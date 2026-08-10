@@ -78,24 +78,24 @@ const AdminSections = () => {
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-xl font-bold mb-5"> সেকশন ব্যবস্থাপনা</h1>
+      <h1 className="text-xl font-bold mb-5">সেকশন ব্যবস্থাপনা</h1>
       <p className="text-sm text-muted-foreground mb-6">
-        সেকশন তৈরি করুন, ছবি ও ক্যাপশন যোগ করুন। স্টুডেন্টরা সেকশনে ক্লিক করলে পরীক্ষাগুলো পপাপে দেখবে।
+        সেকশন তৈরি করুন, কভার ছবি ও ক্যাপশন যোগ করুন। স্টুডেন্টরা প্রশ্ন ভান্ডারে কভার ছবিসহ কার্ড দেখবে এবং ক্লিক করলে ঐ সেকশনের সব পরীক্ষা দেখতে পাবে।
       </p>
 
       <div className="glass-card-static p-5 mb-6">
-        <h2 className="text-sm font-semibold mb-3"> নতুন সেকশন যোগ করুন</h2>
+        <h2 className="text-sm font-semibold mb-3">নতুন সেকশন যোগ করুন</h2>
         <div className="space-y-3">
           <input type="text" placeholder="সেকশনের নাম (যেমন: ঢাকা বিশ্ববিদ্যালয়)" value={newName} onChange={(e) => setNewName(e.target.value)}
             className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
           <input type="text" placeholder="বর্ণনা" value={newDesc} onChange={(e) => setNewDesc(e.target.value)}
             className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
-          <input type="text" placeholder=" স্টাইলিশ ক্যাপশন (ঐচ্ছিক)" value={newCaption} onChange={(e) => setNewCaption(e.target.value)}
+          <input type="text" placeholder="স্টাইলিশ ক্যাপশন (ঐচ্ছিক)" value={newCaption} onChange={(e) => setNewCaption(e.target.value)}
             className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
           <div className="flex items-center gap-3">
             <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium border border-border hover:bg-muted cursor-pointer transition-colors">
               <ImagePlus size={16} className="text-primary" /> ছবি যোগ করুন
-              <span className="text-[10px] text-muted-foreground opacity-70">(সেরা সাইজ: 800×400px)</span>
+              <span className="text-[10px] text-muted-foreground opacity-70">(সেরা সাইজ: 1280×720px — 16:9, ≤১ MB, JPG/PNG)</span>
               <input type="file" accept="image/*" className="hidden" onChange={(e) => { const file = e.target.files?.[0]; if (file) handleImageUpload(file, setNewImage); }} />
             </label>
             {newImage && (
