@@ -77,6 +77,85 @@ export type Database = {
         }
         Relationships: []
       }
+      exam_answers: {
+        Row: {
+          attempt_id: string
+          correct_answer: string
+          created_at: string
+          id: string
+          is_correct: boolean
+          question_id: string
+          selected_answer: string
+        }
+        Insert: {
+          attempt_id: string
+          correct_answer?: string
+          created_at?: string
+          id?: string
+          is_correct?: boolean
+          question_id: string
+          selected_answer?: string
+        }
+        Update: {
+          attempt_id?: string
+          correct_answer?: string
+          created_at?: string
+          id?: string
+          is_correct?: boolean
+          question_id?: string
+          selected_answer?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_answers_attempt_id_fkey"
+            columns: ["attempt_id"]
+            isOneToOne: false
+            referencedRelation: "exam_attempts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exam_attempts: {
+        Row: {
+          correct_answers: number
+          created_at: string
+          exam_id: string
+          id: string
+          score: number
+          total_questions: number
+          user_id: string
+          wrong_answers: number
+        }
+        Insert: {
+          correct_answers?: number
+          created_at?: string
+          exam_id: string
+          id?: string
+          score?: number
+          total_questions?: number
+          user_id: string
+          wrong_answers?: number
+        }
+        Update: {
+          correct_answers?: number
+          created_at?: string
+          exam_id?: string
+          id?: string
+          score?: number
+          total_questions?: number
+          user_id?: string
+          wrong_answers?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_attempts_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exam_premium_batches: {
         Row: {
           created_at: string
@@ -168,6 +247,169 @@ export type Database = {
             columns: ["section_id"]
             isOneToOne: false
             referencedRelation: "sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_exam_answers: {
+        Row: {
+          created_at: string
+          id: string
+          is_correct: boolean
+          live_exam_id: string
+          participant_id: string
+          question_id: string
+          selected_answer: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_correct?: boolean
+          live_exam_id: string
+          participant_id: string
+          question_id: string
+          selected_answer?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_correct?: boolean
+          live_exam_id?: string
+          participant_id?: string
+          question_id?: string
+          selected_answer?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_exam_answers_live_exam_id_fkey"
+            columns: ["live_exam_id"]
+            isOneToOne: false
+            referencedRelation: "live_exams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "live_exam_answers_participant_id_fkey"
+            columns: ["participant_id"]
+            isOneToOne: false
+            referencedRelation: "live_exam_participants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_exam_participants: {
+        Row: {
+          correct: number
+          created_at: string
+          id: string
+          live_exam_id: string
+          max_score: number
+          negative_marks: number
+          percentage: number
+          score: number
+          skipped: number
+          started_at: string | null
+          status: string
+          submitted_at: string | null
+          time_taken_seconds: number
+          user_id: string
+          wrong: number
+        }
+        Insert: {
+          correct?: number
+          created_at?: string
+          id?: string
+          live_exam_id: string
+          max_score?: number
+          negative_marks?: number
+          percentage?: number
+          score?: number
+          skipped?: number
+          started_at?: string | null
+          status?: string
+          submitted_at?: string | null
+          time_taken_seconds?: number
+          user_id: string
+          wrong?: number
+        }
+        Update: {
+          correct?: number
+          created_at?: string
+          id?: string
+          live_exam_id?: string
+          max_score?: number
+          negative_marks?: number
+          percentage?: number
+          score?: number
+          skipped?: number
+          started_at?: string | null
+          status?: string
+          submitted_at?: string | null
+          time_taken_seconds?: number
+          user_id?: string
+          wrong?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_exam_participants_live_exam_id_fkey"
+            columns: ["live_exam_id"]
+            isOneToOne: false
+            referencedRelation: "live_exams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_exams: {
+        Row: {
+          access_mode: string
+          created_at: string
+          description: string
+          duration: number
+          end_time: string
+          exam_id: string
+          id: string
+          negative_marking: number | null
+          show_leaderboard: boolean
+          start_time: string
+          status: string
+          title: string
+        }
+        Insert: {
+          access_mode?: string
+          created_at?: string
+          description?: string
+          duration?: number
+          end_time: string
+          exam_id: string
+          id?: string
+          negative_marking?: number | null
+          show_leaderboard?: boolean
+          start_time: string
+          status?: string
+          title: string
+        }
+        Update: {
+          access_mode?: string
+          created_at?: string
+          description?: string
+          duration?: number
+          end_time?: string
+          exam_id?: string
+          id?: string
+          negative_marking?: number | null
+          show_leaderboard?: boolean
+          start_time?: string
+          status?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_exams_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
             referencedColumns: ["id"]
           },
         ]
