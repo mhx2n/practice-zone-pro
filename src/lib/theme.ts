@@ -3,12 +3,12 @@ import { themePresets, applyThemeColors } from "./themePresets";
 const THEME_KEY = "target_theme";
 const SITE_SETTINGS_KEY = "target_site_settings";
 
-export type Theme = "light" | "dark";
+export type Theme = "light"| "dark";
 
 export function getTheme(): Theme {
   try {
     const saved = localStorage.getItem(THEME_KEY);
-    if (saved === "dark" || saved === "light") return saved;
+    if (saved === "dark"|| saved === "light") return saved;
   } catch {}
   return "light";
 }
@@ -27,12 +27,12 @@ export function applyActiveTheme(mode: Theme) {
     const settings = JSON.parse(raw);
     const themeId = settings.activeThemeId || "ocean-blue";
     
-    if (themeId === "custom" && settings.customTheme) {
+    if (themeId === "custom"&& settings.customTheme) {
       applyThemeColors(settings.customTheme[mode], mode);
     } else {
       const preset = themePresets.find((t) => t.id === themeId);
       if (preset) {
-        applyThemeColors(mode === "dark" ? preset.dark : preset.light, mode);
+        applyThemeColors(mode === "dark"? preset.dark : preset.light, mode);
       }
     }
   } catch {}

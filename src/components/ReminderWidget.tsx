@@ -53,7 +53,7 @@ const ReminderWidget = () => {
             if (!timeLeft) return null;
             return (
               <div key={r.id} className="rounded-lg md:rounded-xl border border-border bg-background/95 backdrop-blur-md shadow-lg overflow-hidden">
-                <div className="h-1" style={{ backgroundColor: r.color || "hsl(var(--primary))" }} />
+                <div className="h-1" style={{ backgroundColor: r.color || "hsl(var(--primary))"}} />
                 <div className="p-2 md:p-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0 flex-1">
@@ -65,7 +65,7 @@ const ReminderWidget = () => {
                     </button>
                   </div>
                   <div className="mt-2 flex items-center gap-2">
-                    <div className="text-[11px] font-bold px-2 py-1 rounded-lg" style={{ backgroundColor: `${r.color || "hsl(var(--primary))"}20`, color: r.color || "hsl(var(--primary))" }}>
+                    <div className="text-[11px] font-bold px-2 py-1 rounded-lg" style={{ backgroundColor: `${r.color || "hsl(var(--primary))"}20`, color: r.color || "hsl(var(--primary))"}}>
                       ⏳ {formatCountdown(timeLeft)}
                     </div>
                     <span className="text-[10px] text-muted-foreground">{new Date(r.targetDate).toLocaleDateString("bn-BD")}</span>

@@ -14,7 +14,7 @@ const StudentResult = () => {
     questions?: Question[];
     originalQuestions?: Question[];
   };
-  const [activeTab, setActiveTab] = useState<"wrong" | "correct" | "skipped">("wrong");
+  const [activeTab, setActiveTab] = useState<"wrong"| "correct"| "skipped">("wrong");
 
   const originalQuestionMap = useMemo(
     () => new Map((originalQuestions ?? []).map((q) => [q.id, q])),
@@ -66,7 +66,7 @@ const StudentResult = () => {
   if (!result) {
     return (
       <div className="pt-24 pb-8 container animate-fade-in">
-        <h1 className="text-xl font-bold mb-5">📊 ফলাফল ইতিহাস</h1>
+        <h1 className="text-xl font-bold mb-5"> ফলাফল ইতিহাস</h1>
         {allResults.length === 0 ? (
           <div className="glass-card-static p-12 text-center text-muted-foreground">
             এখনও কোনো পরীক্ষা দেওয়া হয়নি
@@ -82,11 +82,11 @@ const StudentResult = () => {
                   <p className="text-xs text-muted-foreground">
                     সঠিক: {r.correct} | ভুল: {r.wrong} | বাদ: {r.skipped}
                     {r.negativeMarks > 0 && ` | নেগেটিভ: -${r.negativeMarks.toFixed(2)}`}
-                    {" • "}{new Date(r.timestamp).toLocaleDateString("bn-BD")}
+                    {"• "}{new Date(r.timestamp).toLocaleDateString("bn-BD")}
                   </p>
                 </div>
                 <div className="text-right">
-                  <span className={`text-lg font-bold ${r.percentage >= 60 ? "text-success" : "text-destructive"}`}>{r.percentage}%</span>
+                  <span className={`text-lg font-bold ${r.percentage >= 60 ? "text-success": "text-destructive"}`}>{r.percentage}%</span>
                   <Link to={`/exams/${r.examId}`} className="block text-xs text-primary mt-1">আবার দিন →</Link>
                 </div>
               </div>
@@ -98,17 +98,17 @@ const StudentResult = () => {
   }
 
   const getMessage = () => {
-    if (result.percentage >= 80) return { text: "অসাধারণ! 🏆", color: "text-success" };
-    if (result.percentage >= 60) return { text: "ভালো করেছেন! 👏", color: "text-primary" };
-    if (result.percentage >= 40) return { text: "আরও চেষ্টা করুন 💪", color: "text-warning" };
-    return { text: "আবার চেষ্টা করুন 📚", color: "text-destructive" };
+    if (result.percentage >= 80) return { text: "অসাধারণ! ", color: "text-success"};
+    if (result.percentage >= 60) return { text: "ভালো করেছেন! ", color: "text-primary"};
+    if (result.percentage >= 40) return { text: "আরও চেষ্টা করুন ", color: "text-warning"};
+    return { text: "আবার চেষ্টা করুন ", color: "text-destructive"};
   };
   const msg = getMessage();
 
   const subjectBreakdown = result.subjectBreakdown || [];
   const hasSubjectBreakdown = subjectBreakdown.length > 1;
 
-  const tabData = activeTab === "wrong" ? wrongQs : activeTab === "correct" ? correctQs : skippedQs;
+  const tabData = activeTab === "wrong"? wrongQs : activeTab === "correct"? correctQs : skippedQs;
 
   const renderQuestion = (q: Question, i: number) => {
     const userAns = result.answers[q.id] || "";
@@ -147,7 +147,7 @@ const StudentResult = () => {
             );
           })}
         </div>
-        {q.explanation && <div className="text-sm text-muted-foreground bg-muted/50 rounded-lg p-3 mt-2">💡 <strong>ব্যাখ্যা:</strong> <MathText text={q.explanation} /></div>}
+        {q.explanation && <div className="text-sm text-muted-foreground bg-muted/50 rounded-lg p-3 mt-2"> <strong>ব্যাখ্যা:</strong> <MathText text={q.explanation} /></div>}
       </div>
     );
   };
@@ -196,13 +196,13 @@ const StudentResult = () => {
               <div key={sb.subject} className="bg-muted/50 rounded-xl p-3">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold">{sb.subject}</span>
-                  <span className={`text-sm font-bold ${sb.percentage >= 60 ? "text-success" : sb.percentage >= 40 ? "text-warning" : "text-destructive"}`}>
+                  <span className={`text-sm font-bold ${sb.percentage >= 60 ? "text-success": sb.percentage >= 40 ? "text-warning": "text-destructive"}`}>
                     {sb.percentage}%
                   </span>
                 </div>
                 <div className="w-full bg-muted rounded-full h-2 mb-2">
                   <div
-                    className={`h-2 rounded-full transition-all ${sb.percentage >= 60 ? "bg-success" : sb.percentage >= 40 ? "bg-warning" : "bg-destructive"}`}
+                    className={`h-2 rounded-full transition-all ${sb.percentage >= 60 ? "bg-success": sb.percentage >= 40 ? "bg-warning": "bg-destructive"}`}
                     style={{ width: `${sb.percentage}%` }}
                   />
                 </div>
@@ -221,7 +221,7 @@ const StudentResult = () => {
 
       {/* Score analysis */}
       <div className="glass-card-static p-5 mb-6">
-        <h3 className="text-sm font-semibold mb-3">📊 স্কোর বিশ্লেষণ</h3>
+        <h3 className="text-sm font-semibold mb-3"> স্কোর বিশ্লেষণ</h3>
         <div className="space-y-2 text-sm">
           <div className="flex justify-between"><span className="text-muted-foreground">সঠিক উত্তর</span><span className="font-medium">+{result.correct}</span></div>
           <div className="flex justify-between"><span className="text-muted-foreground">নেগেটিভ মার্ক</span><span className="font-medium text-destructive">-{result.negativeMarks.toFixed(2)}</span></div>
@@ -232,7 +232,7 @@ const StudentResult = () => {
       {/* Review section with tabs */}
       {questions && (
         <div className="mb-6">
-          <h3 className="text-base font-bold mb-3">📖 উত্তর পর্যালোচনা</h3>
+          <h3 className="text-base font-bold mb-3"> উত্তর পর্যালোচনা</h3>
           
           <div className="grid grid-cols-3 gap-2 mb-4">
             <button
@@ -273,9 +273,9 @@ const StudentResult = () => {
           <div className="space-y-3 animate-fade-in">
             {tabData.length === 0 ? (
               <div className="glass-card-static p-8 text-center text-muted-foreground text-sm">
-                {activeTab === "wrong" && "কোনো ভুল উত্তর নেই! 🎉"}
-                {activeTab === "correct" && "কোনো সঠিক উত্তর নেই"}
-                {activeTab === "skipped" && "কোনো স্কিপ করা প্রশ্ন নেই"}
+                {activeTab === "wrong"&& "কোনো ভুল উত্তর নেই! "}
+                {activeTab === "correct"&& "কোনো সঠিক উত্তর নেই"}
+                {activeTab === "skipped"&& "কোনো স্কিপ করা প্রশ্ন নেই"}
               </div>
             ) : (
               tabData.map((q, i) => renderQuestion(q, i))

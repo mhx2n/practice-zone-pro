@@ -30,7 +30,7 @@ const RichTextToolbar = ({ editorRef }: { editorRef: React.RefObject<HTMLDivElem
         className="text-xs bg-transparent border border-border rounded px-1.5 py-1 focus:outline-none"
         defaultValue=""
       >
-        <option value="" disabled>সাইজ</option>
+        <option value=""disabled>সাইজ</option>
         <option value="1">ছোট</option>
         <option value="3">স্বাভাবিক</option>
         <option value="5">বড়</option>
@@ -99,7 +99,7 @@ const AdminNotices = () => {
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-xl font-bold mb-5">📢 নোটিস ব্যবস্থাপনা</h1>
+      <h1 className="text-xl font-bold mb-5"> নোটিস ব্যবস্থাপনা</h1>
 
       <div className="glass-card-static p-5 mb-5">
         <h3 className="font-semibold text-sm mb-3">নতুন নোটিস</h3>
@@ -113,7 +113,7 @@ const AdminNotices = () => {
             contentEditable
             className="min-h-[80px] px-4 py-2.5 text-sm focus:outline-none bg-transparent"
             data-placeholder="বিবরণ লিখুন (বোল্ড, ইটালিক, লিংক সাপোর্ট)"
-            style={{ minHeight: "80px" }}
+            style={{ minHeight: "80px"}}
           />
         </div>
 
@@ -144,7 +144,7 @@ const AdminNotices = () => {
           <div key={n.id} className="glass-card-static p-4 flex items-start justify-between gap-3">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                {n.pinned && <span className="text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">📌</span>}
+                {n.pinned && <span className="text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded-full"></span>}
                 <h4 className="text-sm font-medium truncate">{n.title}</h4>
               </div>
               <p className="text-xs text-muted-foreground">{n.createdAt}</p>
@@ -152,7 +152,7 @@ const AdminNotices = () => {
             </div>
             <div className="flex items-center gap-1 shrink-0">
               <button onClick={() => togglePin(n)} className="p-2 rounded-lg hover:bg-muted transition-colors">
-                <Pin size={14} className={n.pinned ? "text-primary" : "text-muted-foreground"} />
+                <Pin size={14} className={n.pinned ? "text-primary": "text-muted-foreground"} />
               </button>
               <button onClick={() => handleDelete(n.id)} className="p-2 rounded-lg hover:bg-destructive/10 transition-colors">
                 <Trash2 size={14} className="text-destructive" />

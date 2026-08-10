@@ -27,7 +27,7 @@ const TelegramFloatingButton = () => {
         />
       </div>
       <span className="absolute left-16 bottom-1/2 translate-y-1/2 bg-card text-card-foreground text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-border">
-        জয়েন করুন 🚀
+        জয়েন করুন 
       </span>
     </a>
   );

@@ -19,7 +19,7 @@ const AdminSettings = () => {
 
   return (
     <div className="max-w-xl mx-auto animate-fade-in">
-      <h1 className="text-xl font-bold mb-5">⚙️ সেটিংস</h1>
+      <h1 className="text-xl font-bold mb-5"> সেটিংস</h1>
 
       <div className="space-y-4">
         <div className="glass-card-static p-5">

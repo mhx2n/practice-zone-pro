@@ -16,7 +16,7 @@ const StudentDashboard = () => {
     <div className="space-y-6 animate-fade-in">
       {/* Welcome */}
       <div className="glass-card-static p-6 bg-gradient-to-r from-primary/5 to-accent/20">
-        <h1 className="text-xl font-bold mb-1">স্বাগতম! 👋</h1>
+        <h1 className="text-xl font-bold mb-1">স্বাগতম! </h1>
         <p className="text-sm text-muted-foreground">আপনার অনুশীলন ড্যাশবোর্ডে। আজকে পরীক্ষা দিয়ে প্রস্তুতি শুরু করুন!</p>
         <Link
           to="/student/exams"
@@ -29,10 +29,10 @@ const StudentDashboard = () => {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { icon: BookOpen, label: "পরীক্ষা", value: exams.length, color: "text-primary" },
-          { icon: BarChart3, label: "অনুশীলন", value: results.length, color: "text-success" },
-          { icon: Award, label: "গড় স্কোর", value: `${avgScore}%`, color: "text-warning" },
-          { icon: Bell, label: "নোটিস", value: notices.length, color: "text-accent-foreground" },
+          { icon: BookOpen, label: "পরীক্ষা", value: exams.length, color: "text-primary"},
+          { icon: BarChart3, label: "অনুশীলন", value: results.length, color: "text-success"},
+          { icon: Award, label: "গড় স্কোর", value: `${avgScore}%`, color: "text-warning"},
+          { icon: Bell, label: "নোটিস", value: notices.length, color: "text-accent-foreground"},
         ].map((s, i) => (
           <div key={i} className="glass-card-static p-4 text-center">
             <s.icon className={`mx-auto mb-2 ${s.color}`} size={20} />
@@ -46,7 +46,7 @@ const StudentDashboard = () => {
       {recentResults.length > 0 && (
         <section>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-bold">📊 সাম্প্রতিক ফলাফল</h2>
+            <h2 className="text-sm font-bold"> সাম্প্রতিক ফলাফল</h2>
             <Link to="/student/results" className="text-xs text-primary font-medium flex items-center gap-1">
               সব দেখুন <ArrowRight size={12} />
             </Link>
@@ -60,7 +60,7 @@ const StudentDashboard = () => {
                     <Clock size={11} /> {new Date(r.timestamp).toLocaleDateString("bn-BD")}
                   </p>
                 </div>
-                <span className={`text-sm font-bold ${r.percentage >= 60 ? "text-success" : "text-destructive"}`}>
+                <span className={`text-sm font-bold ${r.percentage >= 60 ? "text-success": "text-destructive"}`}>
                   {r.percentage}%
                 </span>
               </div>
@@ -72,7 +72,7 @@ const StudentDashboard = () => {
       {/* Featured Exams */}
       <section>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-bold">⭐ পরীক্ষা সমূহ</h2>
+          <h2 className="text-sm font-bold"> পরীক্ষা সমূহ</h2>
           <Link to="/student/exams" className="text-xs text-primary font-medium flex items-center gap-1">
             সব দেখুন <ArrowRight size={12} />
           </Link>
@@ -93,11 +93,11 @@ const StudentDashboard = () => {
       {/* Notices */}
       {notices.length > 0 && (
         <section>
-          <h2 className="text-sm font-bold mb-3">📢 সর্বশেষ নোটিস</h2>
+          <h2 className="text-sm font-bold mb-3"> সর্বশেষ নোটিস</h2>
           <div className="space-y-2">
             {notices.slice(0, 3).map((n) => (
               <div key={n.id} className="glass-card-static p-3 flex items-center gap-3">
-                {n.pinned && <span className="text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded-full">📌</span>}
+                {n.pinned && <span className="text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded-full"></span>}
                 <span className="text-sm flex-1">{n.title}</span>
                 <span className="text-xs text-muted-foreground">{n.createdAt}</span>
               </div>

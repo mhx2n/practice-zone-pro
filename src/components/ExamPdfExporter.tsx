@@ -67,7 +67,7 @@ interface PdfConfig {
   optionGap: number;
   jpegQuality: number;
   renderScale: number;
-  outputFormat: "png" | "jpeg";
+  outputFormat: "png"| "jpeg";
   presetVersion: number;
   headerFirstPageOnly: boolean;
   showWatermark: boolean;
@@ -87,7 +87,7 @@ function buildQuestionHTML(q: Question, idx: number, cfg: PdfConfig): string {
   const optionsHtml = (q.options || []).map((opt, i) => `
     <div class="opt">
       <span class="opt-lbl">${BN_OPT[i] || toBn(i + 1)})</span>
-      <span class="opt-txt">${renderInline(opt)}${cfg.showOptionImages && q.optionImages?.[i] ? `<img class="opt-img" src="${q.optionImages[i]}" alt=""/>` : ""}</span>
+      <span class="opt-txt">${renderInline(opt)}${cfg.showOptionImages && q.optionImages?.[i] ? `<img class="opt-img" src="${q.optionImages[i]}" alt="" />` : ""}</span>
     </div>
   `).join("");
 
@@ -98,7 +98,7 @@ function buildQuestionHTML(q: Question, idx: number, cfg: PdfConfig): string {
       ${cfg.showExplanations && q.explanation ? `<div class="exp-line"><b>ব্যাখ্যা:</b> <span>${renderInline(q.explanation)}</span></div>` : ""}
     </div>` : "";
 
-  const qImg = cfg.showQuestionImages && q.questionImage ? `<img class="q-img" src="${q.questionImage}" alt=""/>` : "";
+  const qImg = cfg.showQuestionImages && q.questionImage ? `<img class="q-img" src="${q.questionImage}" alt="" />` : "";
 
   return `
     <div class="q">
@@ -126,14 +126,14 @@ function buildQuestionHeadHTML(q: Question, idx: number, cfg: PdfConfig): string
   const optionsHtml = (q.options || []).map((opt, i) => `
     <div class="opt">
       <span class="opt-lbl">${BN_OPT[i] || toBn(i + 1)})</span>
-      <span class="opt-txt">${renderInline(opt)}${cfg.showOptionImages && q.optionImages?.[i] ? `<img class="opt-img" src="${q.optionImages[i]}" alt=""/>` : ""}</span>
+      <span class="opt-txt">${renderInline(opt)}${cfg.showOptionImages && q.optionImages?.[i] ? `<img class="opt-img" src="${q.optionImages[i]}" alt="" />` : ""}</span>
     </div>
   `).join("");
   const ansBlock = cfg.showAnswers ? `
     <div class="ans-box">
       <div class="ans-line"><b>সঠিক উত্তর:</b> <span>${correctLbl ? `${correctLbl}) ` : ""}${renderInline(correct || "—")}</span></div>
     </div>` : "";
-  const qImg = cfg.showQuestionImages && q.questionImage ? `<img class="q-img" src="${q.questionImage}" alt=""/>` : "";
+  const qImg = cfg.showQuestionImages && q.questionImage ? `<img class="q-img" src="${q.questionImage}" alt="" />` : "";
   return `
     <div class="q">
       <div class="q-row">
@@ -151,7 +151,7 @@ function buildQuestionHeadHTML(q: Question, idx: number, cfg: PdfConfig): string
 
 /** Standalone explanation continuation block — flows independently. */
 function buildExplanationContinuationHTML(idx: number, htmlChunk: string, isContinuation: boolean): string {
-  const label = isContinuation ? "ব্যাখ্যা (চলমান)" : "ব্যাখ্যা";
+  const label = isContinuation ? "ব্যাখ্যা (চলমান)": "ব্যাখ্যা";
   return `
     <div class="q exp-cont">
       <div class="ans-box">
@@ -217,7 +217,7 @@ function pageStyles(cfg: PdfConfig): string {
     .pdf-page.debug::before{content:"";position:absolute;left:${cfg.pageMargin}px;top:${cfg.pageMargin}px;right:${cfg.pageMargin}px;bottom:${footerBottom}px;border:1px dashed #3b82f6;pointer-events:none;z-index:5}
     .pdf-page.debug .pdf-footer{outline:1.5px dashed #16a34a;outline-offset:2px;background:rgba(22,163,74,.06)}
     .pdf-page.debug .pdf-body{background:rgba(59,130,246,.04)}
-    .pdf-page.debug::after{content:"page " counter(pg);counter-increment:pg;position:absolute;top:2px;right:6px;font-size:10px;color:#ef4444;font-weight:700;z-index:10}
+    .pdf-page.debug::after{content:"page "counter(pg);counter-increment:pg;position:absolute;top:2px;right:6px;font-size:10px;color:#ef4444;font-weight:700;z-index:10}
     body{counter-reset:pg}
     /* KaTeX tweaks for printable Bengali + math content */
     .math-text-inline{display:inline-block;max-width:100%;vertical-align:-.08em;overflow:visible}
@@ -234,7 +234,7 @@ function buildPageHeaderHTML(exam: Exam, cfg: PdfConfig): string {
   const marks = cfg.marksOverride.trim() || String(exam.questions.length);
   return `
     <div class="pdf-header">
-      ${cfg.showLogo && cfg.logoDataUrl ? `<img class="pdf-logo" src="${cfg.logoDataUrl}" alt=""/>` : ""}
+      ${cfg.showLogo && cfg.logoDataUrl ? `<img class="pdf-logo" src="${cfg.logoDataUrl}" alt="" />` : ""}
       <h1 class="pdf-title">${escapeHtml(cfg.title || exam.title)}</h1>
       ${cfg.subtitle ? `<div class="pdf-sub">${escapeHtml(cfg.subtitle)}</div>` : ""}
       ${cfg.showMeta ? `
@@ -296,7 +296,7 @@ async function buildPaginatedPages(exam: Exam, cfg: PdfConfig, onProgress?: (msg
     const page = document.createElement("div");
     page.className = "pdf-page";
     const isFirst = pages.length === 0;
-    if (cfg.showWatermark && cfg.logoDataUrl) page.innerHTML = `<img class="pdf-watermark" src="${cfg.logoDataUrl}" alt=""/>`;
+    if (cfg.showWatermark && cfg.logoDataUrl) page.innerHTML = `<img class="pdf-watermark" src="${cfg.logoDataUrl}" alt="" />`;
     page.insertAdjacentHTML("beforeend", isFirst || !cfg.headerFirstPageOnly ? buildPageHeaderHTML(exam, cfg) : buildMiniHeaderHTML(exam, cfg));
     const body = document.createElement("div");
     body.className = "pdf-body";
@@ -548,13 +548,13 @@ ${fontHrefs.map((h) => `<link rel="stylesheet" href="${escapeAttr(h)}" />`).join
 </head>
 <body>
 ${cfg.debugMode ? `<div class="debug-bar">
-  <span>🐞 Debug Mode — ${pages.length} পৃষ্ঠা</span>
+  <span> Debug Mode — ${pages.length} পৃষ্ঠা</span>
   <span class="legend">
     <span><i style="border-color:#ef4444"></i>পেজ বক্স</span>
     <span><i style="border-color:#3b82f6"></i>মার্জিন/বডি এরিয়া</span>
     <span><i style="border-color:#16a34a"></i>ফুটার এরিয়া</span>
   </span>
-  <button onclick="window.print()">🖨️ Print / Save as PDF</button>
+  <button onclick="window.print()"> Print / Save as PDF</button>
 </div>` : ""}
 ${pagesHtml}
 </body>
@@ -565,7 +565,7 @@ ${pagesHtml}
   // print() on a nested iframe triggers the OUTER page's print dialog
   // (browsers print the topmost ancestor). A new window is its own top-level
   // browsing context, so window.print() inside it prints exactly our content.
-  const w = window.open("", "_blank", "width=900,height=1000");
+  const w = window.open("", "_blank", " width=900,height=1000");
   if (!w) {
     throw new Error(
       "পপ-আপ ব্লক করা হয়েছে। ব্রাউজারের popup blocker বন্ধ করে আবার চেষ্টা করুন।",
@@ -577,7 +577,7 @@ ${pagesHtml}
 
   if (cfg.debugMode) {
     // Debug: leave the window open for inspection. User clicks the
-    // "Print / Save as PDF" button inside the debug bar to print.
+    // "Print / Save as PDF"button inside the debug bar to print.
     return;
   }
 
@@ -653,7 +653,7 @@ const DEFAULT_CFG: PdfConfig = {
   watermarkOpacity: 0.07,
   watermarkSize: 55,
   debugMode: false,
-  footer: { left: emptySlot(), center: { text: "✈ আমাদের টেলিগ্রাম চ্যানেল", link: "" }, right: emptySlot() },
+  footer: { left: emptySlot(), center: { text: "আমাদের টেলিগ্রাম চ্যানেল", link: ""}, right: emptySlot() },
 };
 
 function loadSavedDefault(): Partial<PdfConfig> | null {
@@ -663,7 +663,7 @@ function loadSavedDefault(): Partial<PdfConfig> | null {
     const parsed = JSON.parse(raw) as Partial<PdfConfig>;
     if (parsed.presetVersion === PDF_CFG_VERSION) return parsed;
     // Migrate older saved configs: force the new "no header logo on first
-    // page" default so cover stays clean for every existing user.
+    // page"default so cover stays clean for every existing user.
     return { ...parsed, renderScale: 2, jpegQuality: 0.82, outputFormat: "jpeg", showLogo: false, presetVersion: PDF_CFG_VERSION };
   } catch { return null; }
 }
@@ -681,7 +681,7 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
   const sitePdfDefaults = (siteSettings?.pdfDefaults || {}) as Partial<PdfConfig>;
   const [cfg, setCfg] = useState<PdfConfig>(() => {
     const saved = loadSavedDefault();
-    return { ...DEFAULT_CFG, ...sitePdfDefaults, ...(saved || {}), title: exam.title, subtitle: exam.subject || "" };
+    return { ...DEFAULT_CFG, ...sitePdfDefaults, ...(saved || {}), title: exam.title, subtitle: exam.subject || ""};
   });
   const [generating, setGenerating] = useState(false);
   const [progress, setProgress] = useState("");
@@ -698,14 +698,14 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
     const { title: _t, subtitle: _s, marksOverride: _m, ...globalDefaults } = cfg;
     saveSite.mutate(
       { ...siteSettings, pdfDefaults: globalDefaults as unknown as Record<string, unknown> },
-      { onSuccess: () => toast({ title: "সাইট ডিফল্ট সেভ হয়েছে ✅", description: "সব এডমিন এখন এই ডিফল্ট পাবে" }) },
+      { onSuccess: () => toast({ title: "সাইট ডিফল্ট সেভ হয়েছে ", description: "সব এডমিন এখন এই ডিফল্ট পাবে" }) },
     );
   };
 
   const questionCount = useMemo(() => exam.questions?.length || 0, [exam.questions]);
 
   const updateCfg = <K extends keyof PdfConfig>(key: K, value: PdfConfig[K]) => setCfg((c) => ({ ...c, [key]: value }));
-  const updateFooter = (pos: "left" | "center" | "right", field: keyof Slot, value: string) =>
+  const updateFooter = (pos: "left"| "center"| "right", field: keyof Slot, value: string) =>
     setCfg((c) => ({ ...c, footer: { ...c.footer, [pos]: { ...c.footer[pos], [field]: value } } }));
 
   const onLogo = (e: ChangeEvent<HTMLInputElement>) => {
@@ -723,10 +723,10 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
     try {
       await printExam(exam, cfg, setProgress);
       toast({
-        title: cfg.debugMode ? "🐞 Debug প্রিভিউ খুলেছে" : "প্রিন্ট ডায়ালগ খুলেছে ✅",
+        title: cfg.debugMode ? " Debug প্রিভিউ খুলেছে": "প্রিন্ট ডায়ালগ খুলেছে ",
         description: cfg.debugMode
           ? "নতুন ট্যাবে লাল/নীল/সবুজ বক্স দেখে overlap চেক করুন।"
-          : 'গন্তব্য থেকে "Save as PDF" বেছে নিন।',
+          : 'গন্তব্য থেকে "Save as PDF"বেছে নিন।',
       });
     } catch (err: unknown) {
       console.error("PDF gen error", err);
@@ -763,7 +763,7 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
                 <div>
                   <label className="text-xs text-muted-foreground">লোগো</label>
                   <label className="flex items-center gap-2 mt-1 px-3 py-2 rounded-lg border border-border cursor-pointer text-xs hover:bg-muted/60">
-                    <ImageIcon size={14} /> {cfg.logoDataUrl ? "লোগো পরিবর্তন" : "লোগো আপলোড"}
+                    <ImageIcon size={14} /> {cfg.logoDataUrl ? "লোগো পরিবর্তন": "লোগো আপলোড"}
                     <input type="file" accept="image/png,image/jpeg" onChange={onLogo} className="hidden" />
                   </label>
                   {cfg.logoDataUrl ? (
@@ -799,7 +799,7 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
               </section>
 
               <section className="rounded-lg border border-border bg-muted/40 p-3">
-                <h3 className="text-xs font-bold mb-1">📄 ভেক্টর PDF (নতুন)</h3>
+                <h3 className="text-xs font-bold mb-1"> ভেক্টর PDF (নতুন)</h3>
                 <p className="text-[11px] text-muted-foreground leading-relaxed">
                   এখন ব্রাউজারের native প্রিন্ট ব্যবহার করে PDF তৈরি হয় — অনেক <b>ছোট ফাইল</b>, যেকোনো জুমে <b>ক্রিস্টাল ক্লিয়ার</b> টেক্সট ও ম্যাথ। বাটন চাপলে প্রিন্ট ডায়ালগ আসবে — গন্তব্য থেকে <b>"Save as PDF"</b> বেছে নিন।
                 </p>
@@ -819,7 +819,7 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
                   <Toggle label="অপশনের ছবি" checked={cfg.showOptionImages} onChange={(v) => updateCfg("showOptionImages", v)} />
                   <Toggle label="হেডার শুধু ১ম পৃষ্ঠায়" checked={cfg.headerFirstPageOnly} onChange={(v) => updateCfg("headerFirstPageOnly", v)} />
                   <Toggle label="লোগো ওয়াটারমার্ক" checked={cfg.showWatermark} onChange={(v) => updateCfg("showWatermark", v)} />
-                  <Toggle label="🐞 Debug মোড (overlap দেখাও)" checked={cfg.debugMode} onChange={(v) => updateCfg("debugMode", v)} />
+                  <Toggle label="Debug মোড (overlap দেখাও)" checked={cfg.debugMode} onChange={(v) => updateCfg("debugMode", v)} />
                 </div>
                 {cfg.showWatermark && (
                   <div className="grid sm:grid-cols-2 gap-3 mt-3">
@@ -833,7 +833,7 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
                 <h3 className="text-xs font-bold mb-2">ফুটার (বাম / মাঝ / ডান)</h3>
                 <div className="grid gap-2">
                   {(["left", "center", "right"] as const).map((p) => (
-                    <SlotEditor key={p} slot={cfg.footer[p]} label={p === "left" ? "বাম" : p === "center" ? "মাঝ" : "ডান"} onText={(v) => updateFooter(p, "text", v)} onLink={(v) => updateFooter(p, "link", v)} />
+                    <SlotEditor key={p} slot={cfg.footer[p]} label={p === "left"? "বাম": p === "center"? "মাঝ": "ডান"} onText={(v) => updateFooter(p, "text", v)} onLink={(v) => updateFooter(p, "link", v)} />
                   ))}
                 </div>
               </section>
@@ -841,7 +841,7 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
               <div className="sticky bottom-0 bg-card pt-2 space-y-2">
                 <div className="grid grid-cols-3 gap-2">
                   <button
-                    onClick={() => { saveDefault(cfg); toast({ title: "ডিফল্ট সেভ হয়েছে ✅", description: "পরের বার এটাই অটো-লোড হবে" }); }}
+                    onClick={() => { saveDefault(cfg); toast({ title: "ডিফল্ট সেভ হয়েছে ", description: "পরের বার এটাই অটো-লোড হবে" }); }}
                     className="py-2 rounded-lg border border-border text-[11px] font-semibold flex items-center justify-center gap-1 hover:bg-muted">
                     <Save size={13} /> লোকাল সেভ
                   </button>
@@ -863,14 +863,14 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
                 </div>
                 <button onClick={downloadPdf} disabled={busy} className="w-full py-3 rounded-xl bg-primary text-primary-foreground text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-50">
                   {generating ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />}
-                  {generating ? progress || "তৈরি হচ্ছে..." : 'PDF সেভ করুন (Save as PDF)'}
+                  {generating ? progress || "তৈরি হচ্ছে...": 'PDF সেভ করুন (Save as PDF)'}
                 </button>
                 <button
                   onClick={saveAsSiteDefault}
                   disabled={saveSite.isPending}
                   className="w-full py-2 rounded-xl border border-primary/40 bg-primary/5 text-primary text-[11px] font-semibold flex items-center justify-center gap-1.5 disabled:opacity-50 hover:bg-primary/10"
                   title="ফন্ট সাইজ, মার্জিন, কালার, ফুটার, লোগো — সব এডমিনের জন্য ডিফল্ট হিসেবে সাইট সেটিংসে সেভ করো">
-                  <Save size={13} /> 🌐 সাইট ডিফল্ট হিসেবে সেভ করো (সব এডমিনের জন্য)
+                  <Save size={13} /> সাইট ডিফল্ট হিসেবে সেভ করো (সব এডমিনের জন্য)
                 </button>
               </div>
             </div>

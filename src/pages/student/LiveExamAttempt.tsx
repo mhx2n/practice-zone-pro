@@ -72,7 +72,7 @@ const LiveExamAttempt = () => {
       const parsed: Question[] = (q || []).map((row: any) => {
         const opts = Array.isArray(row.options)
           ? row.options
-          : (typeof row.options === "string" ? (() => { try { return JSON.parse(row.options); } catch { return []; } })() : []);
+          : (typeof row.options === "string"? (() => { try { return JSON.parse(row.options); } catch { return []; } })() : []);
         return {
           id: row.id,
           question: row.question,
@@ -209,7 +209,7 @@ const LiveExamAttempt = () => {
     setParticipant((prev) => prev ? { ...prev, status: "submitted", score, max_score: max, correct, wrong, skipped, percentage: pct, time_taken_seconds: elapsed } : prev);
     setSubmitted(true);
     if (id) await loadRankings(id);
-    toast({ title: auto ? "সময় শেষ! জমা হয়েছে" : "জমা সফল ✅" });
+    toast({ title: auto ? "সময় শেষ! জমা হয়েছে": "জমা সফল " });
   };
 
   if (loading) return <div className="p-6 text-center text-sm text-muted-foreground pt-32">লোড হচ্ছে...</div>;
@@ -259,7 +259,7 @@ const LiveExamAttempt = () => {
 
           <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
             <button onClick={() => navigate(`/live-exam/${id}/review`)} className="px-4 py-2.5 rounded-xl bg-secondary text-secondary-foreground text-sm font-semibold inline-flex items-center gap-2">
-              📖 উত্তর পর্যালোচনা
+               উত্তর পর্যালোচনা
             </button>
             <button onClick={() => navigate("/live-exams")} className="px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold inline-flex items-center gap-2">
               <Home size={14} /> লাইভ পরীক্ষায় ফিরে যান
@@ -274,9 +274,9 @@ const LiveExamAttempt = () => {
               const pr = profiles[p.user_id];
               const isMe = p.user_id === user?.id;
               return (
-                <div key={p.id} className={`flex items-center gap-3 p-2.5 rounded-xl ${isMe ? "bg-primary/15 border border-primary/30" : "bg-muted/30"}`}>
+                <div key={p.id} className={`flex items-center gap-3 p-2.5 rounded-xl ${isMe ? "bg-primary/15 border border-primary/30": "bg-muted/30"}`}>
                   <div className="w-8 text-center font-bold text-sm">
-                    {i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : i + 1}
+                    {i === 0 ? "": i === 1 ? "": i === 2 ? "": i + 1}
                   </div>
                   {pr?.avatar_url ? <img src={pr.avatar_url} className="w-9 h-9 rounded-full object-cover" alt="" /> :
                     <div className="w-9 h-9 rounded-full bg-primary/20 text-primary flex items-center justify-center text-sm font-bold">
@@ -314,7 +314,7 @@ const LiveExamAttempt = () => {
             <p className="text-xs font-bold truncate">{liveExam.title}</p>
             <p className="text-[10px] text-muted-foreground">উত্তর {answered}/{total}</p>
           </div>
-          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono font-bold text-sm ${timeLeft < 60 ? "bg-destructive/15 text-destructive" : "bg-primary/10 text-primary"}`}>
+          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono font-bold text-sm ${timeLeft < 60 ? "bg-destructive/15 text-destructive": "bg-primary/10 text-primary"}`}>
             <Clock size={14} /> {String(mins).padStart(2, "0")}:{String(secs).padStart(2, "0")}
           </div>
         </div>
@@ -337,8 +337,8 @@ const LiveExamAttempt = () => {
                   return (
                     <button key={idx} onClick={() => selectAnswer(q, opt)} disabled={locked}
                       className={`w-full text-left p-3 rounded-xl border-2 transition-all text-sm ${
-                        selected ? "border-primary bg-primary/10" : "border-border hover:border-primary/50"
-                      } ${locked && !selected ? "opacity-50 cursor-not-allowed" : ""}`}>
+                        selected ? "border-primary bg-primary/10": "border-border hover:border-primary/50"
+                      } ${locked && !selected ? "opacity-50 cursor-not-allowed": ""}`}>
                       <span className="font-bold mr-2">{String.fromCharCode(65 + idx)}.</span>
                       <MathText text={opt} />
                     </button>

@@ -55,7 +55,7 @@ const AdminLayout = () => {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="glass-card-static p-8 text-center max-w-sm">
-          <p className="text-4xl mb-4">🚫</p>
+          <p className="text-4xl mb-4"></p>
           <h1 className="text-xl font-bold mb-2">অ্যাক্সেস নেই</h1>
           <p className="text-sm text-muted-foreground mb-4">আপনার অ্যাডমিন অনুমতি নেই। প্রথম রেজিস্ট্রেশনকারী স্বয়ংক্রিয়ভাবে অ্যাডমিন হন।</p>
           <button onClick={() => { signOut(); navigate("/secure-admin-login"); }} className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
@@ -102,7 +102,7 @@ const AdminLayout = () => {
           {navItems.map((item) => (
             <Link key={item.to} to={item.to}
               className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                isActive(item.to) ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                isActive(item.to) ? "bg-primary text-primary-foreground": "text-muted-foreground hover:text-foreground hover:bg-muted"
               }`}>
               <item.icon size={16} />{item.label}
             </Link>
@@ -115,7 +115,7 @@ const AdminLayout = () => {
               {navItems.map((item) => (
                 <Link key={item.to} to={item.to} onClick={() => setMobileOpen(false)}
                   className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                    isActive(item.to) ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    isActive(item.to) ? "bg-primary text-primary-foreground": "text-muted-foreground hover:text-foreground hover:bg-muted"
                   }`}>
                   <item.icon size={16} />{item.label}
                 </Link>

@@ -26,7 +26,7 @@ const NoticeDetails = () => {
       </button>
       <div className="glass-card-static p-6">
         <div className="flex items-center gap-2 mb-3">
-          {notice.pinned && <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">📌 পিন করা</span>}
+          {notice.pinned && <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full"> পিন করা</span>}
           <span className="text-xs text-muted-foreground">{new Date(notice.createdAt).toLocaleDateString("bn-BD")}</span>
         </div>
         <h1 className="text-2xl font-bold mb-4">{notice.title}</h1>

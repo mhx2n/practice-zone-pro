@@ -332,7 +332,7 @@ const StudentExamAttempt = () => {
               <div key={subject}>
                 <div className="flex items-center gap-2 mb-3 px-1">
                   <span className="text-xs font-bold bg-primary/10 text-primary px-3 py-1.5 rounded-full">
-                    📘 {subject} ({subjectQs.length} প্রশ্ন)
+                     {subject} ({subjectQs.length} প্রশ্ন)
                   </span>
                 </div>
 
@@ -477,7 +477,7 @@ const StudentExamAttempt = () => {
               onClick={() => setShowConfirm(true)}
               className="px-6 py-2.5 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-[0.98]"
             >
-              জমা দিন ✓
+              জমা দিন 
             </button>
           </div>
         </div>,
@@ -496,7 +496,7 @@ const StudentExamAttempt = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-sm">📋 প্রশ্ন তালিকা</h3>
+                <h3 className="font-semibold text-sm"> প্রশ্ন তালিকা</h3>
                 <button
                   onClick={() => setShowPalette(false)}
                   className="p-1 rounded-lg hover:bg-muted"
@@ -509,7 +509,7 @@ const StudentExamAttempt = () => {
                 <div className="space-y-4 mb-4">
                   {subjectGroupedQuestions.map(({ subject, questions: sqs }) => (
                     <div key={subject}>
-                      <p className="text-xs font-semibold text-primary mb-2">📘 {subject}</p>
+                      <p className="text-xs font-semibold text-primary mb-2"> {subject}</p>
                       <div className="grid grid-cols-5 gap-2">
                         {sqs.map((q) => (
                           <button
@@ -609,7 +609,7 @@ const StudentExamAttempt = () => {
                   onClick={() => void doSubmit()}
                   className="flex-1 py-2.5 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-all"
                 >
-                  জমা দিন ✓
+                  জমা দিন 
                 </button>
               </div>
             </div>

@@ -18,14 +18,14 @@ const Navbar = () => {
   const links = [
     { to: "/", label: getLabel("navHome") },
     { to: "/exams", label: getLabel("navExams") },
-    { to: "/live-exams", label: "লাইভ" },
+    { to: "/live-exams", label: "লাইভ"},
     { to: "/results", label: getLabel("navResults") },
     { to: "/notices", label: getLabel("navNotices") },
     { to: "/profile", label: getLabel("navProfile") },
     { to: "/about", label: getLabel("navAbout") },
   ];
 
-  const isActive = (path: string) => path === "/" ? location.pathname === "/" : location.pathname.startsWith(path);
+  const isActive = (path: string) => path === "/"? location.pathname === "/": location.pathname.startsWith(path);
 
   const handleSignOut = async () => {
     try {
@@ -50,7 +50,7 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center gap-6">
           {links.map((l) => (
-            <Link key={l.to} to={l.to} className={`text-sm font-medium transition-colors ${isActive(l.to) ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
+            <Link key={l.to} to={l.to} className={`text-sm font-medium transition-colors ${isActive(l.to) ? "text-primary": "text-muted-foreground hover:text-foreground"}`}>
               {l.label}
             </Link>
           ))}
@@ -84,7 +84,7 @@ const Navbar = () => {
       {open && (
         <div className="md:hidden glass-strong border-t border-border/50 px-4 pb-4 animate-fade-in">
           {links.map((l) => (
-            <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className={`block py-3 text-sm font-medium border-b border-border/50 ${isActive(l.to) ? "text-primary" : "text-muted-foreground"}`}>
+            <Link key={l.to} to={l.to} onClick={() => setOpen(false)} className={`block py-3 text-sm font-medium border-b border-border/50 ${isActive(l.to) ? "text-primary": "text-muted-foreground"}`}>
               {l.label}
             </Link>
           ))}

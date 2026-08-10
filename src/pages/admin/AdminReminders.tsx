@@ -36,7 +36,7 @@ const AdminReminders = () => {
     upsertReminder.mutate(reminder, {
       onSuccess: () => {
         setTitle(""); setDescription(""); setTargetDate("");
-        toast({ title: "রিমাইন্ডার যোগ করা হয়েছে ✅" });
+        toast({ title: "রিমাইন্ডার যোগ করা হয়েছে " });
       },
     });
   };
@@ -61,7 +61,7 @@ const AdminReminders = () => {
       </p>
 
       <div className="glass-card-static p-5 mb-6">
-        <h2 className="text-sm font-semibold mb-3">➕ নতুন রিমাইন্ডার</h2>
+        <h2 className="text-sm font-semibold mb-3"> নতুন রিমাইন্ডার</h2>
         <div className="space-y-3">
           <input type="text" placeholder="শিরোনাম (যেমন: পরীক্ষা শুরু হচ্ছে!)" value={title} onChange={(e) => setTitle(e.target.value)}
             className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
@@ -69,7 +69,7 @@ const AdminReminders = () => {
             className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1">
-              <label className="text-xs text-muted-foreground mb-1 block">📅 তারিখ ও সময়</label>
+              <label className="text-xs text-muted-foreground mb-1 block"> তারিখ ও সময়</label>
               <input type="datetime-local" value={targetDate} onChange={(e) => setTargetDate(e.target.value)}
                 className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
             </div>
@@ -78,7 +78,7 @@ const AdminReminders = () => {
               <div className="flex gap-2 mt-1">
                 {colorOptions.map((c) => (
                   <button key={c} onClick={() => setColor(c)}
-                    className={`w-7 h-7 rounded-full border-2 transition-all ${color === c ? "border-foreground scale-110" : "border-transparent"}`}
+                    className={`w-7 h-7 rounded-full border-2 transition-all ${color === c ? "border-foreground scale-110": "border-transparent"}`}
                     style={{ backgroundColor: c }} />
                 ))}
               </div>

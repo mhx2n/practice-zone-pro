@@ -18,13 +18,13 @@ export const defaultLabels: Record<string, string> = {
   statSubjects: "বিষয়",
   statPractice: "অনুশীলন",
   statNotices: "নোটিস",
-  recentResults: "📊 সাম্প্রতিক ফলাফল",
+  recentResults: "সাম্প্রতিক ফলাফল",
   viewAll: "সব দেখুন",
   noticeBoard: "নোটিস বোর্ড",
-  featuredExams: "⭐ বিশেষ পরীক্ষা",
-  allExams: "📝 সকল পরীক্ষা",
+  featuredExams: "বিশেষ পরীক্ষা",
+  allExams: "সকল পরীক্ষা",
   viewMore: "আরও দেখুন",
-  pinned: "📌 পিন",
+  pinned: "পিন",
 
   // Exam Card
   startExam: "পরীক্ষা শুরু করুন",
@@ -35,7 +35,7 @@ export const defaultLabels: Record<string, string> = {
   diffHard: "কঠিন",
 
   // Exams Page
-  examsPageTitle: "📝 পরীক্ষা সমূহ",
+  examsPageTitle: "পরীক্ষা সমূহ",
   tabSections: "সেকশন",
   tabSubjects: "বিষয়",
   searchHint: "খুঁজুন...",
@@ -52,10 +52,10 @@ export const defaultLabels: Record<string, string> = {
   allRightsReserved: "সকল স্বত্ব সংরক্ষিত",
 
   // Results
-  resultsTitle: "📊 ফলাফল",
+  resultsTitle: "ফলাফল",
 
   // Notices
-  noticesTitle: "📢 নোটিস বোর্ড",
+  noticesTitle: "নোটিস বোর্ড",
 
   // Live Exam Page
   liveExamBadge: "লাইভ এক্সাম",

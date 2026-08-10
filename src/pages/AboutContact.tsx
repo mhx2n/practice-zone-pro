@@ -11,7 +11,7 @@ const AboutContact = () => {
 
   return (
     <div className="pt-24 pb-8 container max-w-2xl min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">📖 আমাদের সম্পর্কে</h1>
+      <h1 className="text-2xl font-bold mb-6"> আমাদের সম্পর্কে</h1>
       <div className="glass-card-static p-6 mb-6">
         <h2 className="text-lg font-semibold mb-3">{settings.aboutTitle}</h2>
         <div className="text-sm text-muted-foreground leading-relaxed prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: sanitize(settings.aboutContent) }} />

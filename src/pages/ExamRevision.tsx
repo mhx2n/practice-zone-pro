@@ -49,7 +49,7 @@ const ExamRevision = () => {
             এই পরীক্ষাটি অন্তত একবার দেওয়ার পর রিভিশন মোড আনলক হবে। প্রশ্ন, সঠিক উত্তর ও ব্যাখ্যা দেখতে পারবেন।
           </p>
           <Link to={`/exams/${exam.id}`} className="inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-4 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
-            পরীক্ষা দিন 🚀
+            পরীক্ষা দিন 
           </Link>
         </div>
       </div>
@@ -67,7 +67,7 @@ const ExamRevision = () => {
       <div className="glass-card-static p-5 mb-5">
         <div className="flex items-center gap-2 mb-2">
           <BookOpen size={18} className="text-primary" />
-          <span className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full">📖 রিভিশন মোড</span>
+          <span className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full"> রিভিশন মোড</span>
         </div>
         <h1 className="text-xl font-bold">{exam.title}</h1>
         <p className="text-xs text-muted-foreground mt-1">
@@ -80,7 +80,7 @@ const ExamRevision = () => {
           <section key={gi}>
             {isMulti && g.section && (
               <h2 className="text-base font-bold text-primary mb-3 sticky top-20 bg-background/90 backdrop-blur py-2 z-10">
-                📚 {g.section}
+                 {g.section}
                 <span className="text-xs font-medium text-muted-foreground ml-2">({g.questions.length})</span>
               </h2>
             )}
@@ -98,7 +98,7 @@ const ExamRevision = () => {
                       {q.options.map((opt, oi) => {
                         const isAns = isAnswerMatch(opt, correct);
                         return (
-                          <div key={oi} className={`px-4 py-2.5 rounded-lg text-sm border ${isAns ? "border-success bg-success/10" : "border-border"}`}>
+                          <div key={oi} className={`px-4 py-2.5 rounded-lg text-sm border ${isAns ? "border-success bg-success/10": "border-border"}`}>
                             <div className="flex items-center gap-2">
                               {isAns && <CheckCircle2 size={16} className="text-success flex-shrink-0" />}
                               <MathText text={opt} className="text-sm" />
@@ -110,7 +110,7 @@ const ExamRevision = () => {
                     </div>
                     {q.explanation && (
                       <div className="text-sm text-muted-foreground bg-muted/50 rounded-lg p-3">
-                        💡 <strong>ব্যাখ্যা:</strong> <MathText text={q.explanation} />
+                         <strong>ব্যাখ্যা:</strong> <MathText text={q.explanation} />
                       </div>
                     )}
                   </div>

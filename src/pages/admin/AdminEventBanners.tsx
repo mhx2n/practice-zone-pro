@@ -37,7 +37,7 @@ const AdminEventBanners = () => {
     upsertBanner.mutate(banner, {
       onSuccess: () => {
         setCaption(""); setTargetDate(""); setImage("");
-        toast({ title: "ব্যানার যোগ হয়েছে ✅" });
+        toast({ title: "ব্যানার যোগ হয়েছে " });
       },
     });
   };
@@ -58,7 +58,7 @@ const AdminEventBanners = () => {
 
   return (
     <div className="animate-fade-in max-w-2xl mx-auto">
-      <h1 className="text-xl font-bold mb-6">🎉 ইভেন্ট ব্যানার</h1>
+      <h1 className="text-xl font-bold mb-6"> ইভেন্ট ব্যানার</h1>
 
       <div className="glass-card-static p-5 space-y-4 mb-6">
         <h2 className="text-sm font-bold">নতুন ব্যানার যোগ করুন</h2>
@@ -98,17 +98,17 @@ const AdminEventBanners = () => {
           {banners.map((b) => {
             const isExpired = new Date(b.targetDate).getTime() <= Date.now();
             return (
-              <div key={b.id} className={`glass-card-static p-4 flex items-center gap-3 ${!b.active || isExpired ? "opacity-50" : ""}`}>
+              <div key={b.id} className={`glass-card-static p-4 flex items-center gap-3 ${!b.active || isExpired ? "opacity-50": ""}`}>
                 {b.image && <img src={b.image} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0" />}
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold truncate">{b.caption}</p>
                   <p className="text-xs text-muted-foreground">
                     {new Date(b.targetDate).toLocaleString("bn-BD")}
-                    {isExpired && " • মেয়াদোত্তীর্ণ"}
+                    {isExpired && "• মেয়াদোত্তীর্ণ"}
                   </p>
                 </div>
                 <div className="flex items-center gap-1 shrink-0">
-                  <button onClick={() => toggleActive(b)} className="p-2 rounded-lg hover:bg-muted transition-colors" title={b.active ? "নিষ্ক্রিয়" : "সক্রিয়"}>
+                  <button onClick={() => toggleActive(b)} className="p-2 rounded-lg hover:bg-muted transition-colors" title={b.active ? "নিষ্ক্রিয়": "সক্রিয়"}>
                     {b.active ? <Eye size={16} className="text-primary" /> : <EyeOff size={16} className="text-muted-foreground" />}
                   </button>
                   <button onClick={() => remove(b.id)} className="p-2 rounded-lg hover:bg-destructive/10 transition-colors">

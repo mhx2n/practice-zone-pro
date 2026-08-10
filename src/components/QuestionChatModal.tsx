@@ -10,7 +10,7 @@ import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 
 interface Message {
-  role: "user" | "assistant";
+  role: "user"| "assistant";
   content: string;
 }
 
@@ -39,22 +39,22 @@ export function QuestionChatModal({ isOpen, onClose, questionContext }: Question
       setMessages([
         {
           role: "assistant",
-          content: `🎓 **আসসালামু আলাইকুম!** আমি আপনার **শিক্ষা সহায়ক**।
+          content: ` **আসসালামু আলাইকুম!** আমি আপনার **শিক্ষা সহায়ক**।
 
 আমি এই প্রশ্নটি সম্পর্কে আপনাকে সাহায্য করতে এসেছি:
 
 ---
 
-**📝 প্রশ্ন:** ${questionContext.questionText}
+** প্রশ্ন:** ${questionContext.questionText}
 
-**✅ সঠিক উত্তর:** ${questionContext.correctAnswer}
-**❌ আপনার উত্তর:** ${questionContext.userAnswer}
+** সঠিক উত্তর:** ${questionContext.correctAnswer}
+** আপনার উত্তর:** ${questionContext.userAnswer}
 
 ---
 
-আপনি এই প্রশ্ন সম্পর্কে যেকোনো কিছু জিজ্ঞাসা করতে পারেন। আমি **শুধুমাত্র পড়াশোনার বিষয়ে** সাহায্য করি। 📚
+আপনি এই প্রশ্ন সম্পর্কে যেকোনো কিছু জিজ্ঞাসা করতে পারেন। আমি **শুধুমাত্র পড়াশোনার বিষয়ে** সাহায্য করি। 
 
-কীভাবে সাহায্য করতে পারি? 🤔`
+কীভাবে সাহায্য করতে পারি? `
         }
       ]);
     }
@@ -96,7 +96,7 @@ export function QuestionChatModal({ isOpen, onClose, questionContext }: Question
       let assistantMessage = "";
 
       // Add empty assistant message to start streaming
-      setMessages(prev => [...prev, { role: "assistant", content: "" }]);
+      setMessages(prev => [...prev, { role: "assistant", content: ""}]);
 
       while (true) {
         const { done, value } = await reader.read();
@@ -147,7 +147,7 @@ export function QuestionChatModal({ isOpen, onClose, questionContext }: Question
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter"&& !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -174,14 +174,14 @@ export function QuestionChatModal({ isOpen, onClose, questionContext }: Question
 
         <div className="flex-1 overflow-y-auto space-y-5 py-5 px-3 sm:px-5">
           {messages.map((message, index) => (
-            <div key={index} className={`flex gap-3 ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={`flex gap-3 max-w-[95%] sm:max-w-[88%] ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
+            <div key={index} className={`flex gap-3 ${message.role === "user"? "justify-end": "justify-start"}`}>
+              <div className={`flex gap-3 max-w-[95%] sm:max-w-[88%] ${message.role === "user"? "flex-row-reverse": "flex-row"}`}>
                 <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 shadow-md mt-1 ${
-                  message.role === "user" 
-                    ? "bg-gradient-to-r from-primary to-primary/80" 
+                  message.role === "user"
+                    ? "bg-gradient-to-r from-primary to-primary/80"
                     : "bg-gradient-to-r from-secondary to-secondary/80 border-2 border-primary/20"
                 }`}>
-                  {message.role === "user" ? (
+                  {message.role === "user"? (
                     <User size={16} className="text-primary-foreground" />
                   ) : (
                     <Sparkles size={16} className="text-secondary-foreground" />

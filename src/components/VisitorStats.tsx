@@ -33,7 +33,7 @@ const VisitorStats = () => {
   useEffect(() => {
     loadStats();
 
-    // Heartbeat: keep this user counted as "active" every 30s
+    // Heartbeat: keep this user counted as "active"every 30s
     const heartbeat = setInterval(() => {
       trackPageVisit(location.pathname);
     }, 30000);
@@ -46,7 +46,7 @@ const VisitorStats = () => {
       .channel("page_visits_live")
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "page_visits" },
+        { event: "INSERT", schema: "public", table: "page_visits"},
         () => loadStats(),
       )
       .subscribe();

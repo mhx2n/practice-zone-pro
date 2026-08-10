@@ -52,7 +52,7 @@ const AdminUsers = () => {
       return;
     }
     setNewBatchName("");
-    toast({ title: "ব্যাচ যোগ হয়েছে ✅" });
+    toast({ title: "ব্যাচ যোগ হয়েছে " });
     load();
   };
 
@@ -70,7 +70,7 @@ const AdminUsers = () => {
       _batch_id: batchId,
     });
     if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
-    toast({ title: "ব্যাচ অ্যাসাইন হয়েছে ✅" });
+    toast({ title: "ব্যাচ অ্যাসাইন হয়েছে " });
     load();
   };
 

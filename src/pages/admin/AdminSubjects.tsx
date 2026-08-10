@@ -81,9 +81,9 @@ const AdminSubjects = () => {
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm flex-wrap">
-        <button onClick={() => { setSubjectId(null); setPaperId(null); }} className={`px-3 py-1.5 rounded-lg ${!subject ? "bg-primary text-primary-foreground" : "glass-strong"}`}>বিষয়সমূহ</button>
+        <button onClick={() => { setSubjectId(null); setPaperId(null); }} className={`px-3 py-1.5 rounded-lg ${!subject ? "bg-primary text-primary-foreground": "glass-strong"}`}>বিষয়সমূহ</button>
         {subject && <><ChevronRight size={14} className="text-muted-foreground" />
-          <button onClick={() => setPaperId(null)} className={`px-3 py-1.5 rounded-lg ${!paper ? "bg-primary text-primary-foreground" : "glass-strong"}`}>{subject.name}</button></>}
+          <button onClick={() => setPaperId(null)} className={`px-3 py-1.5 rounded-lg ${!paper ? "bg-primary text-primary-foreground": "glass-strong"}`}>{subject.name}</button></>}
         {paper && <><ChevronRight size={14} className="text-muted-foreground" />
           <span className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground">{paper.name}</span></>}
       </div>
@@ -92,7 +92,7 @@ const AdminSubjects = () => {
       {!subject && (
         <>
           <div className="glass-card-static p-5 space-y-3">
-            <h2 className="text-sm font-bold">{editSubject ? "বিষয় সম্পাদনা" : "নতুন বিষয়"}</h2>
+            <h2 className="text-sm font-bold">{editSubject ? "বিষয় সম্পাদনা": "নতুন বিষয়"}</h2>
             <div className="grid sm:grid-cols-2 gap-3">
               <input value={sName} onChange={(e) => setSName(e.target.value)} placeholder="বিষয়ের নাম (যেমন: পদার্থবিজ্ঞান)" className="glass-strong rounded-lg px-3 py-2 text-sm" />
               <input value={sDesc} onChange={(e) => setSDesc(e.target.value)} placeholder="সংক্ষিপ্ত বিবরণ (ঐচ্ছিক)" className="glass-strong rounded-lg px-3 py-2 text-sm" />
@@ -100,6 +100,7 @@ const AdminSubjects = () => {
             <div className="flex items-center gap-3">
               <label className="px-3 py-2 rounded-lg glass-strong text-sm inline-flex items-center gap-2 cursor-pointer">
                 <ImagePlus size={14} /> কভার ছবি
+                <span className="text-[10px] text-muted-foreground opacity-70">(সেরা সাইজ: 1280×720px — 16:9)</span>
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f, setSImage); }} />
               </label>
               {sImage && <img src={sImage} alt="প্রিভিউ" className="h-12 w-20 object-cover rounded-lg" />}
@@ -116,7 +117,7 @@ const AdminSubjects = () => {
               const pCount = papers.filter((p) => p.subject_id === s.id).length;
               return (
                 <div key={s.id} className="glass-card-static overflow-hidden">
-                  {s.image && <img src={s.image} alt={s.name} className="w-full h-28 object-cover" />}
+                  {s.image && <img src={s.image} alt={s.name} className="w-full aspect-[16/9] object-cover" />}
                   <div className="p-4">
                     <p className="font-bold text-sm">{s.name}</p>
                     {s.description && <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{s.description}</p>}
@@ -137,7 +138,7 @@ const AdminSubjects = () => {
           <div className="glass-card-static p-5">
             <h2 className="text-sm font-bold mb-3">ক্যাটেগরি</h2>
             <div className="flex gap-2 mb-3">
-              <input value={newCategory} onChange={(e) => setNewCategory(e.target.value)} onKeyDown={(e) => e.key === "Enter" && addCategory()} placeholder="নতুন ক্যাটেগরি" className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm" />
+              <input value={newCategory} onChange={(e) => setNewCategory(e.target.value)} onKeyDown={(e) => e.key === "Enter"&& addCategory()} placeholder="নতুন ক্যাটেগরি" className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm" />
               <button onClick={addCategory} className="p-2 rounded-lg bg-primary text-primary-foreground"><Plus size={16} /></button>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -173,7 +174,7 @@ const AdminSubjects = () => {
                 <div key={p.id} className="glass-card-static p-4">
                   {isEdit ? (
                     <div className="flex gap-2">
-                      <input value={editName.value} onChange={(e) => setEditName({ id: p.id, value: e.target.value })} className="flex-1 glass-strong rounded-lg px-2 py-1.5 text-sm" autoFocus />
+                      <input value={editName.value} onChange={(e) => setEditName({ id: p.id, value: e.target.value })} className="flex-1 glass-strong rounded-lg px-2 py-1.5 text-sm"autoFocus />
                       <button onClick={() => { upsertPaper.mutate({ ...p, name: editName.value.trim() || p.name }); setEditName(null); }} className="p-1.5 text-primary"><Check size={14} /></button>
                       <button onClick={() => setEditName(null)} className="p-1.5"><X size={14} /></button>
                     </div>
@@ -219,7 +220,7 @@ const AdminSubjects = () => {
                     <div className="flex-1 min-w-0">
                       {isEdit ? (
                         <div className="flex gap-2">
-                          <input value={editName.value} onChange={(e) => setEditName({ id: c.id, value: e.target.value })} className="flex-1 glass-strong rounded-lg px-2 py-1.5 text-sm" autoFocus />
+                          <input value={editName.value} onChange={(e) => setEditName({ id: c.id, value: e.target.value })} className="flex-1 glass-strong rounded-lg px-2 py-1.5 text-sm"autoFocus />
                           <button onClick={() => { upsertChapter.mutate({ ...c, name: editName.value.trim() || c.name }); setEditName(null); }} className="p-1.5 text-primary"><Check size={14} /></button>
                           <button onClick={() => setEditName(null)} className="p-1.5"><X size={14} /></button>
                         </div>

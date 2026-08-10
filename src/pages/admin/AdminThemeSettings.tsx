@@ -8,15 +8,15 @@ import { Save, Palette, Check, Sliders, FileText, Plus, Trash2, Link2, Image as 
 import { getTheme } from "@/lib/theme";
 
 const colorFields: { key: keyof ThemeColors; label: string }[] = [
-  { key: "primary", label: "প্রাইমারি" },
-  { key: "background", label: "ব্যাকগ্রাউন্ড" },
-  { key: "foreground", label: "টেক্সট" },
-  { key: "card", label: "কার্ড" },
-  { key: "muted", label: "মিউটেড" },
-  { key: "accent", label: "অ্যাকসেন্ট" },
-  { key: "border", label: "বর্ডার" },
-  { key: "success", label: "সাকসেস" },
-  { key: "warning", label: "ওয়ার্নিং" },
+  { key: "primary", label: "প্রাইমারি"},
+  { key: "background", label: "ব্যাকগ্রাউন্ড"},
+  { key: "foreground", label: "টেক্সট"},
+  { key: "card", label: "কার্ড"},
+  { key: "muted", label: "মিউটেড"},
+  { key: "accent", label: "অ্যাকসেন্ট"},
+  { key: "border", label: "বর্ডার"},
+  { key: "success", label: "সাকসেস"},
+  { key: "warning", label: "ওয়ার্নিং"},
 ];
 
 const hslToHex = (hsl: string): string => {
@@ -75,10 +75,10 @@ const AdminThemeSettings = () => {
     const preset = themePresets.find((t) => t.id === id);
     if (!preset) return;
     setSettings((prev) => prev ? { ...prev, activeThemeId: id } : prev);
-    applyThemeColors(currentMode === "dark" ? preset.dark : preset.light, currentMode);
+    applyThemeColors(currentMode === "dark"? preset.dark : preset.light, currentMode);
   };
 
-  const updateCustomColor = (mode: "light" | "dark", key: keyof ThemeColors, hex: string) => {
+  const updateCustomColor = (mode: "light"| "dark", key: keyof ThemeColors, hex: string) => {
     const hsl = hexToHsl(hex);
     setSettings((prev) => {
       if (!prev) return prev;
@@ -96,12 +96,12 @@ const AdminThemeSettings = () => {
 
   const save = () => {
     saveMut.mutate(settings, {
-      onSuccess: () => toast({ title: "থিম সেভ হয়েছে ✅" }),
+      onSuccess: () => toast({ title: "থিম সেভ হয়েছে " }),
     });
   };
 
   const getEditableColors = (): ThemeColors => {
-    if (settings.activeThemeId === "custom" && settings.customTheme) return settings.customTheme[currentMode];
+    if (settings.activeThemeId === "custom"&& settings.customTheme) return settings.customTheme[currentMode];
     return activePreset ? activePreset[currentMode] : themePresets[0][currentMode];
   };
 
@@ -109,15 +109,15 @@ const AdminThemeSettings = () => {
   const updateReport = (patch: Partial<typeof reportSettings>) => {
     setSettings((p) => p ? { ...p, reportSettings: { ...reportSettings, ...patch } } : p);
   };
-  const updateFooterLink = (idx: number, field: "label" | "url", value: string) => {
+  const updateFooterLink = (idx: number, field: "label"| "url", value: string) => {
     const links = [...reportSettings.footerLinks];
     links[idx] = { ...links[idx], [field]: value };
     updateReport({ footerLinks: links });
   };
-  const addFooterLink = () => updateReport({ footerLinks: [...reportSettings.footerLinks, { label: "", url: "" }] });
+  const addFooterLink = () => updateReport({ footerLinks: [...reportSettings.footerLinks, { label: "", url: ""}] });
   const removeFooterLink = (idx: number) => updateReport({ footerLinks: reportSettings.footerLinks.filter((_, i) => i !== idx) });
-  const podium = reportSettings.podiumColors || { gold: "#eab308", silver: "#94a3b8", bronze: "#ca8a04" };
-  const updatePodium = (key: "gold" | "silver" | "bronze", value: string) =>
+  const podium = reportSettings.podiumColors || { gold: "#eab308", silver: "#94a3b8", bronze: "#ca8a04"};
+  const updatePodium = (key: "gold"| "silver"| "bronze", value: string) =>
     updateReport({ podiumColors: { ...podium, [key]: value } });
 
   const onLogoUpload = (file: File | null) => {
@@ -141,7 +141,7 @@ const AdminThemeSettings = () => {
       </div>
 
       <div className="glass-card-static p-5 space-y-4 mb-6">
-        <h2 className="text-sm font-bold">🏷️ ব্র্যান্ড সেটিংস</h2>
+        <h2 className="text-sm font-bold"> ব্র্যান্ড সেটিংস</h2>
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1">
             <label className="text-xs font-semibold">ব্র্যান্ড নাম</label>
@@ -167,15 +167,15 @@ const AdminThemeSettings = () => {
       </div>
 
       <div className="glass-card-static p-5 space-y-4 mb-6">
-        <h2 className="text-sm font-bold">🎨 প্রিসেট থিম</h2>
+        <h2 className="text-sm font-bold"> প্রিসেট থিম</h2>
         <p className="text-xs text-muted-foreground">একটি থিম নির্বাচন করুন — লাইভ প্রিভিউ দেখুন</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {themePresets.map((preset) => {
             const isActive = settings.activeThemeId === preset.id;
-            const colors = currentMode === "dark" ? preset.dark : preset.light;
+            const colors = currentMode === "dark"? preset.dark : preset.light;
             return (
               <button key={preset.id} onClick={() => selectPreset(preset.id)}
-                className={`relative p-4 rounded-xl border-2 transition-all text-left ${isActive ? "border-primary shadow-lg scale-[1.02]" : "border-border hover:border-primary/40"}`}>
+                className={`relative p-4 rounded-xl border-2 transition-all text-left ${isActive ? "border-primary shadow-lg scale-[1.02]": "border-border hover:border-primary/40"}`}>
                 {isActive && (
                   <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
                     <Check size={12} className="text-primary-foreground" />
@@ -196,12 +196,12 @@ const AdminThemeSettings = () => {
       <div className="glass-card-static p-5 space-y-4 mb-6">
         <button onClick={() => setShowCustom(!showCustom)} className="flex items-center gap-2 text-sm font-bold w-full">
           <Sliders size={16} className="text-primary" /> কাস্টম কালার এডিটর
-          <span className="text-xs text-muted-foreground ml-auto">{showCustom ? "বন্ধ করুন" : "খুলুন"}</span>
+          <span className="text-xs text-muted-foreground ml-auto">{showCustom ? "বন্ধ করুন": "খুলুন"}</span>
         </button>
         {showCustom && (
           <div className="space-y-4 pt-2">
             <p className="text-xs text-muted-foreground">
-              বর্তমান মোড: <span className="font-semibold">{currentMode === "dark" ? "ডার্ক" : "লাইট"}</span> — পরিবর্তন করলে কাস্টম থিম সক্রিয় হবে
+              বর্তমান মোড: <span className="font-semibold">{currentMode === "dark"? "ডার্ক": "লাইট"}</span> — পরিবর্তন করলে কাস্টম থিম সক্রিয় হবে
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {colorFields.map((field) => {
@@ -233,7 +233,7 @@ const AdminThemeSettings = () => {
               const active = reportSettings.themeId === p.id;
               return (
                 <button key={p.id} onClick={() => updateReport({ themeId: p.id })}
-                  className={`p-3 rounded-xl border-2 text-left transition-all ${active ? "border-primary scale-[1.02]" : "border-border hover:border-primary/40"}`}>
+                  className={`p-3 rounded-xl border-2 text-left transition-all ${active ? "border-primary scale-[1.02]": "border-border hover:border-primary/40"}`}>
                   <div className="flex gap-1.5 mb-1.5">
                     <div className="w-5 h-5 rounded-md border" style={{ backgroundColor: p.header }} />
                     <div className="w-5 h-5 rounded-md border" style={{ backgroundColor: p.accent }} />
@@ -243,17 +243,17 @@ const AdminThemeSettings = () => {
               );
             })}
             <button onClick={() => updateReport({ themeId: "custom" })}
-              className={`p-3 rounded-xl border-2 text-left transition-all ${reportSettings.themeId === "custom" ? "border-primary scale-[1.02]" : "border-border hover:border-primary/40"}`}>
+              className={`p-3 rounded-xl border-2 text-left transition-all ${reportSettings.themeId === "custom"? "border-primary scale-[1.02]": "border-border hover:border-primary/40"}`}>
               <div className="flex gap-1.5 mb-1.5">
-                <div className="w-5 h-5 rounded-md border" style={{ backgroundColor: reportSettings.customHeader || "#888" }} />
-                <div className="w-5 h-5 rounded-md border" style={{ backgroundColor: reportSettings.customAccent || "#888" }} />
+                <div className="w-5 h-5 rounded-md border" style={{ backgroundColor: reportSettings.customHeader || "#888"}} />
+                <div className="w-5 h-5 rounded-md border" style={{ backgroundColor: reportSettings.customAccent || "#888"}} />
               </div>
               <p className="text-xs font-semibold">কাস্টম</p>
             </button>
           </div>
         </div>
 
-        {reportSettings.themeId === "custom" && (
+        {reportSettings.themeId === "custom"&& (
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
               <label className="text-xs font-medium">হেডার কালার</label>
@@ -316,9 +316,9 @@ const AdminThemeSettings = () => {
           <label className="text-xs font-semibold mb-2 block">পডিয়াম কালার (১ম / ২য় / ৩য়)</label>
           <div className="grid grid-cols-3 gap-3">
             {([
-              { key: "gold" as const, label: "১ম স্থান" },
-              { key: "silver" as const, label: "২য় স্থান" },
-              { key: "bronze" as const, label: "৩য় স্থান" },
+              { key: "gold"as const, label: "১ম স্থান"},
+              { key: "silver"as const, label: "২য় স্থান"},
+              { key: "bronze"as const, label: "৩য় স্থান"},
             ]).map((m) => (
               <div key={m.key} className="space-y-1">
                 <label className="text-[11px] font-medium">{m.label}</label>
@@ -384,8 +384,8 @@ const AdminThemeSettings = () => {
                 বন্ধ থাকলে শুধু টপ ৩ পডিয়াম দেখাবে — চালু করলে সবার র‍্যাঙ্কিং স্ক্রল করে দেখা যাবে
               </p>
             </div>
-            <div className={`relative w-10 h-5 rounded-full transition-colors shrink-0 ${reportSettings.showFullLeaderboardToStudents ? "bg-primary" : "bg-muted"}`}>
-              <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${reportSettings.showFullLeaderboardToStudents ? "left-[22px]" : "left-0.5"}`} />
+            <div className={`relative w-10 h-5 rounded-full transition-colors shrink-0 ${reportSettings.showFullLeaderboardToStudents ? "bg-primary": "bg-muted"}`}>
+              <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${reportSettings.showFullLeaderboardToStudents ? "left-[22px]": "left-0.5"}`} />
             </div>
           </button>
         </div>

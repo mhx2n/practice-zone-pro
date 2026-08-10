@@ -8,12 +8,12 @@ interface Member { id: string; user_id: string; premium_batch_id: string; }
 interface Profile { user_id: string; full_name: string | null; email: string | null; }
 interface Link { id: string; premium_batch_id: string; ref: string; }
 
-type ContentKind = "subject" | "section" | "exam";
+type ContentKind = "subject"| "section"| "exam";
 
 const KIND_META: Record<ContentKind, { table: string; column: string; label: string }> = {
-  subject: { table: "subject_premium_batches", column: "subject_id", label: "বিষয়" },
-  section: { table: "section_premium_batches", column: "section_id", label: "সেকশন" },
-  exam: { table: "exam_premium_batches", column: "exam_id", label: "পরীক্ষা" },
+  subject: { table: "subject_premium_batches", column: "subject_id", label: "বিষয়"},
+  section: { table: "section_premium_batches", column: "section_id", label: "সেকশন"},
+  exam: { table: "exam_premium_batches", column: "exam_id", label: "পরীক্ষা"},
 };
 
 const AdminPremiumBatches = () => {
@@ -25,7 +25,7 @@ const AdminPremiumBatches = () => {
   const [desc, setDesc] = useState("");
   const [selected, setSelected] = useState<PB | null>(null);
   const [addUserId, setAddUserId] = useState("");
-  const [panel, setPanel] = useState<"members" | "content">("members");
+  const [panel, setPanel] = useState<"members"| "content">("members");
 
   const [subjects, setSubjects] = useState<{ id: string; name: string }[]>([]);
   const [sections, setSections] = useState<{ id: string; name: string }[]>([]);
@@ -64,7 +64,7 @@ const AdminPremiumBatches = () => {
     const { error } = await supabase.from("premium_batches").insert({ name: name.trim(), description: desc.trim() });
     if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
     setName(""); setDesc("");
-    toast({ title: "প্রিমিয়াম ব্যাচ তৈরি হয়েছে ✅" });
+    toast({ title: "প্রিমিয়াম ব্যাচ তৈরি হয়েছে " });
     load();
   };
 
@@ -82,7 +82,7 @@ const AdminPremiumBatches = () => {
     });
     if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
     setAddUserId("");
-    toast({ title: "ইউজার যোগ হয়েছে ✅" });
+    toast({ title: "ইউজার যোগ হয়েছে " });
     load();
   };
 
@@ -100,7 +100,7 @@ const AdminPremiumBatches = () => {
     } as never);
     if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
     setPick((p) => ({ ...p, [kind]: "" }));
-    toast({ title: `${meta.label} লক করা হয়েছে 🔒` });
+    toast({ title: `${meta.label} লক করা হয়েছে ` });
     load();
   };
 
@@ -114,8 +114,8 @@ const AdminPremiumBatches = () => {
   const selLinks = (kind: ContentKind) => (selected ? links[kind].filter((l) => l.premium_batch_id === selected.id) : []);
 
   const optionsFor = (kind: ContentKind): { id: string; label: string }[] =>
-    kind === "subject" ? subjects.map((s) => ({ id: s.id, label: s.name }))
-      : kind === "section" ? sections.map((s) => ({ id: s.id, label: s.name }))
+    kind === "subject"? subjects.map((s) => ({ id: s.id, label: s.name }))
+      : kind === "section"? sections.map((s) => ({ id: s.id, label: s.name }))
         : exams.map((e) => ({ id: e.id, label: e.title }));
 
   const labelOf = (kind: ContentKind, ref: string) => optionsFor(kind).find((o) => o.id === ref)?.label || ref.slice(0, 8);
@@ -166,13 +166,13 @@ const AdminPremiumBatches = () => {
           <div className="flex gap-2">
             {(["members", "content"] as const).map((p) => (
               <button key={p} onClick={() => setPanel(p)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium ${panel === p ? "bg-primary text-primary-foreground" : "glass-strong text-muted-foreground"}`}>
-                {p === "members" ? "সদস্য" : "লকড কনটেন্ট"}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium ${panel === p ? "bg-primary text-primary-foreground": "glass-strong text-muted-foreground"}`}>
+                {p === "members"? "সদস্য": "লকড কনটেন্ট"}
               </button>
             ))}
           </div>
 
-          {panel === "members" && (
+          {panel === "members"&& (
             <>
               <div className="flex gap-2">
                 <select value={addUserId} onChange={(e) => setAddUserId(e.target.value)} className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm">
@@ -204,7 +204,7 @@ const AdminPremiumBatches = () => {
             </>
           )}
 
-          {panel === "content" && (
+          {panel === "content"&& (
             <div className="space-y-5">
               {(["subject", "section", "exam"] as ContentKind[]).map((kind) => {
                 const meta = KIND_META[kind];
@@ -223,7 +223,7 @@ const AdminPremiumBatches = () => {
                     <div className="flex flex-wrap gap-2">
                       {current.map((l) => (
                         <span key={l.id} className="text-xs glass-strong px-3 py-1.5 rounded-full inline-flex items-center gap-2">
-                          🔒 {labelOf(kind, l.ref)}
+                           {labelOf(kind, l.ref)}
                           <button onClick={() => unlockContent(kind, l.id)} className="text-destructive"><X size={12} /></button>
                         </span>
                       ))}
@@ -232,7 +232,7 @@ const AdminPremiumBatches = () => {
                   </div>
                 );
               })}
-              <p className="text-[11px] text-muted-foreground">💡 একটি বিষয় লক করলে তার সব পত্র, অধ্যায় ও পরীক্ষা স্বয়ংক্রিয়ভাবে লুকিয়ে যাবে।</p>
+              <p className="text-[11px] text-muted-foreground"> একটি বিষয় লক করলে তার সব পত্র, অধ্যায় ও পরীক্ষা স্বয়ংক্রিয়ভাবে লুকিয়ে যাবে।</p>
             </div>
           )}
         </div>

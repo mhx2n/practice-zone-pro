@@ -51,7 +51,7 @@ const StudentProfile = () => {
   }, [user?.id]);
 
   const totalAttempts = results.length;
-  const validResults = results.filter((r) => typeof r.percentage === "number" && !isNaN(r.percentage));
+  const validResults = results.filter((r) => typeof r.percentage === "number"&& !isNaN(r.percentage));
   const avgScore = validResults.length > 0 ? Math.round(validResults.reduce((s, r) => s + r.percentage, 0) / validResults.length) : 0;
   const bestScore = validResults.length > 0 ? Math.max(...validResults.map((r) => r.percentage)) : 0;
   const uniqueExams = new Set(results.map((r) => r.examId)).size;
@@ -72,9 +72,9 @@ const StudentProfile = () => {
   }, [validResults]);
 
   const pieData = [
-    { name: "সঠিক", value: totals.correct, color: "hsl(var(--success))" },
-    { name: "ভুল", value: totals.wrong, color: "hsl(var(--destructive))" },
-    { name: "ছাড়া", value: totals.skipped, color: "hsl(var(--muted-foreground))" },
+    { name: "সঠিক", value: totals.correct, color: "hsl(var(--success))"},
+    { name: "ভুল", value: totals.wrong, color: "hsl(var(--destructive))"},
+    { name: "ছাড়া", value: totals.skipped, color: "hsl(var(--muted-foreground))"},
   ].filter((x) => x.value > 0);
 
   const submittedLive = liveStats.filter((p) => p.status === "submitted");
@@ -108,7 +108,7 @@ const StudentProfile = () => {
         .from("profiles")
         .upsert(
           { user_id: user.id, email: user.email, full_name: name, phone: ph || null },
-          { onConflict: "user_id" }
+          { onConflict: "user_id"}
         )
         .select()
         .single();
@@ -117,7 +117,7 @@ const StudentProfile = () => {
       await refreshProfile();
       setFullName(name);
       setPhone(ph);
-      toast({ title: "সংরক্ষিত হয়েছে ✅" });
+      toast({ title: "সংরক্ষিত হয়েছে " });
     } catch (err: any) {
       toast({ title: "সংরক্ষণ ব্যর্থ", description: err?.message || "অজানা ত্রুটি", variant: "destructive" });
     } finally {
@@ -150,14 +150,14 @@ const StudentProfile = () => {
         .from("profiles")
         .upsert(
           { user_id: user.id, email: user.email, avatar_url: publicUrl },
-          { onConflict: "user_id" }
+          { onConflict: "user_id"}
         )
         .select()
         .single();
       if (updateError) throw updateError;
       if (!updated) throw new Error("প্রোফাইলে সেভ হয়নি");
       await refreshProfile();
-      toast({ title: "ছবি আপডেট হয়েছে ✅" });
+      toast({ title: "ছবি আপডেট হয়েছে " });
     } catch (err: any) {
       toast({ title: "আপলোড ব্যর্থ", description: err?.message || "অজানা ত্রুটি", variant: "destructive" });
     } finally {
@@ -205,10 +205,10 @@ const StudentProfile = () => {
       {/* Stats grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
         {[
-          { icon: BookOpen, label: "মোট অনুশীলন", value: totalAttempts, color: "text-primary" },
-          { icon: BarChart3, label: "গড় স্কোর", value: `${avgScore}%`, color: "text-blue-500" },
-          { icon: Award, label: "সর্বোচ্চ", value: `${Math.round(bestScore)}%`, color: "text-warning" },
-          { icon: Radio, label: "লাইভ গড়", value: submittedLive.length ? `${liveAvg}%` : "—", color: "text-success" },
+          { icon: BookOpen, label: "মোট অনুশীলন", value: totalAttempts, color: "text-primary"},
+          { icon: BarChart3, label: "গড় স্কোর", value: `${avgScore}%`, color: "text-blue-500"},
+          { icon: Award, label: "সর্বোচ্চ", value: `${Math.round(bestScore)}%`, color: "text-warning"},
+          { icon: Radio, label: "লাইভ গড়", value: submittedLive.length ? `${liveAvg}%` : "—", color: "text-success"},
         ].map((s, i) => (
           <div key={i} className="glass-card-static p-4 text-center">
             <s.icon className={`mx-auto mb-2 ${s.color}`} size={20} />
@@ -284,7 +284,7 @@ const StudentProfile = () => {
           disabled={saving}
           className="w-full py-2.5 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
         >
-          <Save size={14} /> {saving ? "সংরক্ষণ হচ্ছে..." : "সংরক্ষণ"}
+          <Save size={14} /> {saving ? "সংরক্ষণ হচ্ছে...": "সংরক্ষণ"}
         </button>
       </div>
 
@@ -301,11 +301,11 @@ const StudentProfile = () => {
                     <span className="text-success flex items-center gap-0.5"><CheckCircle2 size={10} />{p.correct}</span>
                     <span className="text-destructive flex items-center gap-0.5"><XCircle size={10} />{p.wrong}</span>
                     <span>•</span>
-                    <span>{p.status === "submitted" ? "জমা" : p.status}</span>
+                    <span>{p.status === "submitted"? "জমা": p.status}</span>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className={`text-sm font-bold ${p.percentage >= 60 ? "text-success" : p.percentage >= 40 ? "text-warning" : "text-destructive"}`}>
+                  <p className={`text-sm font-bold ${p.percentage >= 60 ? "text-success": p.percentage >= 40 ? "text-warning": "text-destructive"}`}>
                     {Math.round(p.percentage)}%
                   </p>
                   <p className="text-[10px] text-muted-foreground">{p.score}/{p.max_score}</p>
@@ -326,7 +326,7 @@ const StudentProfile = () => {
                   <p className="text-sm font-medium">{r.examTitle}</p>
                   <p className="text-xs text-muted-foreground">{new Date(r.timestamp).toLocaleDateString("bn-BD")}</p>
                 </div>
-                <span className={`font-bold ${r.percentage >= 60 ? "text-success" : "text-destructive"}`}>{Math.round(r.percentage)}%</span>
+                <span className={`font-bold ${r.percentage >= 60 ? "text-success": "text-destructive"}`}>{Math.round(r.percentage)}%</span>
               </div>
             ))}
           </div>

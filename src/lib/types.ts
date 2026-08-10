@@ -74,7 +74,7 @@ export interface SiteSettings {
 }
 
 export interface ReportSettings {
-  themeId: string; // "blue" | "emerald" | "maroon" | "noir-gold" | "purple" | "custom"
+  themeId: string; // "blue"| "emerald"| "maroon"| "noir-gold"| "purple"| "custom"
   customHeader?: string; // hex
   customAccent?: string; // hex
   footerText: string;
@@ -95,7 +95,7 @@ export interface Exam {
   chapter: string;
   sectionId?: string;
   chapterId?: string;
-  difficulty: "easy" | "medium" | "hard";
+  difficulty: "easy"| "medium"| "hard";
   questionCount: number;
   duration: number; // minutes
   negativeMarking: number; // e.g. 0, 0.25, 0.5, 1

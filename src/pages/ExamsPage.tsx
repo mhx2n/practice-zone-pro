@@ -3,7 +3,7 @@ import { useSubjectRows, usePapers, useChapters } from "@/hooks/useCurriculum";
 import { usePremiumAccess } from "@/hooks/usePremiumAccess";
 import ExamCard from "@/components/ExamCard";
 import { useMemo, useState } from "react";
-import { Search, X, FolderOpen, BookOpen, ChevronRight, Layers, FileText, ArrowLeft, Library } from "lucide-react";
+import { Search, FolderOpen, BookOpen, ChevronRight, Layers, FileText, ArrowLeft, Library } from "lucide-react";
 import { getLabel } from "@/lib/labels";
 import { useSearchParams } from "react-router-dom";
 
@@ -21,14 +21,14 @@ const ExamsPage = () => {
   const [paperId, setPaperId] = useState<string | null>(null);
   const [chapterId, setChapterId] = useState<string | null>(null);
   const [searchParams] = useSearchParams();
-  const [tab, setTab] = useState<"sections" | "subjects">((searchParams.get("tab") as "sections" | "subjects") || "sections");
+  const [tab, setTab] = useState<"sections"| "subjects">((searchParams.get("tab") as "sections"| "subjects") || "sections");
 
   const allExams = allExamsRaw.filter((e) => e.published && canAccess(e.id));
 
   const diffLabels: Record<string, string> = { all: getLabel("diffAll"), easy: getLabel("diffEasy"), medium: getLabel("diffMedium"), hard: getLabel("diffHard") };
 
   const matches = (title: string) => !search || title.toLowerCase().includes(search.toLowerCase());
-  const passesDifficulty = (d: string) => difficulty === "all" || d === difficulty;
+  const passesDifficulty = (d: string) => difficulty === "all"|| d === difficulty;
 
   const sectionGroups = sections
     .map((s) => ({
@@ -65,20 +65,20 @@ const ExamsPage = () => {
 
   const crumb = (label: string, onClick: (() => void) | null) => (
     <button key={label} onClick={onClick ?? undefined} disabled={!onClick}
-      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${onClick ? "glass-strong hover:text-primary" : "bg-primary text-primary-foreground"}`}>
+      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${onClick ? "glass-strong hover:text-primary": "bg-primary text-primary-foreground"}`}>
       {label}
     </button>
   );
 
   return (
     <div className="pt-24 pb-8 container min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">{getLabel("examsPageTitle")}</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-2"><Library size={22} className="text-primary" /> {getLabel("examsPageTitle")}</h1>
 
       <div className="flex gap-2 mb-5">
         <button
           onClick={() => setTab("sections")}
           className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
-            tab === "sections" ? "bg-primary text-primary-foreground shadow-md" : "glass-strong text-muted-foreground hover:text-foreground"
+            tab === "sections"? "bg-primary text-primary-foreground shadow-md": "glass-strong text-muted-foreground hover:text-foreground"
           }`}
         >
           <Library size={16} /> প্রশ্ন ভান্ডার
@@ -86,7 +86,7 @@ const ExamsPage = () => {
         <button
           onClick={() => setTab("subjects")}
           className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
-            tab === "subjects" ? "bg-primary text-primary-foreground shadow-md" : "glass-strong text-muted-foreground hover:text-foreground"
+            tab === "subjects"? "bg-primary text-primary-foreground shadow-md": "glass-strong text-muted-foreground hover:text-foreground"
           }`}
         >
           <BookOpen size={16} /> {getLabel("tabSubjects")}
@@ -105,38 +105,56 @@ const ExamsPage = () => {
       </div>
 
       {/* ============ প্রশ্ন ভান্ডার ============ */}
-      {tab === "sections" && (
+      {tab === "sections"&& (
         sectionGroups.length === 0 ? (
           <div className="glass-card-static p-12 text-center text-muted-foreground">{getLabel("noSections")}</div>
-        ) : (
-          <div className="space-y-8">
+        ) : !openSection ? (
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
             {sectionGroups.map(({ section, exams }) => (
-              <section key={section.id}>
-                <div className="flex items-end justify-between gap-3 mb-3">
-                  <div className="min-w-0">
-                    <h2 className="text-base font-bold text-primary flex items-center gap-2"><FolderOpen size={16} /> {section.name}</h2>
-                    {section.caption && <p className="text-xs text-primary/70 italic mt-0.5">{section.caption}</p>}
-                    {section.description && !section.caption && <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{section.description}</p>}
+              <button key={section.id} onClick={() => setOpenSectionId(section.id)}
+                className="glass-card p-0 overflow-hidden text-left group transition-all hover:scale-[1.02] active:scale-[0.98]">
+                <div className="w-full aspect-[16/9] overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                  {section.image
+                    ? <img src={section.image} alt={section.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    : <FolderOpen size={32} className="text-primary/50" />}
+                </div>
+                <div className="p-3 sm:p-4">
+                  <h2 className="text-sm font-bold line-clamp-1">{section.name}</h2>
+                  {section.caption && <p className="text-[11px] text-primary/70 italic mt-0.5 line-clamp-1">{section.caption}</p>}
+                  {section.description && !section.caption && <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">{section.description}</p>}
+                  <div className="flex items-center justify-between mt-3 text-[11px]">
+                    <span className="text-muted-foreground bg-muted px-2 py-0.5 rounded-full">{exams.length} পরীক্ষা</span>
+                    <ChevronRight size={15} className="text-primary group-hover:translate-x-1 transition-transform" />
                   </div>
-                  <button onClick={() => setOpenSectionId(section.id)} className="text-xs text-primary font-medium whitespace-nowrap hover:underline">
-                    সব দেখুন ({exams.length})
-                  </button>
                 </div>
-                <div className="flex gap-4 overflow-x-auto pb-3 -mx-1 px-1 snap-x snap-mandatory scroll-smooth">
-                  {exams.map((e) => (
-                    <div key={e.id} className="min-w-[260px] max-w-[280px] flex-shrink-0 snap-start">
-                      <ExamCard exam={e} />
-                    </div>
-                  ))}
-                </div>
-              </section>
+              </button>
             ))}
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <button onClick={() => setOpenSectionId(null)} className="text-sm text-muted-foreground inline-flex items-center gap-1 hover:text-foreground"><ArrowLeft size={14} /> সব ভান্ডার</button>
+            <div className="glass-card-static overflow-hidden">
+              {openSection.section.image && (
+                <div className="w-full aspect-[16/9] sm:aspect-[21/9] overflow-hidden">
+                  <img src={openSection.section.image} alt={openSection.section.name} className="w-full h-full object-cover" />
+                </div>
+              )}
+              <div className="p-4">
+                <h2 className="text-base font-bold text-primary flex items-center gap-2"><FolderOpen size={16} /> {openSection.section.name}</h2>
+                {openSection.section.caption && <p className="text-xs text-primary/70 italic mt-0.5">{openSection.section.caption}</p>}
+                {openSection.section.description && <p className="text-xs text-muted-foreground mt-0.5">{openSection.section.description}</p>}
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {openSection.exams.map((e) => <ExamCard key={e.id} exam={e} />)}
+            </div>
           </div>
         )
       )}
 
+
       {/* ============ বিষয় (Subject → Paper → Chapter → Exam) ============ */}
-      {tab === "subjects" && (
+      {tab === "subjects"&& (
         <>
           {(subject || paper || chapter) && (
             <div className="flex items-center gap-2 flex-wrap mb-5">
@@ -159,7 +177,7 @@ const ExamsPage = () => {
                 {subjectRows.map((s) => (
                   <button key={s.id} onClick={() => setSubjectId(s.id)}
                     className="glass-card p-0 overflow-hidden text-left group transition-all hover:scale-[1.02] active:scale-[0.98]">
-                    <div className="w-full h-32 overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                    <div className="w-full aspect-[16/9] overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
                       {s.image
                         ? <img src={s.image} alt={s.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                         : <BookOpen size={34} className="text-primary/50" />}
@@ -256,25 +274,6 @@ const ExamsPage = () => {
         </>
       )}
 
-      {openSection && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in" onClick={() => setOpenSectionId(null)}>
-          <div className="w-full max-w-2xl max-h-[85vh] bg-background rounded-t-2xl sm:rounded-2xl border border-border shadow-2xl overflow-hidden animate-scale-in flex flex-col" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between p-5 border-b border-border">
-              <div>
-                <h2 className="text-lg font-bold text-primary">📂 {openSection.section.name}</h2>
-                {openSection.section.caption && <p className="text-xs text-primary/70 italic mt-0.5">{openSection.section.caption}</p>}
-                {openSection.section.description && <p className="text-xs text-muted-foreground mt-0.5">{openSection.section.description}</p>}
-              </div>
-              <button onClick={() => setOpenSectionId(null)} className="p-2 rounded-xl hover:bg-muted transition-colors"><X size={20} /></button>
-            </div>
-            <div className="flex-1 overflow-y-auto p-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {openSection.exams.map((e) => <ExamCard key={e.id} exam={e} />)}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

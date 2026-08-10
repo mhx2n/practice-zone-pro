@@ -18,7 +18,7 @@ const NoticesPage = () => {
           {notices.map((n) => (
             <Link key={n.id} to={`/notices/${n.id}`} className="glass-card p-5 block">
               <div className="flex items-center gap-2 mb-2">
-                {n.pinned && <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">📌 পিন করা</span>}
+                {n.pinned && <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full"> পিন করা</span>}
                 <span className="text-xs text-muted-foreground ml-auto">{new Date(n.createdAt).toLocaleDateString("bn-BD")}</span>
               </div>
               <h3 className="font-semibold mb-1">{n.title}</h3>

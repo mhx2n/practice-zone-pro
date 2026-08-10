@@ -19,7 +19,7 @@ const AdminQuestions = () => {
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-xl font-bold mb-5">❓ প্রশ্ন ভান্ডার</h1>
+      <h1 className="text-xl font-bold mb-5"> প্রশ্ন ভান্ডার</h1>
 
       <div className="flex flex-col sm:flex-row gap-3 mb-5">
         <div className="relative flex-1">
@@ -46,7 +46,7 @@ const AdminQuestions = () => {
         {filtered.slice(0, 50).map((q, i) => (
           <div key={q.id} className="glass-card-static p-3">
             <p className="text-sm font-medium"><span className="text-muted-foreground mr-2">{i + 1}.</span>{q.question}</p>
-            <p className="text-xs text-muted-foreground mt-1">✅ {q.answer} • 📁 {q.section} • 📝 {q.examTitle}</p>
+            <p className="text-xs text-muted-foreground mt-1"> {q.answer} •  {q.section} •  {q.examTitle}</p>
           </div>
         ))}
         {filtered.length > 50 && (

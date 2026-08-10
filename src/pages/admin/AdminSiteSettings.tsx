@@ -19,7 +19,7 @@ const RichEditor = ({ label, value, onChange }: { label: string; value: string; 
           <button type="button" onClick={insertLink} className="p-1.5 rounded hover:bg-muted transition-colors"><LinkIcon size={14} /></button>
           <button type="button" onClick={() => execCmd("insertUnorderedList")} className="p-1.5 rounded hover:bg-muted transition-colors"><List size={14} /></button>
           <select onChange={(e) => { if (e.target.value) execCmd("fontSize", e.target.value); }} className="text-xs bg-transparent border border-border rounded px-1 py-1" defaultValue="">
-            <option value="" disabled>সাইজ</option>
+            <option value=""disabled>সাইজ</option>
             <option value="1">ছোট</option>
             <option value="3">স্বাভাবিক</option>
             <option value="5">বড়</option>
@@ -34,12 +34,12 @@ const RichEditor = ({ label, value, onChange }: { label: string; value: string; 
 };
 
 const labelGroups: { title: string; keys: string[] }[] = [
-  { title: "🧭 নেভিগেশন", keys: ["navHome", "navExams", "navResults", "navNotices", "navProfile", "navAbout"] },
-  { title: "🏠 হোমপেজ", keys: ["searchPlaceholder", "ctaExams", "ctaResults", "statTotalExams", "statSubjects", "statPractice", "statNotices", "recentResults", "viewAll", "noticeBoard", "featuredExams", "allExams", "viewMore", "pinned"] },
-  { title: "📝 পরীক্ষা", keys: ["examsPageTitle", "tabSections", "tabSubjects", "searchHint", "allSubjects", "diffAll", "diffEasy", "diffMedium", "diffHard", "noSections", "noExams", "examCount", "viewSection", "startExam", "questions", "minutes"] },
-  { title: "📋 ফুটার", keys: ["quickLinks", "contact", "allRightsReserved"] },
-  { title: "📊 অন্যান্য", keys: ["resultsTitle", "noticesTitle"] },
-  { title: "🔴 লাইভ এক্সাম পেজ", keys: ["liveExamBadge", "liveExamHeroTitle", "liveExamHeroSubtitle", "liveExamStatNow", "liveExamStatUpcoming", "liveExamSectionLive", "liveExamSectionUpcoming", "liveExamEmptyTitle", "liveExamEmptySubtitle", "liveExamJoinNow", "liveExamWait", "liveExamJoining"] },
+  { title: "নেভিগেশন", keys: ["navHome", "navExams", "navResults", "navNotices", "navProfile", "navAbout"] },
+  { title: "হোমপেজ", keys: ["searchPlaceholder", "ctaExams", "ctaResults", "statTotalExams", "statSubjects", "statPractice", "statNotices", "recentResults", "viewAll", "noticeBoard", "featuredExams", "allExams", "viewMore", "pinned"] },
+  { title: "পরীক্ষা", keys: ["examsPageTitle", "tabSections", "tabSubjects", "searchHint", "allSubjects", "diffAll", "diffEasy", "diffMedium", "diffHard", "noSections", "noExams", "examCount", "viewSection", "startExam", "questions", "minutes"] },
+  { title: "ফুটার", keys: ["quickLinks", "contact", "allRightsReserved"] },
+  { title: "অন্যান্য", keys: ["resultsTitle", "noticesTitle"] },
+  { title: "লাইভ এক্সাম পেজ", keys: ["liveExamBadge", "liveExamHeroTitle", "liveExamHeroSubtitle", "liveExamStatNow", "liveExamStatUpcoming", "liveExamSectionLive", "liveExamSectionUpcoming", "liveExamEmptyTitle", "liveExamEmptySubtitle", "liveExamJoinNow", "liveExamWait", "liveExamJoining"] },
 ];
 
 const AdminSiteSettings = () => {
@@ -69,18 +69,18 @@ const AdminSiteSettings = () => {
 
   const save = () => {
     saveMut.mutate(settings, {
-      onSuccess: () => toast({ title: "সেটিংস সেভ হয়েছে ✅" }),
+      onSuccess: () => toast({ title: "সেটিংস সেভ হয়েছে " }),
     });
   };
 
-  const addFooterLink = () => update("footerLinks", [...settings.footerLinks, { label: "", url: "" }]);
+  const addFooterLink = () => update("footerLinks", [...settings.footerLinks, { label: "", url: ""}]);
   const removeFooterLink = (i: number) => update("footerLinks", settings.footerLinks.filter((_, idx) => idx !== i));
-  const updateFooterLink = (i: number, key: "label" | "url", val: string) => {
+  const updateFooterLink = (i: number, key: "label"| "url", val: string) => {
     const updated = [...settings.footerLinks]; updated[i] = { ...updated[i], [key]: val }; update("footerLinks", updated);
   };
-  const addSocialLink = () => update("socialLinks", [...settings.socialLinks, { label: "", url: "" }]);
+  const addSocialLink = () => update("socialLinks", [...settings.socialLinks, { label: "", url: ""}]);
   const removeSocialLink = (i: number) => update("socialLinks", settings.socialLinks.filter((_, idx) => idx !== i));
-  const updateSocialLink = (i: number, key: "label" | "url", val: string) => {
+  const updateSocialLink = (i: number, key: "label"| "url", val: string) => {
     const updated = [...settings.socialLinks]; updated[i] = { ...updated[i], [key]: val }; update("socialLinks", updated);
   };
 
@@ -89,7 +89,7 @@ const AdminSiteSettings = () => {
   return (
     <div className="animate-fade-in max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold">🌐 সাইট কাস্টমাইজ</h1>
+        <h1 className="text-xl font-bold"> সাইট কাস্টমাইজ</h1>
         <button onClick={save} disabled={saveMut.isPending} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-all">
           <Save size={16} /> সেভ করুন
         </button>
@@ -97,7 +97,7 @@ const AdminSiteSettings = () => {
 
       <div className="space-y-6">
         <div className="glass-card-static p-5 space-y-4">
-          <h2 className="text-sm font-bold">📖 আমাদের সম্পর্কে পেজ</h2>
+          <h2 className="text-sm font-bold"> আমাদের সম্পর্কে পেজ</h2>
           <div className="space-y-2">
             <label className="text-sm font-semibold">শিরোনাম</label>
             <input value={settings.aboutTitle} onChange={(e) => update("aboutTitle", e.target.value)}
@@ -119,7 +119,7 @@ const AdminSiteSettings = () => {
         </div>
 
         <div className="glass-card-static p-5 space-y-4">
-          <h2 className="text-sm font-bold">📋 ফুটার সেটিংস</h2>
+          <h2 className="text-sm font-bold"> ফুটার সেটিংস</h2>
           <div className="space-y-2">
             <label className="text-sm font-semibold">ফুটার বিবরণ</label>
             <input value={settings.footerDescription} onChange={(e) => update("footerDescription", e.target.value)}
@@ -170,7 +170,7 @@ const AdminSiteSettings = () => {
 
         <div className="glass-card-static p-5 space-y-4">
           <button onClick={() => setLabelsOpen(!labelsOpen)} className="w-full flex items-center justify-between">
-            <h2 className="text-sm font-bold">🏷️ সকল টেক্সট/লেবেল কাস্টমাইজ</h2>
+            <h2 className="text-sm font-bold"> সকল টেক্সট/লেবেল কাস্টমাইজ</h2>
             {labelsOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
           </button>
           {labelsOpen && (

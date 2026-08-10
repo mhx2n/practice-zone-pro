@@ -5,7 +5,7 @@ import { useState, useMemo } from "react";
 
 import { getLabel } from "@/lib/labels";
 
-const diffLabel: Record<string, string> = { easy: "সহজ", medium: "মাঝারি", hard: "কঠিন" };
+const diffLabel: Record<string, string> = { easy: "সহজ", medium: "মাঝারি", hard: "কঠিন"};
 
 const ExamDetails = () => {
   const { id } = useParams();
@@ -93,10 +93,10 @@ const ExamDetails = () => {
         {/* Subject Selection for multi-subject exams */}
         {hasMultipleSubjects && (
           <div className="glass-card-static p-3 bg-accent/5 border-accent/20">
-            <h3 className="font-semibold text-xs mb-2">📚 {getLabel("subjectSelection", "বিষয় নির্বাচন করুন")}</h3>
+            <h3 className="font-semibold text-xs mb-2"> {getLabel("subjectSelection", "বিষয় নির্বাচন করুন")}</h3>
             <p className="text-[10px] text-muted-foreground mb-2">
               {mandatorySubjects.length > 0
-                ? `🔒 ${mandatorySubjects.join(", ")} ${getLabel("mandatory", "বাধ্যতামূলক")}।`
+                ? ` ${mandatorySubjects.join(", ")} ${getLabel("mandatory", "বাধ্যতামূলক")}।`
                 : getLabel("subjectSelectionHint", "আপনি যে বিষয়গুলোতে পরীক্ষা দিতে চান সেগুলো নির্বাচন করুন।")
               }
             </p>
@@ -114,7 +114,7 @@ const ExamDetails = () => {
                       isSelected
                         ? "bg-primary/10 border-primary/30 text-primary"
                         : "border-border hover:border-primary/20 hover:bg-primary/5 text-muted-foreground"
-                    } ${isMandatory ? "opacity-90 cursor-not-allowed" : ""}`}
+                    } ${isMandatory ? "opacity-90 cursor-not-allowed": ""}`}
                   >
                     {isMandatory ? (
                       <Lock size={13} className="text-primary flex-shrink-0" />
@@ -139,7 +139,7 @@ const ExamDetails = () => {
         )}
 
         <div className="glass-card-static p-4 bg-primary/5 border-primary/20">
-          <h3 className="font-semibold text-sm mb-2">📋 {getLabel("instructionsTitle", "নির্দেশাবলী")}</h3>
+          <h3 className="font-semibold text-sm mb-2"> {getLabel("instructionsTitle", "নির্দেশাবলী")}</h3>
           <ul className="text-xs text-muted-foreground space-y-1.5 list-disc list-inside">
             <li>{getLabel("inst1", "প্রতিটি প্রশ্নের একটি সঠিক উত্তর আছে")}</li>
             <li>{getLabel("inst2", "সময় শেষ হলে স্বয়ংক্রিয়ভাবে জমা হবে")}</li>
@@ -152,14 +152,14 @@ const ExamDetails = () => {
           disabled={hasMultipleSubjects && selectedSubjects.length === 0}
           className="w-full inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-4 py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-[0.98] disabled:opacity-50"
         >
-          পরীক্ষা শুরু করুন 🚀 {hasMultipleSubjects && `(${selectedQuestionCount} প্রশ্ন)`}
+          পরীক্ষা শুরু করুন  {hasMultipleSubjects && `(${selectedQuestionCount} প্রশ্ন)`}
         </button>
         {hasAttempted && (
           <Link
             to={`/exams/${exam.id}/revise`}
             className="w-full inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-4 py-3 bg-accent/10 text-foreground border border-accent/30 hover:bg-accent/20 transition-all active:scale-[0.98]"
           >
-            <BookOpen size={16} /> 📖 রিভিশন মোড (প্রশ্ন + উত্তর + ব্যাখ্যা)
+            <BookOpen size={16} /> রিভিশন মোড (প্রশ্ন + উত্তর + ব্যাখ্যা)
           </Link>
         )}
       </div>

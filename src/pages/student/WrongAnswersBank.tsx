@@ -62,7 +62,7 @@ const WrongAnswersBank = () => {
     <div className="pt-24 pb-8 container max-w-3xl mx-auto animate-fade-in px-3 sm:px-4">
       <div className="flex items-center gap-3 mb-5">
         <Link to="/" className="text-muted-foreground hover:text-foreground"><ArrowLeft size={20} /></Link>
-        <h1 className="text-xl font-bold">📕 ভুল উত্তর ব্যাংক</h1>
+        <h1 className="text-xl font-bold"> ভুল উত্তর ব্যাংক</h1>
       </div>
 
       {entries.length === 0 ? (
@@ -133,7 +133,7 @@ const WrongAnswersBank = () => {
                           >
                             <div className="flex items-center gap-2">
                               <span className="text-xs font-bold bg-primary/10 text-primary px-3 py-1 rounded-full">
-                                📘 {subject}
+                                 {subject}
                               </span>
                               <span className="text-xs text-muted-foreground">{items.length}টি ভুল</span>
                             </div>
@@ -175,7 +175,7 @@ const WrongAnswersBank = () => {
                                   {entry.explanation && (
                                     <div className="text-[15px] sm:text-base bg-muted/50 rounded-lg p-3.5 sm:p-4 border border-border/30">
                                       <div className="flex items-start gap-2.5">
-                                        <span className="text-lg">💡</span>
+                                        <span className="text-lg"></span>
                                         <div>
                                           <strong className="text-foreground">ব্যাখ্যা:</strong>
                                           <p className="mt-1.5 leading-[1.7] text-muted-foreground">

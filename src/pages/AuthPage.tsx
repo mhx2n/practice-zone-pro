@@ -38,13 +38,13 @@ const AuthPage = () => {
         const result = await signUp(normalized, password, fullName);
         if (!result?.session) {
           toast({
-            title: "ভেরিফিকেশন ইমেইল পাঠানো হয়েছে 📧",
+            title: "ভেরিফিকেশন ইমেইল পাঠানো হয়েছে ",
             description: "আপনার Gmail-এ গিয়ে ভেরিফাই লিংকে ক্লিক করুন, তারপর লগইন করুন।",
           });
           setIsSignUp(false);
           return;
         }
-        toast({ title: "স্বাগতম! ✅" });
+        toast({ title: "স্বাগতম! " });
       } else {
         await signIn(normalized, password);
       }
@@ -66,9 +66,9 @@ const AuthPage = () => {
             <span>🎯</span>
             <span className="gradient-text">Target</span>
           </Link>
-          <h1 className="text-xl font-bold">{isSignUp ? "অ্যাকাউন্ট তৈরি করুন" : "লগইন করুন"}</h1>
+          <h1 className="text-xl font-bold">{isSignUp ? "অ্যাকাউন্ট তৈরি করুন": "লগইন করুন"}</h1>
           <p className="text-xs text-muted-foreground mt-1">
-            {isSignUp ? "নতুন অ্যাকাউন্ট খুলুন" : "আপনার অ্যাকাউন্টে প্রবেশ করুন"}
+            {isSignUp ? "নতুন অ্যাকাউন্ট খুলুন": "আপনার অ্যাকাউন্টে প্রবেশ করুন"}
           </p>
         </div>
 
@@ -115,7 +115,7 @@ const AuthPage = () => {
             disabled={loading}
             className="w-full py-3 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-all"
           >
-            {loading ? "অপেক্ষা করুন..." : isSignUp ? "রেজিস্ট্রেশন" : "লগইন"}
+            {loading ? "অপেক্ষা করুন...": isSignUp ? "রেজিস্ট্রেশন": "লগইন"}
           </button>
         </form>
 
@@ -123,7 +123,7 @@ const AuthPage = () => {
           onClick={() => setIsSignUp(!isSignUp)}
           className="block w-full text-center text-xs text-primary mt-4 hover:underline"
         >
-          {isSignUp ? "ইতোমধ্যে অ্যাকাউন্ট আছে? লগইন করুন" : "নতুন অ্যাকাউন্ট তৈরি করুন"}
+          {isSignUp ? "ইতোমধ্যে অ্যাকাউন্ট আছে? লগইন করুন": "নতুন অ্যাকাউন্ট তৈরি করুন"}
         </button>
       </div>
     </div>

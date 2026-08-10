@@ -3,7 +3,7 @@ import { ThemePreset, ThemeColors } from "./types";
 export const themePresets: ThemePreset[] = [
   {
     id: "ocean-blue",
-    name: "🌊 ওশান ব্লু",
+    name: "ওশান ব্লু",
     light: {
       primary: "210 100% 50%",
       primaryForeground: "0 0% 100%",
@@ -41,7 +41,7 @@ export const themePresets: ThemePreset[] = [
   },
   {
     id: "emerald-edu",
-    name: "🌿 এমারেল্ড এডু",
+    name: "এমারেল্ড এডু",
     light: {
       primary: "160 84% 39%",
       primaryForeground: "0 0% 100%",
@@ -79,7 +79,7 @@ export const themePresets: ThemePreset[] = [
   },
   {
     id: "royal-purple",
-    name: "👑 রয়েল পার্পল",
+    name: "রয়েল পার্পল",
     light: {
       primary: "270 70% 55%",
       primaryForeground: "0 0% 100%",
@@ -117,7 +117,7 @@ export const themePresets: ThemePreset[] = [
   },
   {
     id: "warm-sunset",
-    name: "🌅 ওয়ার্ম সানসেট",
+    name: "ওয়ার্ম সানসেট",
     light: {
       primary: "20 90% 52%",
       primaryForeground: "0 0% 100%",
@@ -155,7 +155,7 @@ export const themePresets: ThemePreset[] = [
   },
   {
     id: "deep-navy",
-    name: "⚓ ডিপ নেভি",
+    name: "ডিপ নেভি",
     light: {
       primary: "230 70% 50%",
       primaryForeground: "0 0% 100%",
@@ -193,7 +193,7 @@ export const themePresets: ThemePreset[] = [
   },
   {
     id: "rose-pink",
-    name: "🌸 রোজ পিংক",
+    name: "রোজ পিংক",
     light: {
       primary: "340 75% 55%",
       primaryForeground: "0 0% 100%",
@@ -231,7 +231,7 @@ export const themePresets: ThemePreset[] = [
   },
 ];
 
-export function applyThemeColors(colors: ThemeColors, mode: "light" | "dark") {
+export function applyThemeColors(colors: ThemeColors, mode: "light"| "dark") {
   const root = document.documentElement;
   const isDark = mode === "dark";
   const target = isDark ? root : root;

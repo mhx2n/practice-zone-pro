@@ -51,6 +51,7 @@ import AdminPhotocardBuilder from "./pages/admin/AdminPhotocardBuilder";
 import StudentLiveExams from "./pages/student/StudentLiveExams";
 import LiveExamAttempt from "./pages/student/LiveExamAttempt";
 import LiveExamReview from "./pages/student/LiveExamReview";
+import LiveExamLeaderboard from "./pages/student/LiveExamLeaderboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -78,8 +79,8 @@ const App = () => (
               {/* Public auth pages */}
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/secure-admin-login" element={<AdminLoginPage />} />
-              <Route path="/index" element={<Navigate to="/" replace />} />
-              <Route path="/index.html" element={<Navigate to="/" replace />} />
+              <Route path="/index" element={<Navigate to="/"replace />} />
+              <Route path="/index.html" element={<Navigate to="/"replace />} />
 
               {/* Login required for entire site */}
               <Route element={<ProtectedRoute />}>
@@ -98,6 +99,7 @@ const App = () => (
                   <Route path="/live-exams" element={<StudentLiveExams />} />
                   <Route path="/live-exam/:id" element={<LiveExamAttempt />} />
                   <Route path="/live-exam/:id/review" element={<LiveExamReview />} />
+                  <Route path="/live-exam/:id/leaderboard" element={<LiveExamLeaderboard />} />
                 </Route>
 
                 {/* Admin routes */}

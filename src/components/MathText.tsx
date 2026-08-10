@@ -8,7 +8,7 @@ interface MathTextProps {
   className?: string;
 }
 
-type Token = { type: "text" | "math"; value: string; display?: boolean };
+type Token = { type: "text"| "math"; value: string; display?: boolean };
 
 const LATEX_ENVIRONMENTS = [
   "matrix", "pmatrix", "bmatrix", "Bmatrix", "vmatrix", "Vmatrix", "smallmatrix",
@@ -60,7 +60,7 @@ const consumeBracketExpression = (source: string, start: number) => {
   if (!prefix) return null;
   const openAt = start + prefix[0].length;
   const open = source[openAt];
-  const close = open === "{" ? "}" : "]";
+  const close = open === " {"? "}": "]";
   let depth = 0;
   for (let i = openAt; i < source.length; i++) {
     const ch = source[i];
@@ -122,7 +122,7 @@ export function renderMathTextToHtml(text: string): string {
     }
     if (source.startsWith("\\[", i) || source.startsWith("\\(", i)) {
       const display = source.startsWith("\\[", i);
-      const close = display ? "\\]" : "\\)";
+      const close = display ? "\\]": "\\)";
       const end = source.indexOf(close, i + 2);
       if (end !== -1) {
         flush();
@@ -131,7 +131,7 @@ export function renderMathTextToHtml(text: string): string {
         continue;
       }
     }
-    if (source[i] === "$" && source[i + 1] !== "$") {
+    if (source[i] === "$"&& source[i + 1] !== "$") {
       const end = source.indexOf("$", i + 1);
       if (end !== -1 && !source.slice(i + 1, end).includes("\n")) {
         flush();
@@ -180,7 +180,7 @@ export function renderMathTextToHtml(text: string): string {
 
   return tokens.map((token) => {
     if (token.type === "text") return escapeHtml(token.value);
-    const cls = token.display ? "math-text-display" : "math-text-inline";
+    const cls = token.display ? "math-text-display": "math-text-inline";
     return `<span class="${cls}">${renderMath(token.value, !!token.display)}</span>`;
   }).join("");
 }
@@ -189,7 +189,7 @@ export function renderMathTextToHtml(text: string): string {
  * Renders text with LaTeX math expressions.
  * Supports delimiters and common raw LaTeX snippets like \begin{bmatrix}, a_{ij}, \alpha, \text{...}.
  */
-const MathText = ({ text, className = "" }: MathTextProps) => {
+const MathText = ({ text, className = ""}: MathTextProps) => {
   const html = useMemo(() => {
     return renderMathTextToHtml(text || "");
   }, [text]);
