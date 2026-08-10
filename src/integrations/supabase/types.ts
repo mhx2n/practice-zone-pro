@@ -199,6 +199,27 @@ export type Database = {
         }
         Relationships: []
       }
+      page_visits: {
+        Row: {
+          created_at: string
+          id: string
+          page_path: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          page_path?: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          page_path?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
       premium_batch_members: {
         Row: {
           created_at: string
@@ -382,6 +403,57 @@ export type Database = {
         }
         Relationships: []
       }
+      results: {
+        Row: {
+          answers: Json
+          correct: number
+          created_at: string
+          exam_id: string
+          exam_title: string
+          final_score: number
+          id: string
+          max_score: number
+          negative_marks: number
+          percentage: number
+          session_id: string
+          skipped: number
+          total_questions: number
+          wrong: number
+        }
+        Insert: {
+          answers?: Json
+          correct?: number
+          created_at?: string
+          exam_id: string
+          exam_title?: string
+          final_score?: number
+          id?: string
+          max_score?: number
+          negative_marks?: number
+          percentage?: number
+          session_id: string
+          skipped?: number
+          total_questions?: number
+          wrong?: number
+        }
+        Update: {
+          answers?: Json
+          correct?: number
+          created_at?: string
+          exam_id?: string
+          exam_title?: string
+          final_score?: number
+          id?: string
+          max_score?: number
+          negative_marks?: number
+          percentage?: number
+          session_id?: string
+          skipped?: number
+          total_questions?: number
+          wrong?: number
+        }
+        Relationships: []
+      }
       sections: {
         Row: {
           caption: string | null
@@ -517,6 +589,57 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      wrong_answers: {
+        Row: {
+          correct_answer: string
+          created_at: string
+          exam_id: string
+          exam_title: string
+          explanation: string
+          id: string
+          option_images: Json | null
+          options: Json
+          question_id: string
+          question_image: string | null
+          question_text: string
+          section: string
+          session_id: string
+          user_answer: string
+        }
+        Insert: {
+          correct_answer?: string
+          created_at?: string
+          exam_id: string
+          exam_title?: string
+          explanation?: string
+          id?: string
+          option_images?: Json | null
+          options?: Json
+          question_id: string
+          question_image?: string | null
+          question_text?: string
+          section?: string
+          session_id: string
+          user_answer?: string
+        }
+        Update: {
+          correct_answer?: string
+          created_at?: string
+          exam_id?: string
+          exam_title?: string
+          explanation?: string
+          id?: string
+          option_images?: Json | null
+          options?: Json
+          question_id?: string
+          question_image?: string | null
+          question_text?: string
+          section?: string
+          session_id?: string
+          user_answer?: string
         }
         Relationships: []
       }
