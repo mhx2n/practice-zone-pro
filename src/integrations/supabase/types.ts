@@ -32,6 +32,74 @@ export type Database = {
         }
         Relationships: []
       }
+      categories: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      premium_batch_members: {
+        Row: {
+          created_at: string
+          id: string
+          premium_batch_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          premium_batch_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          premium_batch_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "premium_batch_members_premium_batch_id_fkey"
+            columns: ["premium_batch_id"]
+            isOneToOne: false
+            referencedRelation: "premium_batches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      premium_batches: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -84,6 +152,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      sections: {
+        Row: {
+          caption: string | null
+          created_at: string
+          description: string
+          id: string
+          image: string | null
+          name: string
+          order: number
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          image?: string | null
+          name: string
+          order?: number
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          image?: string | null
+          name?: string
+          order?: number
+        }
+        Relationships: []
+      }
+      subjects: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
