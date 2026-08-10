@@ -149,7 +149,7 @@ export async function signIn(email: string, password: string) {
     if (isBackendConnectivityError(error)) {
       const session = await restoreLocalSession(email);
       if (session?.user) return { session, user: session.user };
-      await supabase.auth.signOut({ scope: "local"}).catch(() => undefined);
+      await supabase.auth.signOut({ scope: "local" }).catch(() => undefined);
     }
     throw toUserFacingError(error, "লগইন");
   }
@@ -169,7 +169,7 @@ export async function signUp(email: string, password: string, fullName?: string)
     return data;
   } catch (error) {
     if (isBackendConnectivityError(error)) {
-      await supabase.auth.signOut({ scope: "local"}).catch(() => undefined);
+      await supabase.auth.signOut({ scope: "local" }).catch(() => undefined);
     }
     throw toUserFacingError(error, "অ্যাকাউন্ট তৈরি");
   }
@@ -207,7 +207,7 @@ export async function signOut() {
     if (error) throw error;
   } catch (error) {
     if (isBackendConnectivityError(error)) {
-      const { error: localError } = await supabase.auth.signOut({ scope: "local"});
+      const { error: localError } = await supabase.auth.signOut({ scope: "local" });
       if (!localError) return;
       throw toUserFacingError(localError, "লগআউট");
     }

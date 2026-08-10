@@ -54,7 +54,7 @@ const AdminSubjects = () => {
   const unassignedExams = exams.filter((e) => !e.chapterId);
 
   const upload = async (file: File, set: (v: string) => void) => {
-    try { set(await compressImage(file)); } catch { toast({ title: "ছবি আপলোড ব্যর্থ", variant: "destructive"}); }
+    try { set(await compressImage(file)); } catch { toast({ title: "ছবি আপলোড ব্যর্থ", variant: "destructive" }); }
   };
 
   const saveSubject = () => {
@@ -75,16 +75,16 @@ const AdminSubjects = () => {
   return (
     <div className="animate-fade-in space-y-6">
       <div>
-        <h1 className="text-xl font-bold flex items-center gap-2"><BookOpen size={20} className="text-primary"/> পাঠ্যক্রম ব্যবস্থাপনা</h1>
+        <h1 className="text-xl font-bold flex items-center gap-2"><BookOpen size={20} className="text-primary" /> পাঠ্যক্রম ব্যবস্থাপনা</h1>
         <p className="text-sm text-muted-foreground mt-1">বিষয় → পত্র → অধ্যায় → পরীক্ষা — এই কাঠামোতে সাজান।</p>
       </div>
 
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm flex-wrap">
         <button onClick={() => { setSubjectId(null); setPaperId(null); }} className={`px-3 py-1.5 rounded-lg ${!subject ? "bg-primary text-primary-foreground": "glass-strong"}`}>বিষয়সমূহ</button>
-        {subject && <><ChevronRight size={14} className="text-muted-foreground"/>
+        {subject && <><ChevronRight size={14} className="text-muted-foreground" />
           <button onClick={() => setPaperId(null)} className={`px-3 py-1.5 rounded-lg ${!paper ? "bg-primary text-primary-foreground": "glass-strong"}`}>{subject.name}</button></>}
-        {paper && <><ChevronRight size={14} className="text-muted-foreground"/>
+        {paper && <><ChevronRight size={14} className="text-muted-foreground" />
           <span className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground">{paper.name}</span></>}
       </div>
 
@@ -94,15 +94,15 @@ const AdminSubjects = () => {
           <div className="glass-card-static p-5 space-y-3">
             <h2 className="text-sm font-bold">{editSubject ? "বিষয় সম্পাদনা": "নতুন বিষয়"}</h2>
             <div className="grid sm:grid-cols-2 gap-3">
-              <input value={sName} onChange={(e) => setSName(e.target.value)} placeholder="বিষয়ের নাম (যেমন: পদার্থবিজ্ঞান)"className="glass-strong rounded-lg px-3 py-2 text-sm"/>
-              <input value={sDesc} onChange={(e) => setSDesc(e.target.value)} placeholder="সংক্ষিপ্ত বিবরণ (ঐচ্ছিক)"className="glass-strong rounded-lg px-3 py-2 text-sm"/>
+              <input value={sName} onChange={(e) => setSName(e.target.value)} placeholder="বিষয়ের নাম (যেমন: পদার্থবিজ্ঞান)" className="glass-strong rounded-lg px-3 py-2 text-sm" />
+              <input value={sDesc} onChange={(e) => setSDesc(e.target.value)} placeholder="সংক্ষিপ্ত বিবরণ (ঐচ্ছিক)" className="glass-strong rounded-lg px-3 py-2 text-sm" />
             </div>
             <div className="flex items-center gap-3">
               <label className="px-3 py-2 rounded-lg glass-strong text-sm inline-flex items-center gap-2 cursor-pointer">
                 <ImagePlus size={14} /> কভার ছবি
-                <input type="file"accept="image/*"className="hidden"onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f, setSImage); }} />
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f, setSImage); }} />
               </label>
-              {sImage && <img src={sImage} alt="প্রিভিউ"className="h-12 w-20 object-cover rounded-lg"/>}
+              {sImage && <img src={sImage} alt="প্রিভিউ" className="h-12 w-20 object-cover rounded-lg" />}
               {sImage && <button onClick={() => setSImage(null)} className="p-1.5 rounded-lg bg-destructive/10 text-destructive"><X size={14} /></button>}
             </div>
             <div className="flex gap-2">
@@ -116,14 +116,14 @@ const AdminSubjects = () => {
               const pCount = papers.filter((p) => p.subject_id === s.id).length;
               return (
                 <div key={s.id} className="glass-card-static overflow-hidden">
-                  {s.image && <img src={s.image} alt={s.name} className="w-full h-28 object-cover"/>}
+                  {s.image && <img src={s.image} alt={s.name} className="w-full h-28 object-cover" />}
                   <div className="p-4">
                     <p className="font-bold text-sm">{s.name}</p>
                     {s.description && <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{s.description}</p>}
                     <p className="text-[11px] text-primary mt-1">{pCount} পত্র</p>
                     <div className="flex gap-2 mt-3">
                       <button onClick={() => { setSubjectId(s.id); setPaperId(null); }} className="flex-1 px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-medium">পত্র দেখুন</button>
-                      <button onClick={() => { setEditSubject(s.id); setSName(s.name); setSDesc(s.description); setSImage(s.image); window.scrollTo({ top: 0, behavior: "smooth"}); }} className="p-1.5 rounded-lg glass-strong"><Pencil size={13} /></button>
+                      <button onClick={() => { setEditSubject(s.id); setSName(s.name); setSDesc(s.description); setSImage(s.image); window.scrollTo({ top: 0, behavior: "smooth" }); }} className="p-1.5 rounded-lg glass-strong"><Pencil size={13} /></button>
                       <button onClick={() => { if (confirm("এই বিষয় ও এর সব পত্র/অধ্যায় মুছবেন?")) deleteSubject.mutate(s.id); }} className="p-1.5 rounded-lg bg-destructive/10 text-destructive"><Trash2 size={13} /></button>
                     </div>
                   </div>
@@ -137,7 +137,7 @@ const AdminSubjects = () => {
           <div className="glass-card-static p-5">
             <h2 className="text-sm font-bold mb-3">ক্যাটেগরি</h2>
             <div className="flex gap-2 mb-3">
-              <input value={newCategory} onChange={(e) => setNewCategory(e.target.value)} onKeyDown={(e) => e.key === "Enter"&& addCategory()} placeholder="নতুন ক্যাটেগরি"className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm"/>
+              <input value={newCategory} onChange={(e) => setNewCategory(e.target.value)} onKeyDown={(e) => e.key === "Enter"&& addCategory()} placeholder="নতুন ক্যাটেগরি" className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm" />
               <button onClick={addCategory} className="p-2 rounded-lg bg-primary text-primary-foreground"><Plus size={16} /></button>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -157,9 +157,9 @@ const AdminSubjects = () => {
       {subject && !paper && (
         <>
           <div className="glass-card-static p-5 space-y-3">
-            <h2 className="text-sm font-bold flex items-center gap-2"><FileText size={15} className="text-primary"/> {subject.name} — নতুন পত্র</h2>
+            <h2 className="text-sm font-bold flex items-center gap-2"><FileText size={15} className="text-primary" /> {subject.name} — নতুন পত্র</h2>
             <div className="flex gap-2">
-              <input value={pName} onChange={(e) => setPName(e.target.value)} placeholder="পত্রের নাম (যেমন: ১ম পত্র)"className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm"/>
+              <input value={pName} onChange={(e) => setPName(e.target.value)} placeholder="পত্রের নাম (যেমন: ১ম পত্র)" className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm" />
               <button onClick={() => { if (pName.trim()) upsertPaper.mutate({ subject_id: subject.id, name: pName.trim(), sort_order: subjectPapers.length }, { onSuccess: () => setPName("") }); }}
                 className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold inline-flex items-center gap-1"><Plus size={14} /> যোগ</button>
             </div>
@@ -199,10 +199,10 @@ const AdminSubjects = () => {
         <>
           <button onClick={() => setPaperId(null)} className="text-sm text-muted-foreground inline-flex items-center gap-1"><ArrowLeft size={14} /> পত্রে ফিরে যান</button>
           <div className="glass-card-static p-5 space-y-3">
-            <h2 className="text-sm font-bold flex items-center gap-2"><Layers size={15} className="text-primary"/> {paper.name} — নতুন অধ্যায়</h2>
+            <h2 className="text-sm font-bold flex items-center gap-2"><Layers size={15} className="text-primary" /> {paper.name} — নতুন অধ্যায়</h2>
             <div className="grid sm:grid-cols-2 gap-3">
-              <input value={cName} onChange={(e) => setCName(e.target.value)} placeholder="অধ্যায়ের নাম"className="glass-strong rounded-lg px-3 py-2 text-sm"/>
-              <input value={cDesc} onChange={(e) => setCDesc(e.target.value)} placeholder="বিবরণ (ঐচ্ছিক)"className="glass-strong rounded-lg px-3 py-2 text-sm"/>
+              <input value={cName} onChange={(e) => setCName(e.target.value)} placeholder="অধ্যায়ের নাম" className="glass-strong rounded-lg px-3 py-2 text-sm" />
+              <input value={cDesc} onChange={(e) => setCDesc(e.target.value)} placeholder="বিবরণ (ঐচ্ছিক)" className="glass-strong rounded-lg px-3 py-2 text-sm" />
             </div>
             <button onClick={() => { if (cName.trim()) upsertChapter.mutate({ paper_id: paper.id, name: cName.trim(), description: cDesc.trim(), sort_order: paperChapters.length }, { onSuccess: () => { setCName(""); setCDesc(""); } }); }}
               className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold inline-flex items-center gap-1"><Plus size={14} /> যোগ</button>
@@ -243,7 +243,7 @@ const AdminSubjects = () => {
                       </div>
                     ))}
                     {assignTarget === c.id ? (
-                      <select autoFocus defaultValue=""onChange={(ev) => { if (ev.target.value) { assignExam.mutate({ examId: ev.target.value, chapterId: c.id }); setAssignTarget(null); } }}
+                      <select autoFocus defaultValue="" onChange={(ev) => { if (ev.target.value) { assignExam.mutate({ examId: ev.target.value, chapterId: c.id }); setAssignTarget(null); } }}
                         className="w-full glass-strong rounded-lg px-3 py-2 text-xs">
                         <option value="">— পরীক্ষা সিলেক্ট করুন —</option>
                         {unassignedExams.map((e) => <option key={e.id} value={e.id}>{e.title}</option>)}

@@ -78,7 +78,7 @@ const AdminLiveExams = () => {
     } else {
       const { error } = await supabase.from("live_exam_premium_batches")
         .insert({ live_exam_id: liveExamId, premium_batch_id: batchId });
-      if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive"});
+      if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
     }
     const { data } = await supabase.from("live_exam_premium_batches").select("id,live_exam_id,premium_batch_id");
     setBatchLinks((data || []) as any);
@@ -108,7 +108,7 @@ const AdminLiveExams = () => {
 
   const createLiveExam = async () => {
     if (!form.title || !form.exam_id || !form.start_time || !form.end_time) {
-      return toast({ title: "সব তথ্য পূরণ করুন", variant: "destructive"});
+      return toast({ title: "সব তথ্য পূরণ করুন", variant: "destructive" });
     }
     const { data: created, error } = await supabase.from("live_exams").insert({
       title: form.title,
@@ -121,14 +121,14 @@ const AdminLiveExams = () => {
       show_leaderboard: form.show_leaderboard,
       status: "scheduled",
     }).select("id").single();
-    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive"});
+    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
     if (created && form.premium_batch_ids.length) {
       const { error: linkErr } = await supabase.from("live_exam_premium_batches").insert(
         form.premium_batch_ids.map((bid) => ({ live_exam_id: created.id, premium_batch_id: bid }))
       );
-      if (linkErr) toast({ title: "ব্যাচ যুক্ত করা যায়নি", description: linkErr.message, variant: "destructive"});
+      if (linkErr) toast({ title: "ব্যাচ যুক্ত করা যায়নি", description: linkErr.message, variant: "destructive" });
     }
-    toast({ title: "লাইভ পরীক্ষা তৈরি হয়েছে"});
+    toast({ title: "লাইভ পরীক্ষা তৈরি হয়েছে" });
     setShowForm(false);
     setForm({ title: "", description: "", exam_id: "", start_time: "", end_time: "", duration: 60, show_leaderboard: true, premium_batch_ids: [] });
     load();
@@ -154,7 +154,7 @@ const AdminLiveExams = () => {
     (async () => {
       const sorted = [...parts].sort((a, b) => b.score - a.score || a.time_taken_seconds - b.time_taken_seconds);
       const submitted = parts.filter((p) => p.status === "submitted"|| p.submitted_at);
-      const fmt = (d: string) => new Date(d).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short"});
+      const fmt = (d: string) => new Date(d).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" });
       const timeText = (seconds = 0) => {
         const mm = Math.floor(seconds / 60);
         const ss = seconds % 60;
@@ -201,7 +201,7 @@ const AdminLiveExams = () => {
         const av = avatarMap[p.user_id];
         const initial = esc((pr?.full_name || "U")[0].toUpperCase());
         const avatarCell = av
-          ? `<img src="${av}"style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;margin:0 auto;"/>`
+          ? `<img src="${av}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;margin:0 auto;" />`
           : `<div style="width:28px;height:28px;border-radius:50%;background:${theme.accent};color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;margin:0 auto;">${initial}</div>`;
         const rank = i + 1;
         const rankBadge =
@@ -252,7 +252,7 @@ const AdminLiveExams = () => {
 
       const footerLinks = (reportCfg.footerLinks || [])
         .filter((l) => l.label && l.url)
-        .map((l) => `<a href="${esc(l.url)}"style="color:${theme.accent};text-decoration:none;margin:0 6px;">${esc(l.label || l.url)}</a>`)
+        .map((l) => `<a href="${esc(l.url)}" style="color:${theme.accent};text-decoration:none;margin:0 6px;">${esc(l.label || l.url)}</a>`)
         .join('<span style="color:#CBD5E1;">•</span>');
 
       // Build offscreen container
@@ -263,7 +263,7 @@ const AdminLiveExams = () => {
           <div style="background:linear-gradient(135deg, ${theme.header}, ${theme.accent});color:#fff;padding:24px 28px;">
             <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.85;font-weight:600;">Final Result Report</div>
             <div style="font-size:24px;font-weight:800;margin-top:4px;line-height:1.2;">${esc(selected.title || "Live Exam Report")}</div>
-            <div style="font-size:11.5px;margin-top:6px;opacity:.9;">Generated: ${esc(new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short"}))}</div>
+            <div style="font-size:11.5px;margin-top:6px;opacity:.9;">Generated: ${esc(new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }))}</div>
           </div>
           <div style="padding:18px 24px 28px;">
             ${infoBlock}
@@ -275,7 +275,7 @@ const AdminLiveExams = () => {
                 </tr>
               </thead>
               <tbody>
-                ${rows || `<tr><td colspan="10"style="text-align:center;padding:30px;color:#94A3B8;">No participants yet</td></tr>`}
+                ${rows || `<tr><td colspan="10" style="text-align:center;padding:30px;color:#94A3B8;">No participants yet</td></tr>`}
               </tbody>
             </table>
             <div style="margin-top:22px;padding-top:14px;border-top:2px solid ${theme.header};display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#475569;">
@@ -344,7 +344,7 @@ const AdminLiveExams = () => {
           doc.setPage(pn);
           doc.setFontSize(8.5);
           doc.setTextColor(100, 116, 139);
-          doc.text(`Page ${pn} / ${total}`, pageW - 8, pageH - 4, { align: "right"});
+          doc.text(`Page ${pn} / ${total}`, pageW - 8, pageH - 4, { align: "right" });
         }
 
         doc.save(`report-${selected.title.replace(/[\\/:*?"<>|]+/g, "_")}.pdf`);
@@ -359,7 +359,7 @@ const AdminLiveExams = () => {
   const downloadAvatar = async (uid: string) => {
     const pr = profiles[uid];
     if (!pr?.avatar_url) {
-      toast({ title: "এই ইউজারের কোনো প্রোফাইল ছবি নেই", variant: "destructive"});
+      toast({ title: "এই ইউজারের কোনো প্রোফাইল ছবি নেই", variant: "destructive" });
       return;
     }
     try {
@@ -377,7 +377,7 @@ const AdminLiveExams = () => {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (e: any) {
-      toast({ title: "ডাউনলোড ব্যর্থ", description: e.message, variant: "destructive"});
+      toast({ title: "ডাউনলোড ব্যর্থ", description: e.message, variant: "destructive" });
     }
   };
 
@@ -395,9 +395,9 @@ const AdminLiveExams = () => {
 
       {showForm && (
         <div className="glass-card-static p-5 space-y-3">
-          <input className="w-full glass-strong rounded-lg px-3 py-2 text-sm"placeholder="টাইটেল"
+          <input className="w-full glass-strong rounded-lg px-3 py-2 text-sm" placeholder="টাইটেল"
             value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
-          <textarea className="w-full glass-strong rounded-lg px-3 py-2 text-sm"placeholder="বিবরণ"rows={2}
+          <textarea className="w-full glass-strong rounded-lg px-3 py-2 text-sm" placeholder="বিবরণ" rows={2}
             value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           <select className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
             value={form.exam_id} onChange={(e) => setForm({ ...form, exam_id: e.target.value })}>
@@ -405,7 +405,7 @@ const AdminLiveExams = () => {
             {exams.map((x) => <option key={x.id} value={x.id}>{x.title} ({x.question_count}টি) {x.published ? "": "• অপ্রকাশিত"}</option>)}
           </select>
           <div className="rounded-xl border border-border p-3 space-y-2">
-            <p className="text-xs font-semibold flex items-center gap-1.5"><Crown size={13} className="text-warning"/> প্রিমিয়াম ব্যাচ অ্যাক্সেস (ঐচ্ছিক)</p>
+            <p className="text-xs font-semibold flex items-center gap-1.5"><Crown size={13} className="text-warning" /> প্রিমিয়াম ব্যাচ অ্যাক্সেস (ঐচ্ছিক)</p>
             <p className="text-[11px] text-muted-foreground">কোনো ব্যাচ সিলেক্ট না করলে সবাই দেখতে পাবে। সিলেক্ট করলে শুধু ঐ ব্যাচের সদস্যরাই পরীক্ষাটি দেখতে ও দিতে পারবে — বাকিদের আইডিতে এটি একেবারেই দেখাবে না।</p>
             {premiumBatches.length === 0 ? (
               <p className="text-[11px] text-muted-foreground">কোনো প্রিমিয়াম ব্যাচ নেই — আগে ব্যাচ তৈরি করুন।</p>
@@ -433,22 +433,22 @@ const AdminLiveExams = () => {
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="text-xs text-muted-foreground">শুরু</label>
-              <input type="datetime-local"className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
+              <input type="datetime-local" className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
                 value={form.start_time} onChange={(e) => setForm({ ...form, start_time: e.target.value })} />
             </div>
             <div>
               <label className="text-xs text-muted-foreground">শেষ</label>
-              <input type="datetime-local"className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
+              <input type="datetime-local" className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
                 value={form.end_time} onChange={(e) => setForm({ ...form, end_time: e.target.value })} />
             </div>
           </div>
           <div>
             <label className="text-xs text-muted-foreground">সময়কাল (মিনিট)</label>
-            <input type="number"className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
+            <input type="number" className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
               value={form.duration} onChange={(e) => setForm({ ...form, duration: Number(e.target.value) })} />
           </div>
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox"checked={form.show_leaderboard}
+            <input type="checkbox" checked={form.show_leaderboard}
               onChange={(e) => setForm({ ...form, show_leaderboard: e.target.checked })} />
             জমা দেওয়ার পরে র‍্যাঙ্কিং দেখাও
           </label>
@@ -545,7 +545,7 @@ const AdminLiveExams = () => {
                         <td className="p-2">
                           <div className="flex items-center gap-2">
                             {pr?.avatar_url ? (
-                              <img src={pr.avatar_url} alt=""className="w-8 h-8 rounded-full object-cover shrink-0"/>
+                              <img src={pr.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover shrink-0" />
                             ) : (
                               <div className="w-8 h-8 rounded-full bg-primary/15 text-primary flex items-center justify-center text-[10px] font-bold shrink-0">
                                 {(pr?.full_name || "U")[0].toUpperCase()}

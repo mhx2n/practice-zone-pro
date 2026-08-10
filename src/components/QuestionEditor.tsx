@@ -50,7 +50,7 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
       const compressed = await compressImage(file);
       updateQ(qId, { questionImage: compressed });
     } catch {
-      toast({ title: "ছবি লোড করতে সমস্যা", variant: "destructive"});
+      toast({ title: "ছবি লোড করতে সমস্যা", variant: "destructive" });
     }
   };
 
@@ -66,7 +66,7 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
         })
       );
     } catch {
-      toast({ title: "ছবি লোড করতে সমস্যা", variant: "destructive"});
+      toast({ title: "ছবি লোড করতে সমস্যা", variant: "destructive" });
     }
   };
 
@@ -88,9 +88,9 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
     upsertExam.mutate(updatedExam, {
       onSuccess: () => {
         onSaved(updatedExam);
-        toast({ title: " প্রশ্ন সংরক্ষিত হয়েছে"});
+        toast({ title: " প্রশ্ন সংরক্ষিত হয়েছে" });
       },
-      onError: () => toast({ title: "সংরক্ষণে সমস্যা হয়েছে", variant: "destructive"}),
+      onError: () => toast({ title: "সংরক্ষণে সমস্যা হয়েছে", variant: "destructive" }),
     });
   };
 
@@ -173,7 +173,7 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                       <label className="text-sm font-semibold text-foreground mb-2 block"> প্রশ্নের ছবি</label>
                       {q.questionImage ? (
                         <div className="relative inline-block">
-                          <img src={q.questionImage} alt=""className="max-w-full max-h-56 rounded-xl border border-border"/>
+                          <img src={q.questionImage} alt="" className="max-w-full max-h-56 rounded-xl border border-border" />
                           <button
                             onClick={() => removeQuestionImage(q.id)}
                             className="absolute top-2 right-2 p-2 rounded-full bg-destructive text-destructive-foreground shadow-lg"
@@ -229,7 +229,7 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                             </button>
                             {q.optionImages?.[oi] ? (
                               <div className="relative inline-block">
-                                <img src={q.optionImages[oi]!} alt=""className="max-h-32 rounded-lg border border-border"/>
+                                <img src={q.optionImages[oi]!} alt="" className="max-h-32 rounded-lg border border-border" />
                                 <button
                                   onClick={() => removeOptionImage(q.id, oi)}
                                   className="absolute top-1 right-1 p-1.5 rounded-full bg-destructive text-destructive-foreground shadow-lg"

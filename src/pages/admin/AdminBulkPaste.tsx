@@ -131,7 +131,7 @@ const AdminBulkPaste = () => {
   const handleParse = () => {
     const { questions: qs, errors: errs } = parsed;
     if (qs.length === 0) {
-      toast({ title: "কোনো প্রশ্ন পাওয়া যায়নি", description: "ফরম্যাট দেখে আবার চেষ্টা করুন", variant: "destructive"});
+      toast({ title: "কোনো প্রশ্ন পাওয়া যায়নি", description: "ফরম্যাট দেখে আবার চেষ্টা করুন", variant: "destructive" });
       setErrors(errs);
       return;
     }
@@ -154,7 +154,7 @@ const AdminBulkPaste = () => {
 
   const createNewExam = () => {
     if (!newExamTitle.trim() || questions.length === 0) {
-      toast({ title: "ত্রুটি", description: "শিরোনাম ও প্রশ্ন প্রয়োজন", variant: "destructive"});
+      toast({ title: "ত্রুটি", description: "শিরোনাম ও প্রশ্ন প্রয়োজন", variant: "destructive" });
       return;
     }
     const exam: Exam = {
@@ -183,7 +183,7 @@ const AdminBulkPaste = () => {
 
   const addToExistingExam = () => {
     if (!targetExamId || questions.length === 0) {
-      toast({ title: "ত্রুটি", description: "পরীক্ষা ও প্রশ্ন নির্বাচন করুন", variant: "destructive"});
+      toast({ title: "ত্রুটি", description: "পরীক্ষা ও প্রশ্ন নির্বাচন করুন", variant: "destructive" });
       return;
     }
     const target = existingExams.find((e) => e.id === targetExamId);
@@ -340,16 +340,16 @@ const AdminBulkPaste = () => {
           {mode === "new"? (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-                <input placeholder="পরীক্ষার নাম *"value={newExamTitle} onChange={(e) => setNewExamTitle(e.target.value)}
-                  className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
-                <input placeholder="বিষয়"value={newExamSubject} onChange={(e) => setNewExamSubject(e.target.value)}
-                  className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+                <input placeholder="পরীক্ষার নাম *" value={newExamTitle} onChange={(e) => setNewExamTitle(e.target.value)}
+                  className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+                <input placeholder="বিষয়" value={newExamSubject} onChange={(e) => setNewExamSubject(e.target.value)}
+                  className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
                 <select value={newExamDifficulty} onChange={(e) => setNewExamDifficulty(e.target.value as "easy"| "medium"| "hard")}
                   className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none">
                   <option value="easy">সহজ</option><option value="medium">মাঝারি</option><option value="hard">কঠিন</option>
                 </select>
-                <input type="number"placeholder="সময় (মিনিট)"value={newExamDuration} onChange={(e) => setNewExamDuration(Number(e.target.value))}
-                  className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+                <input type="number" placeholder="সময় (মিনিট)" value={newExamDuration} onChange={(e) => setNewExamDuration(Number(e.target.value))}
+                  className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
                 <select value={newExamNegativeMarking} onChange={(e) => setNewExamNegativeMarking(Number(e.target.value))}
                   className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none">
                   <option value={0}>নেগেটিভ মার্ক: ০</option>

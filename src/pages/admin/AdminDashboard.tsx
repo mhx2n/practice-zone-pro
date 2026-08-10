@@ -35,18 +35,18 @@ const AdminDashboard = () => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        <Link to="/admin/upload-csv"className="glass-card p-5 text-center">
-          <Upload className="mx-auto mb-2 text-primary"size={24} />
+        <Link to="/admin/upload-csv" className="glass-card p-5 text-center">
+          <Upload className="mx-auto mb-2 text-primary" size={24} />
           <p className="text-sm font-semibold">CSV আপলোড</p>
           <p className="text-xs text-muted-foreground">প্রশ্ন আমদানি করুন</p>
         </Link>
-        <Link to="/admin/exams"className="glass-card p-5 text-center">
-          <BookOpen className="mx-auto mb-2 text-primary"size={24} />
+        <Link to="/admin/exams" className="glass-card p-5 text-center">
+          <BookOpen className="mx-auto mb-2 text-primary" size={24} />
           <p className="text-sm font-semibold">পরীক্ষা ব্যবস্থাপনা</p>
           <p className="text-xs text-muted-foreground">{exams.length}টি পরীক্ষা</p>
         </Link>
-        <Link to="/admin/notices"className="glass-card p-5 text-center">
-          <Bell className="mx-auto mb-2 text-primary"size={24} />
+        <Link to="/admin/notices" className="glass-card p-5 text-center">
+          <Bell className="mx-auto mb-2 text-primary" size={24} />
           <p className="text-sm font-semibold">নোটিস</p>
           <p className="text-xs text-muted-foreground">{notices.length}টি নোটিস</p>
         </Link>

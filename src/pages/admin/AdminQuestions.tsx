@@ -23,9 +23,9 @@ const AdminQuestions = () => {
 
       <div className="flex flex-col sm:flex-row gap-3 mb-5">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"size={16} />
-          <input placeholder="প্রশ্ন খুঁজুন..."value={search} onChange={(e) => setSearch(e.target.value)}
-            className="w-full glass-strong rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+          <input placeholder="প্রশ্ন খুঁজুন..." value={search} onChange={(e) => setSearch(e.target.value)}
+            className="w-full glass-strong rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
         </div>
       </div>
 

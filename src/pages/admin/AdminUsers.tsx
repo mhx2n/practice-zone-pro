@@ -48,19 +48,19 @@ const AdminUsers = () => {
     if (!name) return;
     const { error } = await supabase.from("batches").insert({ name });
     if (error) {
-      toast({ title: "ত্রুটি", description: error.message, variant: "destructive"});
+      toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
       return;
     }
     setNewBatchName("");
-    toast({ title: "ব্যাচ যোগ হয়েছে "});
+    toast({ title: "ব্যাচ যোগ হয়েছে " });
     load();
   };
 
   const deleteBatch = async (id: string) => {
     if (!confirm("ব্যাচ মুছতে চান?")) return;
     const { error } = await supabase.from("batches").delete().eq("id", id);
-    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive"});
-    toast({ title: "মুছে ফেলা হয়েছে"});
+    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
+    toast({ title: "মুছে ফেলা হয়েছে" });
     load();
   };
 
@@ -69,8 +69,8 @@ const AdminUsers = () => {
       _user_id: userId,
       _batch_id: batchId,
     });
-    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive"});
-    toast({ title: "ব্যাচ অ্যাসাইন হয়েছে "});
+    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
+    toast({ title: "ব্যাচ অ্যাসাইন হয়েছে " });
     load();
   };
 
@@ -124,7 +124,7 @@ const AdminUsers = () => {
         <div className="flex items-center justify-between mb-3 gap-3">
           <h2 className="text-sm font-bold flex items-center gap-2"><UsersIcon size={16} /> ইউজার ({users.length})</h2>
           <div className="relative flex-1 max-w-xs">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"/>
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
               type="text"
               value={search}
@@ -145,7 +145,7 @@ const AdminUsers = () => {
               <div key={u.id} className="glass-strong rounded-lg p-3 flex flex-col md:flex-row md:items-center gap-3">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
                   {u.avatar_url ? (
-                    <img src={u.avatar_url} className="w-9 h-9 rounded-full object-cover"alt=""/>
+                    <img src={u.avatar_url} className="w-9 h-9 rounded-full object-cover" alt="" />
                   ) : (
                     <div className="w-9 h-9 rounded-full bg-primary/15 text-primary flex items-center justify-center text-sm font-bold">
                       {(u.full_name || u.email || "U")[0].toUpperCase()}

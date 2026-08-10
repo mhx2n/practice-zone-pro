@@ -7,14 +7,14 @@ const AdminSettings = () => {
 
   const clearResults = () => {
     localStorage.removeItem("target_results");
-    toast({ title: "ফলাফল মুছে ফেলা হয়েছে"});
+    toast({ title: "ফলাফল মুছে ফেলা হয়েছে" });
   };
 
   const resetAll = () => {
     localStorage.removeItem("target_exams");
     localStorage.removeItem("target_notices");
     localStorage.removeItem("target_results");
-    toast({ title: "সকল ডেটা রিসেট হয়েছে", description: "পেজ রিফ্রেশ করুন"});
+    toast({ title: "সকল ডেটা রিসেট হয়েছে", description: "পেজ রিফ্রেশ করুন" });
   };
 
   return (
@@ -28,7 +28,7 @@ const AdminSettings = () => {
 
           <div className="space-y-3">
             <button onClick={clearResults} className="w-full flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium border border-border hover:bg-muted transition-colors">
-              <Trash2 size={16} className="text-warning"/>
+              <Trash2 size={16} className="text-warning" />
               ফলাফল ইতিহাস মুছুন
             </button>
             <button onClick={resetAll} className="w-full flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium border border-destructive/30 hover:bg-destructive/10 transition-colors text-destructive">

@@ -77,51 +77,51 @@ const App = () => (
             <ScrollToTop />
             <Routes>
               {/* Public auth pages */}
-              <Route path="/auth"element={<AuthPage />} />
-              <Route path="/secure-admin-login"element={<AdminLoginPage />} />
-              <Route path="/index"element={<Navigate to="/"replace />} />
-              <Route path="/index.html"element={<Navigate to="/"replace />} />
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/secure-admin-login" element={<AdminLoginPage />} />
+              <Route path="/index" element={<Navigate to="/"replace />} />
+              <Route path="/index.html" element={<Navigate to="/"replace />} />
 
               {/* Login required for entire site */}
               <Route element={<ProtectedRoute />}>
                 <Route element={<PublicLayout />}>
-                  <Route path="/"element={<Index />} />
-                  <Route path="/exams"element={<ExamsPage />} />
-                  <Route path="/exams/:id"element={<ExamDetails />} />
-                  <Route path="/exams/:id/attempt"element={<ExamAttempt />} />
-                  <Route path="/exams/:id/revise"element={<ExamRevision />} />
-                  <Route path="/results"element={<ResultsPage />} />
-                  <Route path="/wrong-answers"element={<WrongAnswersBank />} />
-                  <Route path="/notices"element={<NoticesPage />} />
-                  <Route path="/notices/:id"element={<NoticeDetails />} />
-                  <Route path="/profile"element={<ProfilePage />} />
-                  <Route path="/about"element={<AboutContact />} />
-                  <Route path="/live-exams"element={<StudentLiveExams />} />
-                  <Route path="/live-exam/:id"element={<LiveExamAttempt />} />
-                  <Route path="/live-exam/:id/review"element={<LiveExamReview />} />
-                  <Route path="/live-exam/:id/leaderboard"element={<LiveExamLeaderboard />} />
+                  <Route path="/" element={<Index />} />
+                  <Route path="/exams" element={<ExamsPage />} />
+                  <Route path="/exams/:id" element={<ExamDetails />} />
+                  <Route path="/exams/:id/attempt" element={<ExamAttempt />} />
+                  <Route path="/exams/:id/revise" element={<ExamRevision />} />
+                  <Route path="/results" element={<ResultsPage />} />
+                  <Route path="/wrong-answers" element={<WrongAnswersBank />} />
+                  <Route path="/notices" element={<NoticesPage />} />
+                  <Route path="/notices/:id" element={<NoticeDetails />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/about" element={<AboutContact />} />
+                  <Route path="/live-exams" element={<StudentLiveExams />} />
+                  <Route path="/live-exam/:id" element={<LiveExamAttempt />} />
+                  <Route path="/live-exam/:id/review" element={<LiveExamReview />} />
+                  <Route path="/live-exam/:id/leaderboard" element={<LiveExamLeaderboard />} />
                 </Route>
 
                 {/* Admin routes */}
                 <Route element={<ProtectedRoute adminOnly />}>
                   <Route element={<AdminLayout />}>
-                    <Route path="/admin/dashboard"element={<AdminDashboard />} />
-                    <Route path="/admin/exams"element={<AdminExams />} />
-                    <Route path="/admin/sections"element={<AdminSections />} />
-                    <Route path="/admin/questions"element={<AdminQuestions />} />
-                    <Route path="/admin/upload-csv"element={<AdminCSVUpload />} />
-                    <Route path="/admin/bulk-paste"element={<AdminBulkPaste />} />
-                    <Route path="/admin/notices"element={<AdminNotices />} />
-                    <Route path="/admin/subjects"element={<AdminSubjects />} />
-                    <Route path="/admin/settings"element={<AdminSettings />} />
-                    <Route path="/admin/site-settings"element={<AdminSiteSettings />} />
-                    <Route path="/admin/theme"element={<AdminThemeSettings />} />
-                    <Route path="/admin/reminders"element={<AdminReminders />} />
-                    <Route path="/admin/event-banners"element={<AdminEventBanners />} />
-                    <Route path="/admin/users"element={<AdminUsers />} />
-                    <Route path="/admin/live-exams"element={<AdminLiveExams />} />
-                    <Route path="/admin/premium-batches"element={<AdminPremiumBatches />} />
-                    <Route path="/admin/photocard-builder"element={<AdminPhotocardBuilder />} />
+                    <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                    <Route path="/admin/exams" element={<AdminExams />} />
+                    <Route path="/admin/sections" element={<AdminSections />} />
+                    <Route path="/admin/questions" element={<AdminQuestions />} />
+                    <Route path="/admin/upload-csv" element={<AdminCSVUpload />} />
+                    <Route path="/admin/bulk-paste" element={<AdminBulkPaste />} />
+                    <Route path="/admin/notices" element={<AdminNotices />} />
+                    <Route path="/admin/subjects" element={<AdminSubjects />} />
+                    <Route path="/admin/settings" element={<AdminSettings />} />
+                    <Route path="/admin/site-settings" element={<AdminSiteSettings />} />
+                    <Route path="/admin/theme" element={<AdminThemeSettings />} />
+                    <Route path="/admin/reminders" element={<AdminReminders />} />
+                    <Route path="/admin/event-banners" element={<AdminEventBanners />} />
+                    <Route path="/admin/users" element={<AdminUsers />} />
+                    <Route path="/admin/live-exams" element={<AdminLiveExams />} />
+                    <Route path="/admin/premium-batches" element={<AdminPremiumBatches />} />
+                    <Route path="/admin/photocard-builder" element={<AdminPhotocardBuilder />} />
                   </Route>
                 </Route>
               </Route>

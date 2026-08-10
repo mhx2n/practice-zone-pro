@@ -25,7 +25,7 @@ export function GeneralAIChatModal({ isOpen, onClose }: GeneralAIChatModalProps)
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth"});
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -162,7 +162,7 @@ export function GeneralAIChatModal({ isOpen, onClose }: GeneralAIChatModalProps)
         <DialogHeader className="border-b p-4 bg-gradient-to-r from-primary/5 to-primary/10">
           <DialogTitle className="flex items-center gap-3 text-xl">
             <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-primary/80 flex items-center justify-center shadow-lg">
-              <Sparkles size={24} className="text-primary-foreground"/>
+              <Sparkles size={24} className="text-primary-foreground" />
             </div>
             <div className="flex flex-col items-start">
               <span className="font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
@@ -185,9 +185,9 @@ export function GeneralAIChatModal({ isOpen, onClose }: GeneralAIChatModalProps)
                     : "bg-gradient-to-r from-secondary to-secondary/80 border-2 border-primary/20"
                 }`}>
                   {message.role === "user"? (
-                    <User size={16} className="text-primary-foreground"/>
+                    <User size={16} className="text-primary-foreground" />
                   ) : (
-                    <Sparkles size={16} className="text-secondary-foreground"/>
+                    <Sparkles size={16} className="text-secondary-foreground" />
                   )}
                 </div>
                 <div className={`rounded-2xl px-4 py-3.5 sm:px-5 sm:py-4 shadow-sm border ${
@@ -212,11 +212,11 @@ export function GeneralAIChatModal({ isOpen, onClose }: GeneralAIChatModalProps)
             <div className="flex gap-3 justify-start">
               <div className="flex gap-3 max-w-[90%]">
                 <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 bg-gradient-to-r from-secondary to-secondary/80 border-2 border-primary/20 shadow-md">
-                  <Sparkles size={16} className="text-secondary-foreground"/>
+                  <Sparkles size={16} className="text-secondary-foreground" />
                 </div>
                 <div className="rounded-2xl p-4 bg-gradient-to-r from-card to-card/80 border border-border/50 shadow-sm">
                   <div className="flex items-center gap-2">
-                    <Loader2 size={16} className="animate-spin text-primary"/>
+                    <Loader2 size={16} className="animate-spin text-primary" />
                     <span className="text-sm text-muted-foreground">খুঁজছি ও চিন্তা করছি...</span>
                   </div>
                 </div>

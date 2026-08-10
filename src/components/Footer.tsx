@@ -30,7 +30,7 @@ const Footer = () => {
             <h4 className="font-semibold text-sm mb-3">{getLabel("contact")}</h4>
             <div className="flex gap-3">
               {settings.socialLinks.map((link, i) => (
-                <a key={i} href={link.url} target="_blank"rel="noopener noreferrer"className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   {link.label}
                 </a>
               ))}

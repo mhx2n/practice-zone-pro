@@ -61,7 +61,7 @@ const WrongAnswersBank = () => {
   return (
     <div className="pt-24 pb-8 container max-w-3xl mx-auto animate-fade-in px-3 sm:px-4">
       <div className="flex items-center gap-3 mb-5">
-        <Link to="/"className="text-muted-foreground hover:text-foreground"><ArrowLeft size={20} /></Link>
+        <Link to="/" className="text-muted-foreground hover:text-foreground"><ArrowLeft size={20} /></Link>
         <h1 className="text-xl font-bold"> ভুল উত্তর ব্যাংক</h1>
       </div>
 
@@ -69,7 +69,7 @@ const WrongAnswersBank = () => {
         <div className="glass-card-static p-12 text-center text-muted-foreground">
           কোনো ভুল উত্তর সংরক্ষিত নেই
           <br />
-          <Link to="/exams"className="text-primary text-sm mt-2 inline-block">পরীক্ষা দিন →</Link>
+          <Link to="/exams" className="text-primary text-sm mt-2 inline-block">পরীক্ষা দিন →</Link>
         </div>
       ) : (
         <div className="space-y-5">
@@ -152,7 +152,7 @@ const WrongAnswersBank = () => {
                                       </p>
                                     </div>
                                   </div>
-                                  {entry.questionImage && <img src={entry.questionImage} alt="প্রশ্নের ছবি"className="max-w-full max-h-48 rounded-xl border border-border/30 mb-3 object-contain shadow-sm"/>}
+                                  {entry.questionImage && <img src={entry.questionImage} alt="প্রশ্নের ছবি" className="max-w-full max-h-48 rounded-xl border border-border/30 mb-3 object-contain shadow-sm" />}
                                   <div className="space-y-2 mb-3">
                                     {entry.options.map((opt, oi) => {
                                       const isCorrectOpt = isAnswerMatch(opt, entry.correctAnswer);
@@ -163,11 +163,11 @@ const WrongAnswersBank = () => {
                                       return (
                                       <div key={opt} className={`px-3.5 py-3 rounded-lg text-[15px] sm:text-base border ${cls} transition-colors`}>
                                           <div className="flex items-center gap-2.5">
-                                            {isCorrectOpt && <CheckCircle2 size={18} className="text-success flex-shrink-0"/>}
-                                            {isUserOpt && !isCorrectOpt && <XCircle size={18} className="text-destructive flex-shrink-0"/>}
-                                            <MathText text={opt} className="leading-[1.7]"/>
+                                            {isCorrectOpt && <CheckCircle2 size={18} className="text-success flex-shrink-0" />}
+                                            {isUserOpt && !isCorrectOpt && <XCircle size={18} className="text-destructive flex-shrink-0" />}
+                                            <MathText text={opt} className="leading-[1.7]" />
                                           </div>
-                                          {entry.optionImages?.[oi] && <img src={entry.optionImages[oi]!} alt=""className="mt-2 max-h-20 rounded-lg border border-border/30 object-contain"/>}
+                                          {entry.optionImages?.[oi] && <img src={entry.optionImages[oi]!} alt="" className="mt-2 max-h-20 rounded-lg border border-border/30 object-contain" />}
                                         </div>
                                       );
                                     })}

@@ -36,7 +36,7 @@ const LiveExamReview = () => {
     (async () => {
       setLoading(true);
       const { data: le } = await supabase.from("live_exams").select("*").eq("id", id).single();
-      if (!le) { toast({ title: "পরীক্ষা পাওয়া যায়নি", variant: "destructive"}); navigate("/live-exams"); return; }
+      if (!le) { toast({ title: "পরীক্ষা পাওয়া যায়নি", variant: "destructive" }); navigate("/live-exams"); return; }
       const effective = computeLiveStatus(le.start_time, le.end_time, le.status);
 
       // Fetch participant — student must have submitted
@@ -45,13 +45,13 @@ const LiveExamReview = () => {
         .eq("live_exam_id", id).eq("user_id", user.id).maybeSingle();
 
       if (!p || p.status !== "submitted") {
-        toast({ title: "জমা দেওয়ার পরে পর্যালোচনা দেখা যাবে", variant: "destructive"});
+        toast({ title: "জমা দেওয়ার পরে পর্যালোচনা দেখা যাবে", variant: "destructive" });
         navigate("/live-exams");
         return;
       }
       // Strict: review available ONLY after the live exam has ended (anti-cheating)
       if (effective !== "ended") {
-        toast({ title: "পরীক্ষা শেষ হওয়ার পর উত্তর পর্যালোচনা দেখা যাবে", variant: "destructive"});
+        toast({ title: "পরীক্ষা শেষ হওয়ার পর উত্তর পর্যালোচনা দেখা যাবে", variant: "destructive" });
         navigate("/live-exams");
         return;
       }
@@ -115,7 +115,7 @@ const LiveExamReview = () => {
           <p className="text-[11px] text-muted-foreground">পর্যালোচনা</p>
           <h1 className="text-base font-bold truncate">{exam.title}</h1>
         </div>
-        <Link to="/live-exams"className="text-xs text-primary font-semibold inline-flex items-center gap-1">
+        <Link to="/live-exams" className="text-xs text-primary font-semibold inline-flex items-center gap-1">
           <Trophy size={14} /> র‍্যাঙ্কিং
         </Link>
       </div>
@@ -166,8 +166,8 @@ const LiveExamReview = () => {
                     <div key={i} className={`p-2.5 rounded-lg border-2 text-sm flex items-start gap-2 ${cls}`}>
                       <span className="font-bold shrink-0">{String.fromCharCode(65 + i)}.</span>
                       <span className="flex-1 min-w-0"><MathText text={opt} /></span>
-                      {isCorrect && <CheckCircle2 size={14} className="text-success shrink-0 mt-0.5"/>}
-                      {isPicked && !isCorrect && <XCircle size={14} className="text-destructive shrink-0 mt-0.5"/>}
+                      {isCorrect && <CheckCircle2 size={14} className="text-success shrink-0 mt-0.5" />}
+                      {isPicked && !isCorrect && <XCircle size={14} className="text-destructive shrink-0 mt-0.5" />}
                     </div>
                   );
                 })}

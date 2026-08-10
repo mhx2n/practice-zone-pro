@@ -14,7 +14,7 @@ interface Participant {
 interface ProfileLite { user_id: string; full_name: string | null; avatar_url: string | null; batch_name: string | null }
 
 function Avatar({ url, name, size = 40 }: { url?: string | null; name?: string | null; size?: number }) {
-  if (url) return <img src={url} alt=""className="rounded-full object-cover shrink-0"style={{ width: size, height: size }} />;
+  if (url) return <img src={url} alt="" className="rounded-full object-cover shrink-0" style={{ width: size, height: size }} />;
   return (
     <div className="rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold shrink-0"
       style={{ width: size, height: size, fontSize: size * 0.42 }}>
@@ -103,13 +103,13 @@ const LiveExamLeaderboard = () => {
       {/* Hero */}
       <div className="relative overflow-hidden rounded-3xl border border-border p-6 md:p-8"
         style={{ background: `linear-gradient(135deg, ${podium.gold}22, ${podium.silver}12, transparent)` }}>
-        <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full opacity-20 blur-3xl"style={{ background: podium.gold }} />
+        <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full opacity-20 blur-3xl" style={{ background: podium.gold }} />
         <div className="relative flex items-start gap-4">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-lg overflow-hidden"
             style={{ background: `linear-gradient(135deg, ${podium.gold}, ${podium.bronze})` }}>
             {cfg.liveExamLogo
-              ? <img src={cfg.liveExamLogo} alt=""className="w-full h-full object-cover"/>
-              : <Trophy size={26} className="text-primary-foreground drop-shadow"/>}
+              ? <img src={cfg.liveExamLogo} alt="" className="w-full h-full object-cover" />
+              : <Trophy size={26} className="text-primary-foreground drop-shadow" />}
           </div>
           <div className="min-w-0">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">লিডারবোর্ড</p>
@@ -125,7 +125,7 @@ const LiveExamLeaderboard = () => {
             { icon: Award, label: "গড় স্কোর", value: `${avgPct}%` },
           ].map((s, i) => (
             <div key={i} className="rounded-2xl bg-card/70 border border-border p-3 text-center">
-              <s.icon size={16} className="mx-auto mb-1.5 text-primary"/>
+              <s.icon size={16} className="mx-auto mb-1.5 text-primary" />
               <p className="text-base font-extrabold">{s.value}</p>
               <p className="text-[10px] text-muted-foreground">{s.label}</p>
             </div>
@@ -137,7 +137,7 @@ const LiveExamLeaderboard = () => {
         <div className="glass-card-static p-14 text-center text-sm text-muted-foreground">লোড হচ্ছে...</div>
       ) : parts.length === 0 ? (
         <div className="glass-card-static p-14 text-center">
-          <Trophy className="mx-auto text-muted-foreground/40 mb-3"size={38} />
+          <Trophy className="mx-auto text-muted-foreground/40 mb-3" size={38} />
           <p className="text-sm text-muted-foreground">এখনো কেউ পরীক্ষা জমা দেয়নি</p>
         </div>
       ) : (
@@ -147,15 +147,15 @@ const LiveExamLeaderboard = () => {
             <div className="flex items-end justify-center gap-3 md:gap-6">
               {podiumOrder.map((p, i) => {
                 const meta = podiumMeta[i];
-                if (!p) return <div key={i} className="flex-1"/>;
+                if (!p) return <div key={i} className="flex-1" />;
                 const pr = profiles[p.user_id];
                 const isMe = p.user_id === user?.id;
                 const isFirst = i === 1;
                 return (
                   <div key={p.id} className="flex-1 flex flex-col items-center text-center min-w-0">
-                    {isFirst && <Crown size={22} className="mb-1"style={{ color: podium.gold }} />}
+                    {isFirst && <Crown size={22} className="mb-1" style={{ color: podium.gold }} />}
                     <div className="relative mb-3">
-                      <div className="rounded-full p-1 shadow-lg"style={{ background: `linear-gradient(135deg, ${meta.color}, ${meta.color}aa)` }}>
+                      <div className="rounded-full p-1 shadow-lg" style={{ background: `linear-gradient(135deg, ${meta.color}, ${meta.color}aa)` }}>
                         <div className="rounded-full bg-background p-0.5">
                           <Avatar url={pr?.avatar_url} name={pr?.full_name} size={isFirst ? 78 : 58} />
                         </div>
@@ -172,7 +172,7 @@ const LiveExamLeaderboard = () => {
                     <p className="text-[10px] text-muted-foreground mt-0.5 inline-flex items-center gap-1"><Timer size={10} /> {formatTime(p.time_taken_seconds)}</p>
                     <div className="mt-3 w-full rounded-t-2xl flex items-center justify-center relative overflow-hidden"
                       style={{ height: meta.h, background: `linear-gradient(to bottom, ${meta.color}, ${meta.color}bb)` }}>
-                      <div className="absolute inset-0 opacity-20"style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.45) 0%, transparent 55%, rgba(0,0,0,0.25) 100%)"}} />
+                      <div className="absolute inset-0 opacity-20" style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.45) 0%, transparent 55%, rgba(0,0,0,0.25) 100%)"}} />
                       <span className="relative text-xl md:text-2xl font-extrabold text-background drop-shadow">{meta.label}</span>
                     </div>
                   </div>
@@ -201,11 +201,11 @@ const LiveExamLeaderboard = () => {
             parts.length > 3 && (
               <div className="glass-card-static p-4 md:p-5">
                 <div className="flex items-center justify-between gap-3 mb-3">
-                  <h2 className="text-sm font-bold inline-flex items-center gap-2"><Medal size={15} className="text-primary"/> পূর্ণ র‍্যাঙ্কিং</h2>
+                  <h2 className="text-sm font-bold inline-flex items-center gap-2"><Medal size={15} className="text-primary" /> পূর্ণ র‍্যাঙ্কিং</h2>
                   <div className="relative w-40 md:w-56">
-                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"/>
+                    <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="নাম খুঁজুন"
-                      className="w-full glass-strong rounded-xl pl-8 pr-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+                      className="w-full glass-strong rounded-xl pl-8 pr-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-primary/30" />
                   </div>
                 </div>
                 <div className="space-y-1.5">

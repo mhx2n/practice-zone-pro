@@ -33,7 +33,7 @@ const ThemeToggle = () => {
       className="p-2 rounded-xl hover:bg-muted transition-colors"
       aria-label="Toggle theme"
     >
-      {theme === "light"? <Moon size={18} className="text-muted-foreground"/> : <Sun size={18} className="text-warning" />}
+      {theme === "light"? <Moon size={18} className="text-muted-foreground" /> : <Sun size={18} className="text-warning" />}
     </button>
   );
 };

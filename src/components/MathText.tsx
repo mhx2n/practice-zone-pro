@@ -60,7 +60,7 @@ const consumeBracketExpression = (source: string, start: number) => {
   if (!prefix) return null;
   const openAt = start + prefix[0].length;
   const open = source[openAt];
-  const close = open === "{"? "}": "]";
+  const close = open === " {"? "}": "]";
   let depth = 0;
   for (let i = openAt; i < source.length; i++) {
     const ch = source[i];

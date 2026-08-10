@@ -37,7 +37,7 @@ const EventBannerDisplay = () => {
           return (
             <div key={banner.id} className="container py-1.5 flex items-center gap-3 justify-center relative">
               {banner.image && (
-                <img src={banner.image} alt={banner.caption} className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg object-cover shrink-0"/>
+                <img src={banner.image} alt={banner.caption} className="w-7 h-7 sm:w-9 sm:h-9 rounded-lg object-cover shrink-0" />
               )}
               <div className="flex flex-col sm:flex-row items-center gap-0.5 sm:gap-3 text-center min-w-0">
                 <span className="text-xs sm:text-sm font-semibold text-foreground truncate max-w-[180px] sm:max-w-none">{banner.caption}</span>

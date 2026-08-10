@@ -85,10 +85,10 @@ const StudentProfile = () => {
     const name = fullName.trim();
     const ph = phone.trim();
     if (!name) {
-      return toast({ title: "নাম খালি রাখা যাবে না", variant: "destructive"});
+      return toast({ title: "নাম খালি রাখা যাবে না", variant: "destructive" });
     }
     if (name.length > 100) {
-      return toast({ title: "নাম ১০০ অক্ষরের মধ্যে হতে হবে", variant: "destructive"});
+      return toast({ title: "নাম ১০০ অক্ষরের মধ্যে হতে হবে", variant: "destructive" });
     }
     if (ph) {
       const digits = ph.replace(/\D/g, "");
@@ -117,9 +117,9 @@ const StudentProfile = () => {
       await refreshProfile();
       setFullName(name);
       setPhone(ph);
-      toast({ title: "সংরক্ষিত হয়েছে "});
+      toast({ title: "সংরক্ষিত হয়েছে " });
     } catch (err: any) {
-      toast({ title: "সংরক্ষণ ব্যর্থ", description: err?.message || "অজানা ত্রুটি", variant: "destructive"});
+      toast({ title: "সংরক্ষণ ব্যর্থ", description: err?.message || "অজানা ত্রুটি", variant: "destructive" });
     } finally {
       setSaving(false);
     }
@@ -131,10 +131,10 @@ const StudentProfile = () => {
     if (e.target) e.target.value = "";
     if (!file || !user) return;
     if (!file.type.startsWith("image/")) {
-      return toast({ title: "শুধু ছবি ফাইল আপলোড করুন", variant: "destructive"});
+      return toast({ title: "শুধু ছবি ফাইল আপলোড করুন", variant: "destructive" });
     }
     if (file.size > 5 * 1024 * 1024) {
-      return toast({ title: "ছবি ৫MB এর মধ্যে হতে হবে", variant: "destructive"});
+      return toast({ title: "ছবি ৫MB এর মধ্যে হতে হবে", variant: "destructive" });
     }
     setUploading(true);
     try {
@@ -157,9 +157,9 @@ const StudentProfile = () => {
       if (updateError) throw updateError;
       if (!updated) throw new Error("প্রোফাইলে সেভ হয়নি");
       await refreshProfile();
-      toast({ title: "ছবি আপডেট হয়েছে "});
+      toast({ title: "ছবি আপডেট হয়েছে " });
     } catch (err: any) {
-      toast({ title: "আপলোড ব্যর্থ", description: err?.message || "অজানা ত্রুটি", variant: "destructive"});
+      toast({ title: "আপলোড ব্যর্থ", description: err?.message || "অজানা ত্রুটি", variant: "destructive" });
     } finally {
       setUploading(false);
     }
@@ -171,11 +171,11 @@ const StudentProfile = () => {
     <div className="pt-24 pb-10 container max-w-4xl mx-auto animate-fade-in px-4">
       {/* Hero header */}
       <div className="relative overflow-hidden rounded-3xl p-6 md:p-8 mb-6 bg-gradient-to-br from-primary/15 via-primary/5 to-transparent border border-primary/20">
-        <div className="absolute -right-12 -top-12 w-48 h-48 bg-primary/20 rounded-full blur-3xl"/>
+        <div className="absolute -right-12 -top-12 w-48 h-48 bg-primary/20 rounded-full blur-3xl" />
         <div className="relative flex flex-col md:flex-row items-center md:items-start gap-5">
           <div className="relative w-24 h-24 md:w-28 md:h-28 shrink-0">
           {profile?.avatar_url ? (
-            <img src={profile.avatar_url} alt={fullName} className="w-full h-full rounded-full object-cover ring-4 ring-primary/20"/>
+            <img src={profile.avatar_url} alt={fullName} className="w-full h-full rounded-full object-cover ring-4 ring-primary/20" />
           ) : (
             <div className="w-full h-full rounded-full bg-primary/15 text-primary flex items-center justify-center text-3xl font-bold ring-4 ring-primary/20">
               {initial}
@@ -188,7 +188,7 @@ const StudentProfile = () => {
           >
             <Camera size={14} />
           </button>
-          <input ref={fileInputRef} type="file"accept="image/*"onChange={handleAvatarChange} className="hidden"/>
+          <input ref={fileInputRef} type="file" accept="image/*" onChange={handleAvatarChange} className="hidden" />
           </div>
           <div className="text-center md:text-left flex-1">
             <h1 className="text-2xl font-extrabold">{fullName || "অনুশীলনকারী"}</h1>
@@ -223,24 +223,24 @@ const StudentProfile = () => {
         <div className="grid md:grid-cols-2 gap-4 mb-6">
           {trendData.length > 1 && (
             <div className="glass-card-static p-4">
-              <h3 className="text-sm font-bold mb-2 flex items-center gap-2"><TrendingUp size={14} className="text-primary"/> পারফরম্যান্স ট্রেন্ড</h3>
-              <ResponsiveContainer width="100%"height={180}>
+              <h3 className="text-sm font-bold mb-2 flex items-center gap-2"><TrendingUp size={14} className="text-primary" /> পারফরম্যান্স ট্রেন্ড</h3>
+              <ResponsiveContainer width="100%" height={180}>
                 <LineChart data={trendData}>
-                  <CartesianGrid strokeDasharray="3 3"stroke="hsl(var(--border))"/>
-                  <XAxis dataKey="idx"tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))"/>
-                  <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))"/>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="idx" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
+                  <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
                   <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
-                  <Line type="monotone"dataKey="pct"stroke="hsl(var(--primary))"strokeWidth={2} dot={{ r: 3 }} />
+                  <Line type="monotone" dataKey="pct" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3 }} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           )}
           {pieData.length > 0 && (
             <div className="glass-card-static p-4">
-              <h3 className="text-sm font-bold mb-2 flex items-center gap-2"><Target size={14} className="text-primary"/> উত্তর বিশ্লেষণ</h3>
-              <ResponsiveContainer width="100%"height={180}>
+              <h3 className="text-sm font-bold mb-2 flex items-center gap-2"><Target size={14} className="text-primary" /> উত্তর বিশ্লেষণ</h3>
+              <ResponsiveContainer width="100%" height={180}>
                 <PieChart>
-                  <Pie data={pieData} dataKey="value"nameKey="name"cx="50%"cy="50%"outerRadius={60} label={{ fontSize: 10 }}>
+                  <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={60} label={{ fontSize: 10 }}>
                     {pieData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
                   </Pie>
                   <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, fontSize: 12 }} />
@@ -291,7 +291,7 @@ const StudentProfile = () => {
       {/* Live exam history */}
       {liveStats.length > 0 && (
         <div className="mb-6">
-          <h2 className="text-sm font-bold mb-3 flex items-center gap-2"><Trophy size={14} className="text-warning"/> লাইভ পরীক্ষার ইতিহাস</h2>
+          <h2 className="text-sm font-bold mb-3 flex items-center gap-2"><Trophy size={14} className="text-warning" /> লাইভ পরীক্ষার ইতিহাস</h2>
           <div className="space-y-2">
             {liveStats.slice(0, 8).map((p) => (
               <div key={p.id} className="glass-card-static p-3 flex items-center justify-between gap-3">
@@ -318,7 +318,7 @@ const StudentProfile = () => {
 
       {results.length > 0 && (
         <div>
-          <h2 className="text-sm font-bold mb-3 flex items-center gap-2"><BarChart3 size={14} className="text-primary"/> সাম্প্রতিক অনুশীলন</h2>
+          <h2 className="text-sm font-bold mb-3 flex items-center gap-2"><BarChart3 size={14} className="text-primary" /> সাম্প্রতিক অনুশীলন</h2>
           <div className="space-y-2">
             {results.slice(0, 10).map((r, i) => (
               <div key={i} className="glass-card-static p-3 flex items-center justify-between">

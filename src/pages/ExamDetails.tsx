@@ -61,7 +61,7 @@ const ExamDetails = () => {
     return (
       <div className="pt-24 container text-center min-h-screen">
         <p className="text-muted-foreground">পরীক্ষা পাওয়া যায়নি</p>
-        <Link to="/exams"className="text-primary text-sm mt-2 inline-block">ফিরে যান</Link>
+        <Link to="/exams" className="text-primary text-sm mt-2 inline-block">ফিরে যান</Link>
       </div>
     );
   }
@@ -117,11 +117,11 @@ const ExamDetails = () => {
                     } ${isMandatory ? "opacity-90 cursor-not-allowed": ""}`}
                   >
                     {isMandatory ? (
-                      <Lock size={13} className="text-primary flex-shrink-0"/>
+                      <Lock size={13} className="text-primary flex-shrink-0" />
                     ) : isSelected ? (
-                      <CheckSquare size={13} className="text-primary flex-shrink-0"/>
+                      <CheckSquare size={13} className="text-primary flex-shrink-0" />
                     ) : (
-                      <Square size={13} className="text-muted-foreground flex-shrink-0"/>
+                      <Square size={13} className="text-muted-foreground flex-shrink-0" />
                     )}
                     <span className="flex-1 text-left truncate">{subject}</span>
                     <span className="text-[10px] bg-muted px-1.5 py-0.5 rounded-full whitespace-nowrap">

@@ -95,9 +95,9 @@ const ExamsPage = () => {
 
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"size={16} />
-          <input type="text"placeholder={getLabel("searchHint")} value={search} onChange={(e) => setSearch(e.target.value)}
-            className="w-full glass-strong rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 text-foreground"/>
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+          <input type="text" placeholder={getLabel("searchHint")} value={search} onChange={(e) => setSearch(e.target.value)}
+            className="w-full glass-strong rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 text-foreground" />
         </div>
         <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)} className="glass-strong rounded-xl px-3 py-2.5 text-sm focus:outline-none text-foreground bg-card">
           {["all", "easy", "medium", "hard"].map((d) => <option key={d} value={d} className="bg-card text-foreground">{diffLabels[d]}</option>)}
@@ -115,8 +115,8 @@ const ExamsPage = () => {
                 className="glass-card p-0 overflow-hidden text-left group transition-all hover:scale-[1.02] active:scale-[0.98]">
                 <div className="w-full aspect-[16/9] overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
                   {section.image
-                    ? <img src={section.image} alt={section.name} loading="lazy"className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
-                    : <FolderOpen size={32} className="text-primary/50"/>}
+                    ? <img src={section.image} alt={section.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    : <FolderOpen size={32} className="text-primary/50" />}
                 </div>
                 <div className="p-3 sm:p-4">
                   <h2 className="text-sm font-bold line-clamp-1">{section.name}</h2>
@@ -124,7 +124,7 @@ const ExamsPage = () => {
                   {section.description && !section.caption && <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-2">{section.description}</p>}
                   <div className="flex items-center justify-between mt-3 text-[11px]">
                     <span className="text-muted-foreground bg-muted px-2 py-0.5 rounded-full">{exams.length} পরীক্ষা</span>
-                    <ChevronRight size={15} className="text-primary group-hover:translate-x-1 transition-transform"/>
+                    <ChevronRight size={15} className="text-primary group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
               </button>
@@ -136,7 +136,7 @@ const ExamsPage = () => {
             <div className="glass-card-static overflow-hidden">
               {openSection.section.image && (
                 <div className="w-full aspect-[16/9] sm:aspect-[21/9] overflow-hidden">
-                  <img src={openSection.section.image} alt={openSection.section.name} className="w-full h-full object-cover"/>
+                  <img src={openSection.section.image} alt={openSection.section.name} className="w-full h-full object-cover" />
                 </div>
               )}
               <div className="p-4">
@@ -159,11 +159,11 @@ const ExamsPage = () => {
           {(subject || paper || chapter) && (
             <div className="flex items-center gap-2 flex-wrap mb-5">
               {crumb("বিষয়সমূহ", resetCurriculum)}
-              {subject && <ChevronRight size={14} className="text-muted-foreground"/>}
+              {subject && <ChevronRight size={14} className="text-muted-foreground" />}
               {subject && crumb(subject.name, paper ? () => { setPaperId(null); setChapterId(null); } : null)}
-              {paper && <ChevronRight size={14} className="text-muted-foreground"/>}
+              {paper && <ChevronRight size={14} className="text-muted-foreground" />}
               {paper && crumb(paper.name, chapter ? () => setChapterId(null) : null)}
-              {chapter && <ChevronRight size={14} className="text-muted-foreground"/>}
+              {chapter && <ChevronRight size={14} className="text-muted-foreground" />}
               {chapter && crumb(chapter.name, null)}
             </div>
           )}
@@ -179,8 +179,8 @@ const ExamsPage = () => {
                     className="glass-card p-0 overflow-hidden text-left group transition-all hover:scale-[1.02] active:scale-[0.98]">
                     <div className="w-full aspect-[16/9] overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
                       {s.image
-                        ? <img src={s.image} alt={s.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
-                        : <BookOpen size={34} className="text-primary/50"/>}
+                        ? <img src={s.image} alt={s.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        : <BookOpen size={34} className="text-primary/50" />}
                     </div>
                     <div className="p-4">
                       <h2 className="text-sm font-bold">{s.name}</h2>
@@ -217,7 +217,7 @@ const ExamsPage = () => {
                             {chapterIdsOfPaper(p.id).length} অধ্যায় • {examCountOfPaper(p.id)} পরীক্ষা
                           </p>
                         </div>
-                        <ChevronRight size={18} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all"/>
+                        <ChevronRight size={18} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                       </button>
                     ))}
                   </div>
@@ -250,7 +250,7 @@ const ExamsPage = () => {
                       {c.description && <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{c.description}</p>}
                     </div>
                     <span className="text-[11px] text-muted-foreground bg-muted px-2 py-0.5 rounded-full whitespace-nowrap">{examsByChapter(c.id).length} পরীক্ষা</span>
-                    <ChevronRight size={18} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all"/>
+                    <ChevronRight size={18} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                   </button>
                 ))
               )}
@@ -261,7 +261,7 @@ const ExamsPage = () => {
           {chapter && (
             <div className="space-y-4">
               <button onClick={() => setChapterId(null)} className="text-sm text-muted-foreground inline-flex items-center gap-1 hover:text-foreground"><ArrowLeft size={14} /> {paper?.name}</button>
-              <h2 className="text-base font-bold flex items-center gap-2"><Layers size={16} className="text-primary"/> {chapter.name}</h2>
+              <h2 className="text-base font-bold flex items-center gap-2"><Layers size={16} className="text-primary" /> {chapter.name}</h2>
               {examsByChapter(chapter.id).length === 0 ? (
                 <div className="glass-card-static p-12 text-center text-muted-foreground">এই অধ্যায়ে কোনো পরীক্ষা নেই</div>
               ) : (

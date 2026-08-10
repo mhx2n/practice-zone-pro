@@ -44,13 +44,13 @@ const AuthPage = () => {
           setIsSignUp(false);
           return;
         }
-        toast({ title: "স্বাগতম! "});
+        toast({ title: "স্বাগতম! " });
       } else {
         await signIn(normalized, password);
       }
       navigate("/", { replace: true });
     } catch (err: any) {
-      toast({ title: "ত্রুটি", description: err.message || "ব্যর্থ হয়েছে", variant: "destructive"});
+      toast({ title: "ত্রুটি", description: err.message || "ব্যর্থ হয়েছে", variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -62,7 +62,7 @@ const AuthPage = () => {
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background to-accent/20">
       <div className="glass-card-static p-8 w-full max-w-sm">
         <div className="text-center mb-6">
-          <Link to="/"className="inline-flex items-center gap-2 text-2xl font-bold mb-4">
+          <Link to="/" className="inline-flex items-center gap-2 text-2xl font-bold mb-4">
             <span>🎯</span>
             <span className="gradient-text">Target</span>
           </Link>
@@ -77,7 +77,7 @@ const AuthPage = () => {
         <form onSubmit={handleSubmit} className="space-y-3">
           {isSignUp && (
             <div className="relative">
-              <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"size={16} />
+              <UserIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
               <input
                 type="text"
                 placeholder="পূর্ণ নাম"
@@ -88,7 +88,7 @@ const AuthPage = () => {
             </div>
           )}
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"size={16} />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
             <input
               type="email"
               placeholder="আপনার Gmail (যেমন: name@gmail.com)"
@@ -99,7 +99,7 @@ const AuthPage = () => {
             />
           </div>
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"size={16} />
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
             <input
               type="password"
               placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)"

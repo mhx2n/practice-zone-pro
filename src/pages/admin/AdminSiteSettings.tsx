@@ -14,11 +14,11 @@ const RichEditor = ({ label, value, onChange }: { label: string; value: string; 
       <label className="text-sm font-semibold">{label}</label>
       <div className="border border-border rounded-xl overflow-hidden">
         <div className="flex items-center gap-1 p-2 border-b border-border bg-muted/30 flex-wrap">
-          <button type="button"onClick={() => execCmd("bold")} className="p-1.5 rounded hover:bg-muted transition-colors"><Bold size={14} /></button>
-          <button type="button"onClick={() => execCmd("italic")} className="p-1.5 rounded hover:bg-muted transition-colors"><Italic size={14} /></button>
-          <button type="button"onClick={insertLink} className="p-1.5 rounded hover:bg-muted transition-colors"><LinkIcon size={14} /></button>
-          <button type="button"onClick={() => execCmd("insertUnorderedList")} className="p-1.5 rounded hover:bg-muted transition-colors"><List size={14} /></button>
-          <select onChange={(e) => { if (e.target.value) execCmd("fontSize", e.target.value); }} className="text-xs bg-transparent border border-border rounded px-1 py-1"defaultValue="">
+          <button type="button" onClick={() => execCmd("bold")} className="p-1.5 rounded hover:bg-muted transition-colors"><Bold size={14} /></button>
+          <button type="button" onClick={() => execCmd("italic")} className="p-1.5 rounded hover:bg-muted transition-colors"><Italic size={14} /></button>
+          <button type="button" onClick={insertLink} className="p-1.5 rounded hover:bg-muted transition-colors"><LinkIcon size={14} /></button>
+          <button type="button" onClick={() => execCmd("insertUnorderedList")} className="p-1.5 rounded hover:bg-muted transition-colors"><List size={14} /></button>
+          <select onChange={(e) => { if (e.target.value) execCmd("fontSize", e.target.value); }} className="text-xs bg-transparent border border-border rounded px-1 py-1" defaultValue="">
             <option value=""disabled>সাইজ</option>
             <option value="1">ছোট</option>
             <option value="3">স্বাভাবিক</option>
@@ -69,7 +69,7 @@ const AdminSiteSettings = () => {
 
   const save = () => {
     saveMut.mutate(settings, {
-      onSuccess: () => toast({ title: "সেটিংস সেভ হয়েছে "}),
+      onSuccess: () => toast({ title: "সেটিংস সেভ হয়েছে " }),
     });
   };
 
@@ -101,21 +101,21 @@ const AdminSiteSettings = () => {
           <div className="space-y-2">
             <label className="text-sm font-semibold">শিরোনাম</label>
             <input value={settings.aboutTitle} onChange={(e) => update("aboutTitle", e.target.value)}
-              className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+              className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
           </div>
-          <RichEditor label="বিবরণ"value={settings.aboutContent} onChange={(v) => update("aboutContent", v)} />
+          <RichEditor label="বিবরণ" value={settings.aboutContent} onChange={(v) => update("aboutContent", v)} />
           <div className="space-y-2">
             <label className="text-sm font-semibold">বৈশিষ্ট্য শিরোনাম</label>
             <input value={settings.featuresTitle} onChange={(e) => update("featuresTitle", e.target.value)}
-              className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+              className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
           </div>
-          <RichEditor label="বৈশিষ্ট্য তালিকা"value={settings.featuresContent} onChange={(v) => update("featuresContent", v)} />
+          <RichEditor label="বৈশিষ্ট্য তালিকা" value={settings.featuresContent} onChange={(v) => update("featuresContent", v)} />
           <div className="space-y-2">
             <label className="text-sm font-semibold">যোগাযোগ শিরোনাম</label>
             <input value={settings.contactTitle} onChange={(e) => update("contactTitle", e.target.value)}
-              className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+              className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
           </div>
-          <RichEditor label="যোগাযোগ তথ্য"value={settings.contactContent} onChange={(v) => update("contactContent", v)} />
+          <RichEditor label="যোগাযোগ তথ্য" value={settings.contactContent} onChange={(v) => update("contactContent", v)} />
         </div>
 
         <div className="glass-card-static p-5 space-y-4">
@@ -123,7 +123,7 @@ const AdminSiteSettings = () => {
           <div className="space-y-2">
             <label className="text-sm font-semibold">ফুটার বিবরণ</label>
             <input value={settings.footerDescription} onChange={(e) => update("footerDescription", e.target.value)}
-              className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+              className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-2">
@@ -132,7 +132,7 @@ const AdminSiteSettings = () => {
                 placeholder={String(new Date().getFullYear())}
                 value={settings.footerCopyrightYear || ""}
                 onChange={(e) => update("footerCopyrightYear", e.target.value)}
-                className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+                className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
               <p className="text-[11px] text-muted-foreground">খালি রাখলে স্বয়ংক্রিয়ভাবে বর্তমান সাল ব্যবহার হবে।</p>
             </div>
             <div className="space-y-2">
@@ -141,16 +141,16 @@ const AdminSiteSettings = () => {
                 placeholder="সকল স্বত্ব সংরক্ষিত"
                 value={settings.footerCopyrightText || ""}
                 onChange={(e) => update("footerCopyrightText", e.target.value)}
-                className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+                className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
             </div>
           </div>
           <div className="space-y-2">
             <label className="text-sm font-semibold">দ্রুত লিঙ্কসমূহ</label>
             {settings.footerLinks.map((link, i) => (
               <div key={i} className="flex gap-2 items-center">
-                <input placeholder="লেবেল"value={link.label} onChange={(e) => updateFooterLink(i, "label", e.target.value)} className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm focus:outline-none"/>
-                <input placeholder="URL (/exams)"value={link.url} onChange={(e) => updateFooterLink(i, "url", e.target.value)} className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm focus:outline-none"/>
-                <button onClick={() => removeFooterLink(i)} className="p-2 hover:bg-destructive/10 rounded-lg"><Trash2 size={14} className="text-destructive"/></button>
+                <input placeholder="লেবেল" value={link.label} onChange={(e) => updateFooterLink(i, "label", e.target.value)} className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm focus:outline-none" />
+                <input placeholder="URL (/exams)" value={link.url} onChange={(e) => updateFooterLink(i, "url", e.target.value)} className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm focus:outline-none" />
+                <button onClick={() => removeFooterLink(i)} className="p-2 hover:bg-destructive/10 rounded-lg"><Trash2 size={14} className="text-destructive" /></button>
               </div>
             ))}
             <button onClick={addFooterLink} className="inline-flex items-center gap-1 text-xs text-primary hover:underline"><Plus size={14} /> লিঙ্ক যোগ করুন</button>
@@ -159,9 +159,9 @@ const AdminSiteSettings = () => {
             <label className="text-sm font-semibold">সোশ্যাল লিঙ্কসমূহ</label>
             {settings.socialLinks.map((link, i) => (
               <div key={i} className="flex gap-2 items-center">
-                <input placeholder="লেবেল (Telegram)"value={link.label} onChange={(e) => updateSocialLink(i, "label", e.target.value)} className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm focus:outline-none"/>
-                <input placeholder="URL"value={link.url} onChange={(e) => updateSocialLink(i, "url", e.target.value)} className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm focus:outline-none"/>
-                <button onClick={() => removeSocialLink(i)} className="p-2 hover:bg-destructive/10 rounded-lg"><Trash2 size={14} className="text-destructive"/></button>
+                <input placeholder="লেবেল (Telegram)" value={link.label} onChange={(e) => updateSocialLink(i, "label", e.target.value)} className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm focus:outline-none" />
+                <input placeholder="URL" value={link.url} onChange={(e) => updateSocialLink(i, "url", e.target.value)} className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm focus:outline-none" />
+                <button onClick={() => removeSocialLink(i)} className="p-2 hover:bg-destructive/10 rounded-lg"><Trash2 size={14} className="text-destructive" /></button>
               </div>
             ))}
             <button onClick={addSocialLink} className="inline-flex items-center gap-1 text-xs text-primary hover:underline"><Plus size={14} /> সোশ্যাল লিঙ্ক যোগ করুন</button>
@@ -186,9 +186,9 @@ const AdminSiteSettings = () => {
                     <div className="p-3 space-y-2">
                       {group.keys.map((key) => (
                         <div key={key} className="flex items-center gap-2">
-                          <span className="text-xs text-muted-foreground w-32 shrink-0 truncate"title={key}>{key}</span>
+                          <span className="text-xs text-muted-foreground w-32 shrink-0 truncate" title={key}>{key}</span>
                           <input value={uiLabels[key] || ""} placeholder={defaultLabels[key] || key} onChange={(e) => updateLabel(key, e.target.value)}
-                            className="flex-1 glass-strong rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary/30"/>
+                            className="flex-1 glass-strong rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary/30" />
                         </div>
                       ))}
                     </div>

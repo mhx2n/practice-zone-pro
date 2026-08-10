@@ -39,19 +39,19 @@ const LiveExamAttempt = () => {
     if (!id || !user || accessLoading) return;
     (async () => {
       const { data: le } = await supabase.from("live_exams").select("*").eq("id", id).single();
-      if (!le) { toast({ title: "পরীক্ষা পাওয়া যায়নি", variant: "destructive"}); navigate("/live-exams"); return; }
+      if (!le) { toast({ title: "পরীক্ষা পাওয়া যায়নি", variant: "destructive" }); navigate("/live-exams"); return; }
       const effective = computeLiveStatus(le.start_time, le.end_time, le.status);
       if (effective !== "live") {
-        toast({ title: "পরীক্ষা এখন লাইভ নয়", variant: "destructive"});
+        toast({ title: "পরীক্ষা এখন লাইভ নয়", variant: "destructive" });
         navigate("/live-exams");
         return;
       }
       if (le.status !== "live") {
-        void supabase.from("live_exams").update({ status: "live"}).eq("id", le.id);
+        void supabase.from("live_exams").update({ status: "live" }).eq("id", le.id);
         (le as any).status = "live";
       }
       if (!accessLoading && !canAccess(le.exam_id)) {
-        toast({ title: "এই পরীক্ষার অ্যাক্সেস নেই", variant: "destructive"});
+        toast({ title: "এই পরীক্ষার অ্যাক্সেস নেই", variant: "destructive" });
         navigate("/live-exams");
         return;
       }
@@ -209,7 +209,7 @@ const LiveExamAttempt = () => {
     setParticipant((prev) => prev ? { ...prev, status: "submitted", score, max_score: max, correct, wrong, skipped, percentage: pct, time_taken_seconds: elapsed } : prev);
     setSubmitted(true);
     if (id) await loadRankings(id);
-    toast({ title: auto ? "সময় শেষ! জমা হয়েছে": "জমা সফল "});
+    toast({ title: auto ? "সময় শেষ! জমা হয়েছে": "জমা সফল " });
   };
 
   if (loading) return <div className="p-6 text-center text-sm text-muted-foreground pt-32">লোড হচ্ছে...</div>;
@@ -222,7 +222,7 @@ const LiveExamAttempt = () => {
     return (
       <div className="min-h-screen pt-24 pb-10 px-4 max-w-4xl mx-auto space-y-5 will-change-scroll">
         <div className="glass-card-static p-6 text-center space-y-4">
-          <CheckCircle2 className="mx-auto text-success"size={56} />
+          <CheckCircle2 className="mx-auto text-success" size={56} />
           <h1 className="text-2xl font-bold">পরীক্ষা জমা হয়েছে</h1>
           <p className="text-sm text-muted-foreground">{liveExam.title}</p>
 
@@ -268,7 +268,7 @@ const LiveExamAttempt = () => {
         </div>
 
         <div className="glass-card-static p-5">
-          <h2 className="text-base font-bold mb-3 flex items-center gap-2"><Trophy size={16} className="text-warning"/> চূড়ান্ত র‍্যাঙ্কিং ({sorted.length})</h2>
+          <h2 className="text-base font-bold mb-3 flex items-center gap-2"><Trophy size={16} className="text-warning" /> চূড়ান্ত র‍্যাঙ্কিং ({sorted.length})</h2>
           <div className="space-y-1.5">
             {sorted.map((p, i) => {
               const pr = profiles[p.user_id];
@@ -278,7 +278,7 @@ const LiveExamAttempt = () => {
                   <div className="w-8 text-center font-bold text-sm">
                     {i === 0 ? "": i === 1 ? "": i === 2 ? "": i + 1}
                   </div>
-                  {pr?.avatar_url ? <img src={pr.avatar_url} className="w-9 h-9 rounded-full object-cover"alt=""/> :
+                  {pr?.avatar_url ? <img src={pr.avatar_url} className="w-9 h-9 rounded-full object-cover" alt="" /> :
                     <div className="w-9 h-9 rounded-full bg-primary/20 text-primary flex items-center justify-center text-sm font-bold">
                       {(pr?.full_name || "U")[0]}
                     </div>}

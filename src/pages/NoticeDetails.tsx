@@ -14,7 +14,7 @@ const NoticeDetails = () => {
       <div className="pt-24 container text-center min-h-screen text-muted-foreground">
         নোটিস পাওয়া যায়নি
         <br />
-        <Link to="/notices"className="text-primary text-sm">ফিরে যান</Link>
+        <Link to="/notices" className="text-primary text-sm">ফিরে যান</Link>
       </div>
     );
   }
@@ -30,7 +30,7 @@ const NoticeDetails = () => {
           <span className="text-xs text-muted-foreground">{new Date(notice.createdAt).toLocaleDateString("bn-BD")}</span>
         </div>
         <h1 className="text-2xl font-bold mb-4">{notice.title}</h1>
-        {notice.image && <img src={notice.image} alt={notice.title} className="w-full rounded-xl object-cover max-h-80 mb-4"/>}
+        {notice.image && <img src={notice.image} alt={notice.title} className="w-full rounded-xl object-cover max-h-80 mb-4" />}
         <div className="text-muted-foreground leading-relaxed prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(notice.content) }} />
       </div>
     </div>

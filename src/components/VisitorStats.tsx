@@ -87,8 +87,8 @@ const VisitorStats = () => {
     <div className="glass-strong rounded-2xl p-4 backdrop-blur-xl border border-border/50">
       <div className="flex items-center gap-2 mb-4">
         <div className="relative">
-          <div className="w-2 h-2 bg-success rounded-full animate-pulse"/>
-          <div className="absolute inset-0 w-2 h-2 bg-success rounded-full animate-ping"/>
+          <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
+          <div className="absolute inset-0 w-2 h-2 bg-success rounded-full animate-ping" />
         </div>
         <span className="text-xs font-medium text-muted-foreground">লাইভ পরিসংখ্যান</span>
         {loading && <span className="text-[10px] text-muted-foreground">(লোড হচ্ছে...)</span>}

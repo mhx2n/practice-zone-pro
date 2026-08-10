@@ -64,7 +64,7 @@ const AdminCSVUpload = () => {
   const parseCSV = (text: string) => {
     const lines = reassembleCSVLines(text);
     if (lines.length < 2) {
-      toast({ title: "ত্রুটি", description: "CSV ফাইলে ডেটা নেই", variant: "destructive"});
+      toast({ title: "ত্রুটি", description: "CSV ফাইলে ডেটা নেই", variant: "destructive" });
       return;
     }
 
@@ -123,7 +123,7 @@ const AdminCSVUpload = () => {
 
     setImportSummary({ total: lines.length - 1, imported: questions.length, skipped: skippedCount, errors });
     if (errors.length > 0) {
-      toast({ title: `${skippedCount} সারি বাদ পড়েছে`, description: errors.slice(0, 3).join("; "), variant: "destructive"});
+      toast({ title: `${skippedCount} সারি বাদ পড়েছে`, description: errors.slice(0, 3).join("; "), variant: "destructive" });
     }
     
     if (mode === "existing") {
@@ -156,7 +156,7 @@ const AdminCSVUpload = () => {
 
   const createExamFromCSV = () => {
     if (!newExamTitle || csvQuestions.length === 0) {
-      toast({ title: "ত্রুটি", description: "শিরোনাম ও প্রশ্ন প্রয়োজন", variant: "destructive"});
+      toast({ title: "ত্রুটি", description: "শিরোনাম ও প্রশ্ন প্রয়োজন", variant: "destructive" });
       return;
     }
 
@@ -188,7 +188,7 @@ const AdminCSVUpload = () => {
 
   const addToExistingExam = () => {
     if (!targetExamId || csvQuestions.length === 0) {
-      toast({ title: "ত্রুটি", description: "পরীক্ষা ও প্রশ্ন নির্বাচন করুন", variant: "destructive"});
+      toast({ title: "ত্রুটি", description: "পরীক্ষা ও প্রশ্ন নির্বাচন করুন", variant: "destructive" });
       return;
     }
     const targetExam = existingExams.find((e) => e.id === targetExamId);
@@ -267,12 +267,12 @@ const AdminCSVUpload = () => {
         onDrop={handleDrop}
         className={`glass-card-static p-8 text-center mb-5 border-2 border-dashed transition-colors ${dragOver ? "border-primary bg-primary/5": "border-primary/30"}`}
       >
-        <Upload className="mx-auto mb-3 text-primary"size={36} />
+        <Upload className="mx-auto mb-3 text-primary" size={36} />
         <p className="text-sm font-medium mb-1">CSV ফাইল আপলোড করুন বা ড্র্যাগ করুন</p>
         <p className="text-xs text-muted-foreground mb-4">কলাম: questions, option1-5, answer, explanation, section</p>
         <label className="cursor-pointer inline-block px-5 py-2.5 rounded-xl text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
           ফাইল নির্বাচন করুন
-          <input type="file"accept=".csv"onChange={handleCSV} className="hidden"/>
+          <input type="file" accept=".csv" onChange={handleCSV} className="hidden" />
         </label>
       </div>
 
@@ -329,20 +329,20 @@ const AdminCSVUpload = () => {
               />
             )}
             <label className="cursor-pointer inline-block px-4 py-2 rounded-lg text-xs font-medium bg-accent text-accent-foreground hover:bg-accent/80 transition-all">
-              <Plus size={14} className="inline mr-1"/> আরো CSV আপলোড করুন
-              <input type="file"accept=".csv"onChange={handleCSV} className="hidden"/>
+              <Plus size={14} className="inline mr-1" /> আরো CSV আপলোড করুন
+              <input type="file" accept=".csv" onChange={handleCSV} className="hidden" />
             </label>
           </div>
 
           {mode === "new"? (
             <>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-                <input placeholder="পরীক্ষার নাম *"value={newExamTitle} onChange={(e) => setNewExamTitle(e.target.value)} className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
-                <input placeholder="বিষয়"value={newExamSubject} onChange={(e) => setNewExamSubject(e.target.value)} className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+                <input placeholder="পরীক্ষার নাম *" value={newExamTitle} onChange={(e) => setNewExamTitle(e.target.value)} className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+                <input placeholder="বিষয়" value={newExamSubject} onChange={(e) => setNewExamSubject(e.target.value)} className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
                 <select value={newExamDifficulty} onChange={(e) => setNewExamDifficulty(e.target.value as "easy"| "medium"| "hard")} className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none">
                   <option value="easy">সহজ</option><option value="medium">মাঝারি</option><option value="hard">কঠিন</option>
                 </select>
-                <input type="number"placeholder="সময় (মিনিট)"value={newExamDuration} onChange={(e) => setNewExamDuration(Number(e.target.value))} className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+                <input type="number" placeholder="সময় (মিনিট)" value={newExamDuration} onChange={(e) => setNewExamDuration(Number(e.target.value))} className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
                 <select value={newExamNegativeMarking} onChange={(e) => setNewExamNegativeMarking(Number(e.target.value))} className="glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none">
                   <option value={0}>নেগেটিভ মার্ক: ০</option><option value={0.25}>নেগেটিভ মার্ক: ০.২৫</option><option value={0.5}>নেগেটিভ মার্ক: ০.৫</option><option value={1}>নেগেটিভ মার্ক: ১</option>
                 </select>

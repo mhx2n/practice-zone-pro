@@ -71,7 +71,7 @@ const StudentResult = () => {
           <div className="glass-card-static p-12 text-center text-muted-foreground">
             এখনও কোনো পরীক্ষা দেওয়া হয়নি
             <br />
-            <Link to="/exams"className="text-primary text-sm mt-2 inline-block">পরীক্ষা দিন →</Link>
+            <Link to="/exams" className="text-primary text-sm mt-2 inline-block">পরীক্ষা দিন →</Link>
           </div>
         ) : (
           <div className="space-y-3">
@@ -127,7 +127,7 @@ const StudentResult = () => {
             <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full flex-shrink-0">{q.section}</span>
           )}
         </div>
-        {q.questionImage && <img src={q.questionImage} alt=""className="max-w-full max-h-48 rounded-lg border border-border mb-3 object-contain"/>}
+        {q.questionImage && <img src={q.questionImage} alt="" className="max-w-full max-h-48 rounded-lg border border-border mb-3 object-contain" />}
         <div className="space-y-2 mb-3">
           {q.options.map((opt, oi) => {
             const isAnswer = isAnswerMatch(opt, correctAnswer);
@@ -138,11 +138,11 @@ const StudentResult = () => {
             return (
               <div key={opt} className={`px-4 py-3 rounded-lg text-sm border ${cls}`}>
                 <div className="flex items-center gap-2">
-                  {isAnswer && <CheckCircle2 size={16} className="text-success flex-shrink-0"/>}
-                  {isUser && !isCorrect && <XCircle size={16} className="text-destructive flex-shrink-0"/>}
-                  <MathText text={opt} className="text-sm"/>
+                  {isAnswer && <CheckCircle2 size={16} className="text-success flex-shrink-0" />}
+                  {isUser && !isCorrect && <XCircle size={16} className="text-destructive flex-shrink-0" />}
+                  <MathText text={opt} className="text-sm" />
                 </div>
-                {q.optionImages?.[oi] && <img src={q.optionImages[oi]!} alt=""className="mt-2 max-h-24 rounded border border-border object-contain"/>}
+                {q.optionImages?.[oi] && <img src={q.optionImages[oi]!} alt="" className="mt-2 max-h-24 rounded border border-border object-contain" />}
               </div>
             );
           })}
@@ -164,22 +164,22 @@ const StudentResult = () => {
       {/* Stats grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         <div className="glass-card-static p-4 text-center">
-          <CheckCircle2 className="mx-auto mb-1 text-success"size={22} />
+          <CheckCircle2 className="mx-auto mb-1 text-success" size={22} />
           <p className="text-xl font-bold">{result.correct}</p>
           <p className="text-xs text-muted-foreground">সঠিক</p>
         </div>
         <div className="glass-card-static p-4 text-center">
-          <XCircle className="mx-auto mb-1 text-destructive"size={22} />
+          <XCircle className="mx-auto mb-1 text-destructive" size={22} />
           <p className="text-xl font-bold">{result.wrong}</p>
           <p className="text-xs text-muted-foreground">ভুল</p>
         </div>
         <div className="glass-card-static p-4 text-center">
-          <MinusCircle className="mx-auto mb-1 text-muted-foreground"size={22} />
+          <MinusCircle className="mx-auto mb-1 text-muted-foreground" size={22} />
           <p className="text-xl font-bold">{result.skipped}</p>
           <p className="text-xs text-muted-foreground">বাদ</p>
         </div>
         <div className="glass-card-static p-4 text-center">
-          <AlertTriangle className="mx-auto mb-1 text-warning"size={22} />
+          <AlertTriangle className="mx-auto mb-1 text-warning" size={22} />
           <p className="text-xl font-bold text-destructive">-{result.negativeMarks.toFixed(2)}</p>
           <p className="text-xs text-muted-foreground">নেগেটিভ</p>
         </div>
@@ -189,7 +189,7 @@ const StudentResult = () => {
       {hasSubjectBreakdown && (
         <div className="glass-card-static p-5 mb-6">
           <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-            <BookOpen size={16} className="text-primary"/> বিষয়ভিত্তিক ফলাফল
+            <BookOpen size={16} className="text-primary" /> বিষয়ভিত্তিক ফলাফল
           </h3>
           <div className="space-y-3">
             {subjectBreakdown.map((sb) => (
@@ -243,7 +243,7 @@ const StudentResult = () => {
                   : "glass-card-static hover:bg-muted/60"
               }`}
             >
-              <XCircle size={18} className="mx-auto mb-1"/>
+              <XCircle size={18} className="mx-auto mb-1" />
               ভুল ({wrongQs.length})
             </button>
             <button
@@ -254,7 +254,7 @@ const StudentResult = () => {
                   : "glass-card-static hover:bg-muted/60"
               }`}
             >
-              <CheckCircle2 size={18} className="mx-auto mb-1"/>
+              <CheckCircle2 size={18} className="mx-auto mb-1" />
               সঠিক ({correctQs.length})
             </button>
             <button
@@ -265,7 +265,7 @@ const StudentResult = () => {
                   : "glass-card-static hover:bg-muted/60"
               }`}
             >
-              <MinusCircle size={18} className="mx-auto mb-1"/>
+              <MinusCircle size={18} className="mx-auto mb-1" />
               স্কিপ ({skippedQs.length})
             </button>
           </div>
@@ -289,7 +289,7 @@ const StudentResult = () => {
         <Link to={`/exams/${result.examId}`} className="flex-1 inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-4 py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
           <RotateCcw size={16} /> আবার চেষ্টা করুন
         </Link>
-        <Link to="/exams"className="flex-1 inline-flex items-center justify-center text-sm text-center font-semibold rounded-xl px-4 py-3 glass hover:bg-muted/80 transition-all">অন্য পরীক্ষা</Link>
+        <Link to="/exams" className="flex-1 inline-flex items-center justify-center text-sm text-center font-semibold rounded-xl px-4 py-3 glass hover:bg-muted/80 transition-all">অন্য পরীক্ষা</Link>
       </div>
     </div>
   );

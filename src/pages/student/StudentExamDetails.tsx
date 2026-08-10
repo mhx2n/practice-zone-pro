@@ -16,7 +16,7 @@ const StudentExamDetails = () => {
     return (
       <div className="text-center py-20">
         <p className="text-muted-foreground">পরীক্ষা পাওয়া যায়নি</p>
-        <Link to="/student/exams"className="text-primary text-sm mt-2 inline-block">ফিরে যান</Link>
+        <Link to="/student/exams" className="text-primary text-sm mt-2 inline-block">ফিরে যান</Link>
       </div>
     );
   }

@@ -42,9 +42,9 @@ const StudentExams = () => {
       <h1 className="text-xl font-bold"> পরীক্ষা সমূহ</h1>
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"size={16} />
-          <input type="text"placeholder="খুঁজুন..."value={search} onChange={(e) => setSearch(e.target.value)}
-            className="w-full glass-strong rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
+          <input type="text" placeholder="খুঁজুন..." value={search} onChange={(e) => setSearch(e.target.value)}
+            className="w-full glass-strong rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
         </div>
         <select value={subject} onChange={(e) => setSubject(e.target.value)} className="glass-strong rounded-xl px-3 py-2.5 text-sm focus:outline-none">
           {subjects.map((s) => <option key={s} value={s}>{s === "all"? "সকল বিষয়": s}</option>)}
@@ -60,7 +60,7 @@ const StudentExams = () => {
           {sectionedExams.map(({ section, exams }) => (
             <div key={section.id}>
               <button onClick={() => toggleSection(section.id)} className="w-full flex items-center gap-2 glass-card-static p-4 mb-3 text-left hover:bg-muted/50 transition-colors">
-                {collapsedSections[section.id] ? <ChevronRight size={18} className="text-primary"/> : <ChevronDown size={18} className="text-primary"/>}
+                {collapsedSections[section.id] ? <ChevronRight size={18} className="text-primary" /> : <ChevronDown size={18} className="text-primary" />}
                 <div className="flex-1">
                   <h2 className="text-base font-bold text-primary"> {section.name}</h2>
                   {section.description && <p className="text-xs text-muted-foreground mt-0.5">{section.description}</p>}

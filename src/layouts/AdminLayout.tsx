@@ -42,7 +42,7 @@ const AdminLayout = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3"/>
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           <p className="text-sm text-muted-foreground">লোড হচ্ছে...</p>
         </div>
       </div>
@@ -78,10 +78,10 @@ const AdminLayout = () => {
       <header className="glass-nav fixed top-0 left-0 right-0 z-50 border-b border-border/50">
         <div className="flex items-center justify-between h-14 px-4">
           <div className="flex items-center gap-3">
-            <button className="md:hidden p-1.5"onClick={() => setMobileOpen(!mobileOpen)}>
+            <button className="md:hidden p-1.5" onClick={() => setMobileOpen(!mobileOpen)}>
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
-            <Link to="/admin/dashboard"className="flex items-center gap-2 font-bold">
+            <Link to="/admin/dashboard" className="flex items-center gap-2 font-bold">
               <span className="text-xl">🎯</span>
               <span className="gradient-text text-lg">Target</span>
               <span className="text-xs bg-destructive/10 text-destructive px-2 py-0.5 rounded-full font-medium">Admin</span>
@@ -110,8 +110,8 @@ const AdminLayout = () => {
         </aside>
 
         {mobileOpen && (
-          <div className="md:hidden fixed inset-0 z-40 bg-background/80 backdrop-blur-sm"onClick={() => setMobileOpen(false)}>
-            <aside className="w-64 h-full glass-strong p-4 pt-20 space-y-1 animate-fade-in"onClick={(e) => e.stopPropagation()}>
+          <div className="md:hidden fixed inset-0 z-40 bg-background/80 backdrop-blur-sm" onClick={() => setMobileOpen(false)}>
+            <aside className="w-64 h-full glass-strong p-4 pt-20 space-y-1 animate-fade-in" onClick={(e) => e.stopPropagation()}>
               {navItems.map((item) => (
                 <Link key={item.to} to={item.to} onClick={() => setMobileOpen(false)}
                   className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
