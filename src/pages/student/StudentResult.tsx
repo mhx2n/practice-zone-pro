@@ -14,7 +14,7 @@ const StudentResult = () => {
     questions?: Question[];
     originalQuestions?: Question[];
   };
-  const [activeTab, setActiveTab] = useState<"wrong" | "correct" | "skipped">("wrong");
+  const [activeTab, setActiveTab] = useState<"wrong"| "correct"| "skipped">("wrong");
 
   const originalQuestionMap = useMemo(
     () => new Map((originalQuestions ?? []).map((q) => [q.id, q])),
@@ -66,12 +66,12 @@ const StudentResult = () => {
   if (!result) {
     return (
       <div className="pt-24 pb-8 container animate-fade-in">
-        <h1 className="text-xl font-bold mb-5">📊 ফলাফল ইতিহাস</h1>
+        <h1 className="text-xl font-bold mb-5"> ফলাফল ইতিহাস</h1>
         {allResults.length === 0 ? (
           <div className="glass-card-static p-12 text-center text-muted-foreground">
             এখনও কোনো পরীক্ষা দেওয়া হয়নি
             <br />
-            <Link to="/exams" className="text-primary text-sm mt-2 inline-block">পরীক্ষা দিন →</Link>
+            <Link to="/exams"className="text-primary text-sm mt-2 inline-block">পরীক্ষা দিন →</Link>
           </div>
         ) : (
           <div className="space-y-3">
@@ -82,11 +82,11 @@ const StudentResult = () => {
                   <p className="text-xs text-muted-foreground">
                     সঠিক: {r.correct} | ভুল: {r.wrong} | বাদ: {r.skipped}
                     {r.negativeMarks > 0 && ` | নেগেটিভ: -${r.negativeMarks.toFixed(2)}`}
-                    {" • "}{new Date(r.timestamp).toLocaleDateString("bn-BD")}
+                    {"• "}{new Date(r.timestamp).toLocaleDateString("bn-BD")}
                   </p>
                 </div>
                 <div className="text-right">
-                  <span className={`text-lg font-bold ${r.percentage >= 60 ? "text-success" : "text-destructive"}`}>{r.percentage}%</span>
+                  <span className={`text-lg font-bold ${r.percentage >= 60 ? "text-success": "text-destructive"}`}>{r.percentage}%</span>
                   <Link to={`/exams/${r.examId}`} className="block text-xs text-primary mt-1">আবার দিন →</Link>
                 </div>
               </div>
@@ -98,17 +98,17 @@ const StudentResult = () => {
   }
 
   const getMessage = () => {
-    if (result.percentage >= 80) return { text: "অসাধারণ! 🏆", color: "text-success" };
-    if (result.percentage >= 60) return { text: "ভালো করেছেন! 👏", color: "text-primary" };
-    if (result.percentage >= 40) return { text: "আরও চেষ্টা করুন 💪", color: "text-warning" };
-    return { text: "আবার চেষ্টা করুন 📚", color: "text-destructive" };
+    if (result.percentage >= 80) return { text: "অসাধারণ! ", color: "text-success"};
+    if (result.percentage >= 60) return { text: "ভালো করেছেন! ", color: "text-primary"};
+    if (result.percentage >= 40) return { text: "আরও চেষ্টা করুন ", color: "text-warning"};
+    return { text: "আবার চেষ্টা করুন ", color: "text-destructive"};
   };
   const msg = getMessage();
 
   const subjectBreakdown = result.subjectBreakdown || [];
   const hasSubjectBreakdown = subjectBreakdown.length > 1;
 
-  const tabData = activeTab === "wrong" ? wrongQs : activeTab === "correct" ? correctQs : skippedQs;
+  const tabData = activeTab === "wrong"? wrongQs : activeTab === "correct"? correctQs : skippedQs;
 
   const renderQuestion = (q: Question, i: number) => {
     const userAns = result.answers[q.id] || "";
@@ -127,7 +127,7 @@ const StudentResult = () => {
             <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full flex-shrink-0">{q.section}</span>
           )}
         </div>
-        {q.questionImage && <img src={q.questionImage} alt="" className="max-w-full max-h-48 rounded-lg border border-border mb-3 object-contain" />}
+        {q.questionImage && <img src={q.questionImage} alt=""className="max-w-full max-h-48 rounded-lg border border-border mb-3 object-contain"/>}
         <div className="space-y-2 mb-3">
           {q.options.map((opt, oi) => {
             const isAnswer = isAnswerMatch(opt, correctAnswer);
@@ -138,16 +138,16 @@ const StudentResult = () => {
             return (
               <div key={opt} className={`px-4 py-3 rounded-lg text-sm border ${cls}`}>
                 <div className="flex items-center gap-2">
-                  {isAnswer && <CheckCircle2 size={16} className="text-success flex-shrink-0" />}
-                  {isUser && !isCorrect && <XCircle size={16} className="text-destructive flex-shrink-0" />}
-                  <MathText text={opt} className="text-sm" />
+                  {isAnswer && <CheckCircle2 size={16} className="text-success flex-shrink-0"/>}
+                  {isUser && !isCorrect && <XCircle size={16} className="text-destructive flex-shrink-0"/>}
+                  <MathText text={opt} className="text-sm"/>
                 </div>
-                {q.optionImages?.[oi] && <img src={q.optionImages[oi]!} alt="" className="mt-2 max-h-24 rounded border border-border object-contain" />}
+                {q.optionImages?.[oi] && <img src={q.optionImages[oi]!} alt=""className="mt-2 max-h-24 rounded border border-border object-contain"/>}
               </div>
             );
           })}
         </div>
-        {q.explanation && <div className="text-sm text-muted-foreground bg-muted/50 rounded-lg p-3 mt-2">💡 <strong>ব্যাখ্যা:</strong> <MathText text={q.explanation} /></div>}
+        {q.explanation && <div className="text-sm text-muted-foreground bg-muted/50 rounded-lg p-3 mt-2"> <strong>ব্যাখ্যা:</strong> <MathText text={q.explanation} /></div>}
       </div>
     );
   };
@@ -164,22 +164,22 @@ const StudentResult = () => {
       {/* Stats grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         <div className="glass-card-static p-4 text-center">
-          <CheckCircle2 className="mx-auto mb-1 text-success" size={22} />
+          <CheckCircle2 className="mx-auto mb-1 text-success"size={22} />
           <p className="text-xl font-bold">{result.correct}</p>
           <p className="text-xs text-muted-foreground">সঠিক</p>
         </div>
         <div className="glass-card-static p-4 text-center">
-          <XCircle className="mx-auto mb-1 text-destructive" size={22} />
+          <XCircle className="mx-auto mb-1 text-destructive"size={22} />
           <p className="text-xl font-bold">{result.wrong}</p>
           <p className="text-xs text-muted-foreground">ভুল</p>
         </div>
         <div className="glass-card-static p-4 text-center">
-          <MinusCircle className="mx-auto mb-1 text-muted-foreground" size={22} />
+          <MinusCircle className="mx-auto mb-1 text-muted-foreground"size={22} />
           <p className="text-xl font-bold">{result.skipped}</p>
           <p className="text-xs text-muted-foreground">বাদ</p>
         </div>
         <div className="glass-card-static p-4 text-center">
-          <AlertTriangle className="mx-auto mb-1 text-warning" size={22} />
+          <AlertTriangle className="mx-auto mb-1 text-warning"size={22} />
           <p className="text-xl font-bold text-destructive">-{result.negativeMarks.toFixed(2)}</p>
           <p className="text-xs text-muted-foreground">নেগেটিভ</p>
         </div>
@@ -189,20 +189,20 @@ const StudentResult = () => {
       {hasSubjectBreakdown && (
         <div className="glass-card-static p-5 mb-6">
           <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-            <BookOpen size={16} className="text-primary" /> বিষয়ভিত্তিক ফলাফল
+            <BookOpen size={16} className="text-primary"/> বিষয়ভিত্তিক ফলাফল
           </h3>
           <div className="space-y-3">
             {subjectBreakdown.map((sb) => (
               <div key={sb.subject} className="bg-muted/50 rounded-xl p-3">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-semibold">{sb.subject}</span>
-                  <span className={`text-sm font-bold ${sb.percentage >= 60 ? "text-success" : sb.percentage >= 40 ? "text-warning" : "text-destructive"}`}>
+                  <span className={`text-sm font-bold ${sb.percentage >= 60 ? "text-success": sb.percentage >= 40 ? "text-warning": "text-destructive"}`}>
                     {sb.percentage}%
                   </span>
                 </div>
                 <div className="w-full bg-muted rounded-full h-2 mb-2">
                   <div
-                    className={`h-2 rounded-full transition-all ${sb.percentage >= 60 ? "bg-success" : sb.percentage >= 40 ? "bg-warning" : "bg-destructive"}`}
+                    className={`h-2 rounded-full transition-all ${sb.percentage >= 60 ? "bg-success": sb.percentage >= 40 ? "bg-warning": "bg-destructive"}`}
                     style={{ width: `${sb.percentage}%` }}
                   />
                 </div>
@@ -221,7 +221,7 @@ const StudentResult = () => {
 
       {/* Score analysis */}
       <div className="glass-card-static p-5 mb-6">
-        <h3 className="text-sm font-semibold mb-3">📊 স্কোর বিশ্লেষণ</h3>
+        <h3 className="text-sm font-semibold mb-3"> স্কোর বিশ্লেষণ</h3>
         <div className="space-y-2 text-sm">
           <div className="flex justify-between"><span className="text-muted-foreground">সঠিক উত্তর</span><span className="font-medium">+{result.correct}</span></div>
           <div className="flex justify-between"><span className="text-muted-foreground">নেগেটিভ মার্ক</span><span className="font-medium text-destructive">-{result.negativeMarks.toFixed(2)}</span></div>
@@ -232,7 +232,7 @@ const StudentResult = () => {
       {/* Review section with tabs */}
       {questions && (
         <div className="mb-6">
-          <h3 className="text-base font-bold mb-3">📖 উত্তর পর্যালোচনা</h3>
+          <h3 className="text-base font-bold mb-3"> উত্তর পর্যালোচনা</h3>
           
           <div className="grid grid-cols-3 gap-2 mb-4">
             <button
@@ -243,7 +243,7 @@ const StudentResult = () => {
                   : "glass-card-static hover:bg-muted/60"
               }`}
             >
-              <XCircle size={18} className="mx-auto mb-1" />
+              <XCircle size={18} className="mx-auto mb-1"/>
               ভুল ({wrongQs.length})
             </button>
             <button
@@ -254,7 +254,7 @@ const StudentResult = () => {
                   : "glass-card-static hover:bg-muted/60"
               }`}
             >
-              <CheckCircle2 size={18} className="mx-auto mb-1" />
+              <CheckCircle2 size={18} className="mx-auto mb-1"/>
               সঠিক ({correctQs.length})
             </button>
             <button
@@ -265,7 +265,7 @@ const StudentResult = () => {
                   : "glass-card-static hover:bg-muted/60"
               }`}
             >
-              <MinusCircle size={18} className="mx-auto mb-1" />
+              <MinusCircle size={18} className="mx-auto mb-1"/>
               স্কিপ ({skippedQs.length})
             </button>
           </div>
@@ -273,9 +273,9 @@ const StudentResult = () => {
           <div className="space-y-3 animate-fade-in">
             {tabData.length === 0 ? (
               <div className="glass-card-static p-8 text-center text-muted-foreground text-sm">
-                {activeTab === "wrong" && "কোনো ভুল উত্তর নেই! 🎉"}
-                {activeTab === "correct" && "কোনো সঠিক উত্তর নেই"}
-                {activeTab === "skipped" && "কোনো স্কিপ করা প্রশ্ন নেই"}
+                {activeTab === "wrong"&& "কোনো ভুল উত্তর নেই! "}
+                {activeTab === "correct"&& "কোনো সঠিক উত্তর নেই"}
+                {activeTab === "skipped"&& "কোনো স্কিপ করা প্রশ্ন নেই"}
               </div>
             ) : (
               tabData.map((q, i) => renderQuestion(q, i))
@@ -289,7 +289,7 @@ const StudentResult = () => {
         <Link to={`/exams/${result.examId}`} className="flex-1 inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-4 py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
           <RotateCcw size={16} /> আবার চেষ্টা করুন
         </Link>
-        <Link to="/exams" className="flex-1 inline-flex items-center justify-center text-sm text-center font-semibold rounded-xl px-4 py-3 glass hover:bg-muted/80 transition-all">অন্য পরীক্ষা</Link>
+        <Link to="/exams"className="flex-1 inline-flex items-center justify-center text-sm text-center font-semibold rounded-xl px-4 py-3 glass hover:bg-muted/80 transition-all">অন্য পরীক্ষা</Link>
       </div>
     </div>
   );

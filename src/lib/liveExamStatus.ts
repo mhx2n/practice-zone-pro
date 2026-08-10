@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export type LiveStatus = "scheduled" | "live" | "ended";
+export type LiveStatus = "scheduled"| "live"| "ended";
 
 /**
  * Compute the effective status of a live exam from its schedule.
@@ -13,8 +13,8 @@ export function computeLiveStatus(
   storedStatus: string,
   now: Date = new Date(),
 ): LiveStatus {
-  const start = typeof startTime === "string" ? new Date(startTime) : startTime;
-  const end = typeof endTime === "string" ? new Date(endTime) : endTime;
+  const start = typeof startTime === "string"? new Date(startTime) : startTime;
+  const end = typeof endTime === "string"? new Date(endTime) : endTime;
 
   // Manual end is sticky
   if (storedStatus === "ended") return "ended";

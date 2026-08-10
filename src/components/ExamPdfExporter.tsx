@@ -67,7 +67,7 @@ interface PdfConfig {
   optionGap: number;
   jpegQuality: number;
   renderScale: number;
-  outputFormat: "png" | "jpeg";
+  outputFormat: "png"| "jpeg";
   presetVersion: number;
   headerFirstPageOnly: boolean;
   showWatermark: boolean;
@@ -87,7 +87,7 @@ function buildQuestionHTML(q: Question, idx: number, cfg: PdfConfig): string {
   const optionsHtml = (q.options || []).map((opt, i) => `
     <div class="opt">
       <span class="opt-lbl">${BN_OPT[i] || toBn(i + 1)})</span>
-      <span class="opt-txt">${renderInline(opt)}${cfg.showOptionImages && q.optionImages?.[i] ? `<img class="opt-img" src="${q.optionImages[i]}" alt=""/>` : ""}</span>
+      <span class="opt-txt">${renderInline(opt)}${cfg.showOptionImages && q.optionImages?.[i] ? `<img class="opt-img"src="${q.optionImages[i]}"alt=""/>` : ""}</span>
     </div>
   `).join("");
 
@@ -98,7 +98,7 @@ function buildQuestionHTML(q: Question, idx: number, cfg: PdfConfig): string {
       ${cfg.showExplanations && q.explanation ? `<div class="exp-line"><b>ব্যাখ্যা:</b> <span>${renderInline(q.explanation)}</span></div>` : ""}
     </div>` : "";
 
-  const qImg = cfg.showQuestionImages && q.questionImage ? `<img class="q-img" src="${q.questionImage}" alt=""/>` : "";
+  const qImg = cfg.showQuestionImages && q.questionImage ? `<img class="q-img"src="${q.questionImage}"alt=""/>` : "";
 
   return `
     <div class="q">
@@ -126,14 +126,14 @@ function buildQuestionHeadHTML(q: Question, idx: number, cfg: PdfConfig): string
   const optionsHtml = (q.options || []).map((opt, i) => `
     <div class="opt">
       <span class="opt-lbl">${BN_OPT[i] || toBn(i + 1)})</span>
-      <span class="opt-txt">${renderInline(opt)}${cfg.showOptionImages && q.optionImages?.[i] ? `<img class="opt-img" src="${q.optionImages[i]}" alt=""/>` : ""}</span>
+      <span class="opt-txt">${renderInline(opt)}${cfg.showOptionImages && q.optionImages?.[i] ? `<img class="opt-img"src="${q.optionImages[i]}"alt=""/>` : ""}</span>
     </div>
   `).join("");
   const ansBlock = cfg.showAnswers ? `
     <div class="ans-box">
       <div class="ans-line"><b>সঠিক উত্তর:</b> <span>${correctLbl ? `${correctLbl}) ` : ""}${renderInline(correct || "—")}</span></div>
     </div>` : "";
-  const qImg = cfg.showQuestionImages && q.questionImage ? `<img class="q-img" src="${q.questionImage}" alt=""/>` : "";
+  const qImg = cfg.showQuestionImages && q.questionImage ? `<img class="q-img"src="${q.questionImage}"alt=""/>` : "";
   return `
     <div class="q">
       <div class="q-row">
@@ -151,7 +151,7 @@ function buildQuestionHeadHTML(q: Question, idx: number, cfg: PdfConfig): string
 
 /** Standalone explanation continuation block — flows independently. */
 function buildExplanationContinuationHTML(idx: number, htmlChunk: string, isContinuation: boolean): string {
-  const label = isContinuation ? "ব্যাখ্যা (চলমান)" : "ব্যাখ্যা";
+  const label = isContinuation ? "ব্যাখ্যা (চলমান)": "ব্যাখ্যা";
   return `
     <div class="q exp-cont">
       <div class="ans-box">
@@ -217,7 +217,7 @@ function pageStyles(cfg: PdfConfig): string {
     .pdf-page.debug::before{content:"";position:absolute;left:${cfg.pageMargin}px;top:${cfg.pageMargin}px;right:${cfg.pageMargin}px;bottom:${footerBottom}px;border:1px dashed #3b82f6;pointer-events:none;z-index:5}
     .pdf-page.debug .pdf-footer{outline:1.5px dashed #16a34a;outline-offset:2px;background:rgba(22,163,74,.06)}
     .pdf-page.debug .pdf-body{background:rgba(59,130,246,.04)}
-    .pdf-page.debug::after{content:"page " counter(pg);counter-increment:pg;position:absolute;top:2px;right:6px;font-size:10px;color:#ef4444;font-weight:700;z-index:10}
+    .pdf-page.debug::after{content:"page "counter(pg);counter-increment:pg;position:absolute;top:2px;right:6px;font-size:10px;color:#ef4444;font-weight:700;z-index:10}
     body{counter-reset:pg}
     /* KaTeX tweaks for printable Bengali + math content */
     .math-text-inline{display:inline-block;max-width:100%;vertical-align:-.08em;overflow:visible}
@@ -234,7 +234,7 @@ function buildPageHeaderHTML(exam: Exam, cfg: PdfConfig): string {
   const marks = cfg.marksOverride.trim() || String(exam.questions.length);
   return `
     <div class="pdf-header">
-      ${cfg.showLogo && cfg.logoDataUrl ? `<img class="pdf-logo" src="${cfg.logoDataUrl}" alt=""/>` : ""}
+      ${cfg.showLogo && cfg.logoDataUrl ? `<img class="pdf-logo"src="${cfg.logoDataUrl}"alt=""/>` : ""}
       <h1 class="pdf-title">${escapeHtml(cfg.title || exam.title)}</h1>
       ${cfg.subtitle ? `<div class="pdf-sub">${escapeHtml(cfg.subtitle)}</div>` : ""}
       ${cfg.showMeta ? `
@@ -260,7 +260,7 @@ function buildFooterHTML(cfg: PdfConfig, pageNum: number, totalPages: number): s
   if (!cfg.showFooter) return "";
   const slot = (s: Slot, cls: string) => {
     if (!s.text) return `<div class="slot ${cls}"></div>`;
-    if (s.link) return `<div class="slot ${cls}"><a href="${escapeAttr(s.link)}" style="color:inherit;text-decoration:none">${escapeHtml(s.text)}</a></div>`;
+    if (s.link) return `<div class="slot ${cls}"><a href="${escapeAttr(s.link)}"style="color:inherit;text-decoration:none">${escapeHtml(s.text)}</a></div>`;
     return `<div class="slot ${cls}">${escapeHtml(s.text)}</div>`;
   };
   return `
@@ -268,7 +268,7 @@ function buildFooterHTML(cfg: PdfConfig, pageNum: number, totalPages: number): s
       ${slot(cfg.footer.left, "left")}
       ${slot(cfg.footer.center, "center")}
       <div class="slot right">
-        ${cfg.footer.right.text ? (cfg.footer.right.link ? `<a href="${escapeAttr(cfg.footer.right.link)}" style="color:inherit;text-decoration:none">${escapeHtml(cfg.footer.right.text)}</a>` : escapeHtml(cfg.footer.right.text)) : ""}
+        ${cfg.footer.right.text ? (cfg.footer.right.link ? `<a href="${escapeAttr(cfg.footer.right.link)}"style="color:inherit;text-decoration:none">${escapeHtml(cfg.footer.right.text)}</a>` : escapeHtml(cfg.footer.right.text)) : ""}
         ${cfg.showPageNumbers ? `<div class="pn">পৃষ্ঠা ${toBn(pageNum)} / ${toBn(totalPages)}</div>` : ""}
       </div>
     </div>
@@ -296,7 +296,7 @@ async function buildPaginatedPages(exam: Exam, cfg: PdfConfig, onProgress?: (msg
     const page = document.createElement("div");
     page.className = "pdf-page";
     const isFirst = pages.length === 0;
-    if (cfg.showWatermark && cfg.logoDataUrl) page.innerHTML = `<img class="pdf-watermark" src="${cfg.logoDataUrl}" alt=""/>`;
+    if (cfg.showWatermark && cfg.logoDataUrl) page.innerHTML = `<img class="pdf-watermark"src="${cfg.logoDataUrl}"alt=""/>`;
     page.insertAdjacentHTML("beforeend", isFirst || !cfg.headerFirstPageOnly ? buildPageHeaderHTML(exam, cfg) : buildMiniHeaderHTML(exam, cfg));
     const body = document.createElement("div");
     body.className = "pdf-body";
@@ -520,10 +520,10 @@ async function printExam(exam: Exam, cfg: PdfConfig, onProgress?: (msg: string) 
   const docHtml = `<!doctype html>
 <html lang="bn">
 <head>
-<meta charset="utf-8" />
+<meta charset="utf-8"/>
 <title>${escapeHtml(cfg.title || exam.title || "exam")}</title>
-${katexHref ? `<link rel="stylesheet" href="${escapeAttr(katexHref)}" />` : ""}
-${fontHrefs.map((h) => `<link rel="stylesheet" href="${escapeAttr(h)}" />`).join("\n")}
+${katexHref ? `<link rel="stylesheet"href="${escapeAttr(katexHref)}"/>` : ""}
+${fontHrefs.map((h) => `<link rel="stylesheet"href="${escapeAttr(h)}"/>`).join("\n")}
 <style>
   @page { size: A4 portrait; margin: 0; }
   html, body { margin: 0; padding: 0; background: #fff; }
@@ -548,13 +548,13 @@ ${fontHrefs.map((h) => `<link rel="stylesheet" href="${escapeAttr(h)}" />`).join
 </head>
 <body>
 ${cfg.debugMode ? `<div class="debug-bar">
-  <span>🐞 Debug Mode — ${pages.length} পৃষ্ঠা</span>
+  <span> Debug Mode — ${pages.length} পৃষ্ঠা</span>
   <span class="legend">
     <span><i style="border-color:#ef4444"></i>পেজ বক্স</span>
     <span><i style="border-color:#3b82f6"></i>মার্জিন/বডি এরিয়া</span>
     <span><i style="border-color:#16a34a"></i>ফুটার এরিয়া</span>
   </span>
-  <button onclick="window.print()">🖨️ Print / Save as PDF</button>
+  <button onclick="window.print()"> Print / Save as PDF</button>
 </div>` : ""}
 ${pagesHtml}
 </body>
@@ -577,7 +577,7 @@ ${pagesHtml}
 
   if (cfg.debugMode) {
     // Debug: leave the window open for inspection. User clicks the
-    // "Print / Save as PDF" button inside the debug bar to print.
+    // "Print / Save as PDF"button inside the debug bar to print.
     return;
   }
 
@@ -612,7 +612,7 @@ ${pagesHtml}
   });
 }
 
-const emptySlot = (): Slot => ({ text: "", link: "" });
+const emptySlot = (): Slot => ({ text: "", link: ""});
 const PDF_DEFAULT_KEY = "target_pdf_default_cfg";
 const PDF_CFG_VERSION = 3;
 const DEFAULT_CFG: PdfConfig = {
@@ -653,7 +653,7 @@ const DEFAULT_CFG: PdfConfig = {
   watermarkOpacity: 0.07,
   watermarkSize: 55,
   debugMode: false,
-  footer: { left: emptySlot(), center: { text: "✈ আমাদের টেলিগ্রাম চ্যানেল", link: "" }, right: emptySlot() },
+  footer: { left: emptySlot(), center: { text: "আমাদের টেলিগ্রাম চ্যানেল", link: ""}, right: emptySlot() },
 };
 
 function loadSavedDefault(): Partial<PdfConfig> | null {
@@ -663,7 +663,7 @@ function loadSavedDefault(): Partial<PdfConfig> | null {
     const parsed = JSON.parse(raw) as Partial<PdfConfig>;
     if (parsed.presetVersion === PDF_CFG_VERSION) return parsed;
     // Migrate older saved configs: force the new "no header logo on first
-    // page" default so cover stays clean for every existing user.
+    // page"default so cover stays clean for every existing user.
     return { ...parsed, renderScale: 2, jpegQuality: 0.82, outputFormat: "jpeg", showLogo: false, presetVersion: PDF_CFG_VERSION };
   } catch { return null; }
 }
@@ -681,7 +681,7 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
   const sitePdfDefaults = (siteSettings?.pdfDefaults || {}) as Partial<PdfConfig>;
   const [cfg, setCfg] = useState<PdfConfig>(() => {
     const saved = loadSavedDefault();
-    return { ...DEFAULT_CFG, ...sitePdfDefaults, ...(saved || {}), title: exam.title, subtitle: exam.subject || "" };
+    return { ...DEFAULT_CFG, ...sitePdfDefaults, ...(saved || {}), title: exam.title, subtitle: exam.subject || ""};
   });
   const [generating, setGenerating] = useState(false);
   const [progress, setProgress] = useState("");
@@ -693,44 +693,44 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
   }, [open, exam.id, exam.title, exam.subject]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const saveAsSiteDefault = () => {
-    if (!siteSettings) { toast({ title: "সাইট সেটিংস লোড হয়নি", variant: "destructive" }); return; }
+    if (!siteSettings) { toast({ title: "সাইট সেটিংস লোড হয়নি", variant: "destructive"}); return; }
     // Strip per-exam fields so the saved global default doesn't override every exam's title.
     const { title: _t, subtitle: _s, marksOverride: _m, ...globalDefaults } = cfg;
     saveSite.mutate(
       { ...siteSettings, pdfDefaults: globalDefaults as unknown as Record<string, unknown> },
-      { onSuccess: () => toast({ title: "সাইট ডিফল্ট সেভ হয়েছে ✅", description: "সব এডমিন এখন এই ডিফল্ট পাবে" }) },
+      { onSuccess: () => toast({ title: "সাইট ডিফল্ট সেভ হয়েছে ", description: "সব এডমিন এখন এই ডিফল্ট পাবে"}) },
     );
   };
 
   const questionCount = useMemo(() => exam.questions?.length || 0, [exam.questions]);
 
   const updateCfg = <K extends keyof PdfConfig>(key: K, value: PdfConfig[K]) => setCfg((c) => ({ ...c, [key]: value }));
-  const updateFooter = (pos: "left" | "center" | "right", field: keyof Slot, value: string) =>
+  const updateFooter = (pos: "left"| "center"| "right", field: keyof Slot, value: string) =>
     setCfg((c) => ({ ...c, footer: { ...c.footer, [pos]: { ...c.footer[pos], [field]: value } } }));
 
   const onLogo = (e: ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (!f) return;
-    if (f.size > 1024 * 1024) { toast({ title: "লোগো ১MB এর মধ্যে হতে হবে", variant: "destructive" }); return; }
+    if (f.size > 1024 * 1024) { toast({ title: "লোগো ১MB এর মধ্যে হতে হবে", variant: "destructive"}); return; }
     const reader = new FileReader();
     reader.onload = () => setCfg((c) => ({ ...c, logoDataUrl: String(reader.result || "") }));
     reader.readAsDataURL(f);
   };
 
   const downloadPdf = async () => {
-    if (!questionCount) { toast({ title: "প্রশ্ন নেই", variant: "destructive" }); return; }
+    if (!questionCount) { toast({ title: "প্রশ্ন নেই", variant: "destructive"}); return; }
     setGenerating(true);
     try {
       await printExam(exam, cfg, setProgress);
       toast({
-        title: cfg.debugMode ? "🐞 Debug প্রিভিউ খুলেছে" : "প্রিন্ট ডায়ালগ খুলেছে ✅",
+        title: cfg.debugMode ? " Debug প্রিভিউ খুলেছে": "প্রিন্ট ডায়ালগ খুলেছে ",
         description: cfg.debugMode
           ? "নতুন ট্যাবে লাল/নীল/সবুজ বক্স দেখে overlap চেক করুন।"
-          : 'গন্তব্য থেকে "Save as PDF" বেছে নিন।',
+          : 'গন্তব্য থেকে "Save as PDF"বেছে নিন।',
       });
     } catch (err: unknown) {
       console.error("PDF gen error", err);
-      toast({ title: "PDF তৈরিতে ত্রুটি", description: errorMessage(err), variant: "destructive" });
+      toast({ title: "PDF তৈরিতে ত্রুটি", description: errorMessage(err), variant: "destructive"});
     } finally { setGenerating(false); setProgress(""); }
   };
 
@@ -746,29 +746,29 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
               <h2 className="font-bold text-lg flex items-center gap-2"><Settings2 size={18} /> PDF এক্সপোর্ট</h2>
               <p className="text-[11px] text-muted-foreground mt-0.5">এক ক্লিকে ডাউনলোড • Bengali font • KaTeX math • Auto pagination</p>
             </div>
-            <button onClick={onClose} className="p-1.5 hover:bg-muted rounded-lg" aria-label="বন্ধ করুন"><X size={16} /></button>
+            <button onClick={onClose} className="p-1.5 hover:bg-muted rounded-lg"aria-label="বন্ধ করুন"><X size={16} /></button>
           </div>
 
           <div className="min-h-[calc(100vh-8rem)]">
             <div className="p-4 md:p-5 space-y-5 max-h-[calc(100vh-8rem)] overflow-y-auto">
               <section className="grid sm:grid-cols-2 gap-3">
-                <TextInput label="শিরোনাম" value={cfg.title} onChange={(v) => updateCfg("title", v)} />
-                <TextInput label="সাবটাইটেল" value={cfg.subtitle} onChange={(v) => updateCfg("subtitle", v)} />
-                <TextInput label="সেট" value={cfg.setLabel} onChange={(v) => updateCfg("setLabel", v)} placeholder="A" />
-                <TextInput label="পূর্ণমান" value={cfg.marksOverride} onChange={(v) => updateCfg("marksOverride", v)} placeholder={`${questionCount}`} />
+                <TextInput label="শিরোনাম"value={cfg.title} onChange={(v) => updateCfg("title", v)} />
+                <TextInput label="সাবটাইটেল"value={cfg.subtitle} onChange={(v) => updateCfg("subtitle", v)} />
+                <TextInput label="সেট"value={cfg.setLabel} onChange={(v) => updateCfg("setLabel", v)} placeholder="A"/>
+                <TextInput label="পূর্ণমান"value={cfg.marksOverride} onChange={(v) => updateCfg("marksOverride", v)} placeholder={`${questionCount}`} />
               </section>
 
               <section className="grid sm:grid-cols-2 gap-3">
-                <NumberInput label="লোগো উচ্চতা" value={cfg.logoHeight} min={16} max={64} step={1} onChange={(v) => updateCfg("logoHeight", v)} />
+                <NumberInput label="লোগো উচ্চতা"value={cfg.logoHeight} min={16} max={64} step={1} onChange={(v) => updateCfg("logoHeight", v)} />
                 <div>
                   <label className="text-xs text-muted-foreground">লোগো</label>
                   <label className="flex items-center gap-2 mt-1 px-3 py-2 rounded-lg border border-border cursor-pointer text-xs hover:bg-muted/60">
-                    <ImageIcon size={14} /> {cfg.logoDataUrl ? "লোগো পরিবর্তন" : "লোগো আপলোড"}
-                    <input type="file" accept="image/png,image/jpeg" onChange={onLogo} className="hidden" />
+                    <ImageIcon size={14} /> {cfg.logoDataUrl ? "লোগো পরিবর্তন": "লোগো আপলোড"}
+                    <input type="file"accept="image/png,image/jpeg"onChange={onLogo} className="hidden"/>
                   </label>
                   {cfg.logoDataUrl ? (
                     <div className="mt-2 flex items-center gap-2">
-                      <img src={cfg.logoDataUrl} alt="PDF logo preview" className="w-10 h-10 object-contain rounded border border-border" />
+                      <img src={cfg.logoDataUrl} alt="PDF logo preview"className="w-10 h-10 object-contain rounded border border-border"/>
                       <button onClick={() => updateCfg("logoDataUrl", "")} className="text-xs text-destructive">সরাও</button>
                     </div>
                   ) : null}
@@ -778,28 +778,28 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
               <section>
                 <h3 className="text-xs font-bold mb-2">লে-আউট কাস্টমাইজ</h3>
                 <div className="grid sm:grid-cols-2 gap-3">
-                  <NumberInput label="পেজ মার্জিন" value={cfg.pageMargin} min={20} max={56} step={1} onChange={(v) => updateCfg("pageMargin", v)} />
-                  <NumberInput label="কলাম gap" value={cfg.columnGap} min={8} max={28} step={1} onChange={(v) => updateCfg("columnGap", v)} />
-                  <NumberInput label="প্রশ্ন gap" value={cfg.questionGap} min={2} max={20} step={0.5} onChange={(v) => updateCfg("questionGap", v)} />
-                  <NumberInput label="অপশন gap" value={cfg.optionGap} min={1} max={10} step={0.5} onChange={(v) => updateCfg("optionGap", v)} />
+                  <NumberInput label="পেজ মার্জিন"value={cfg.pageMargin} min={20} max={56} step={1} onChange={(v) => updateCfg("pageMargin", v)} />
+                  <NumberInput label="কলাম gap"value={cfg.columnGap} min={8} max={28} step={1} onChange={(v) => updateCfg("columnGap", v)} />
+                  <NumberInput label="প্রশ্ন gap"value={cfg.questionGap} min={2} max={20} step={0.5} onChange={(v) => updateCfg("questionGap", v)} />
+                  <NumberInput label="অপশন gap"value={cfg.optionGap} min={1} max={10} step={0.5} onChange={(v) => updateCfg("optionGap", v)} />
                 </div>
               </section>
 
               <section>
                 <h3 className="text-xs font-bold mb-2">ফন্ট ও রঙ</h3>
                 <div className="grid sm:grid-cols-2 gap-3">
-                  <NumberInput label="বেস ফন্ট" value={cfg.baseFontSize} min={8} max={14} step={0.1} onChange={(v) => updateCfg("baseFontSize", v)} />
-                  <NumberInput label="প্রশ্ন ফন্ট" value={cfg.questionFontSize} min={9} max={16} step={0.1} onChange={(v) => updateCfg("questionFontSize", v)} />
-                  <NumberInput label="অপশন ফন্ট" value={cfg.optionFontSize} min={8} max={14} step={0.1} onChange={(v) => updateCfg("optionFontSize", v)} />
-                  <NumberInput label="লাইন height" value={cfg.lineHeight} min={1.2} max={1.8} step={0.01} onChange={(v) => updateCfg("lineHeight", v)} />
-                  <ColorInput label="প্রাইমারি" value={cfg.primaryColor} onChange={(v) => updateCfg("primaryColor", v)} />
-                  <ColorInput label="উত্তর বক্স" value={cfg.answerBg} onChange={(v) => updateCfg("answerBg", v)} />
-                  <ColorInput label="বর্ডার" value={cfg.borderColor} onChange={(v) => updateCfg("borderColor", v)} />
+                  <NumberInput label="বেস ফন্ট"value={cfg.baseFontSize} min={8} max={14} step={0.1} onChange={(v) => updateCfg("baseFontSize", v)} />
+                  <NumberInput label="প্রশ্ন ফন্ট"value={cfg.questionFontSize} min={9} max={16} step={0.1} onChange={(v) => updateCfg("questionFontSize", v)} />
+                  <NumberInput label="অপশন ফন্ট"value={cfg.optionFontSize} min={8} max={14} step={0.1} onChange={(v) => updateCfg("optionFontSize", v)} />
+                  <NumberInput label="লাইন height"value={cfg.lineHeight} min={1.2} max={1.8} step={0.01} onChange={(v) => updateCfg("lineHeight", v)} />
+                  <ColorInput label="প্রাইমারি"value={cfg.primaryColor} onChange={(v) => updateCfg("primaryColor", v)} />
+                  <ColorInput label="উত্তর বক্স"value={cfg.answerBg} onChange={(v) => updateCfg("answerBg", v)} />
+                  <ColorInput label="বর্ডার"value={cfg.borderColor} onChange={(v) => updateCfg("borderColor", v)} />
                 </div>
               </section>
 
               <section className="rounded-lg border border-border bg-muted/40 p-3">
-                <h3 className="text-xs font-bold mb-1">📄 ভেক্টর PDF (নতুন)</h3>
+                <h3 className="text-xs font-bold mb-1"> ভেক্টর PDF (নতুন)</h3>
                 <p className="text-[11px] text-muted-foreground leading-relaxed">
                   এখন ব্রাউজারের native প্রিন্ট ব্যবহার করে PDF তৈরি হয় — অনেক <b>ছোট ফাইল</b>, যেকোনো জুমে <b>ক্রিস্টাল ক্লিয়ার</b> টেক্সট ও ম্যাথ। বাটন চাপলে প্রিন্ট ডায়ালগ আসবে — গন্তব্য থেকে <b>"Save as PDF"</b> বেছে নিন।
                 </p>
@@ -808,23 +808,23 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
               <section>
                 <h3 className="text-xs font-bold mb-2">দেখানোর অপশন</h3>
                 <div className="grid sm:grid-cols-2 gap-2">
-                  <Toggle label="দুই-কলাম" checked={cfg.twoColumn} onChange={(v) => updateCfg("twoColumn", v)} />
-                  <Toggle label="মেটা বার" checked={cfg.showMeta} onChange={(v) => updateCfg("showMeta", v)} />
-                  <Toggle label="লোগো" checked={cfg.showLogo} onChange={(v) => updateCfg("showLogo", v)} />
-                  <Toggle label="ফুটার" checked={cfg.showFooter} onChange={(v) => updateCfg("showFooter", v)} />
-                  <Toggle label="পৃষ্ঠা নম্বর" checked={cfg.showPageNumbers} onChange={(v) => updateCfg("showPageNumbers", v)} />
-                  <Toggle label="সঠিক উত্তর" checked={cfg.showAnswers} onChange={(v) => updateCfg("showAnswers", v)} />
-                  <Toggle label="ব্যাখ্যা" checked={cfg.showExplanations} onChange={(v) => updateCfg("showExplanations", v)} />
-                  <Toggle label="প্রশ্নের ছবি" checked={cfg.showQuestionImages} onChange={(v) => updateCfg("showQuestionImages", v)} />
-                  <Toggle label="অপশনের ছবি" checked={cfg.showOptionImages} onChange={(v) => updateCfg("showOptionImages", v)} />
-                  <Toggle label="হেডার শুধু ১ম পৃষ্ঠায়" checked={cfg.headerFirstPageOnly} onChange={(v) => updateCfg("headerFirstPageOnly", v)} />
-                  <Toggle label="লোগো ওয়াটারমার্ক" checked={cfg.showWatermark} onChange={(v) => updateCfg("showWatermark", v)} />
-                  <Toggle label="🐞 Debug মোড (overlap দেখাও)" checked={cfg.debugMode} onChange={(v) => updateCfg("debugMode", v)} />
+                  <Toggle label="দুই-কলাম"checked={cfg.twoColumn} onChange={(v) => updateCfg("twoColumn", v)} />
+                  <Toggle label="মেটা বার"checked={cfg.showMeta} onChange={(v) => updateCfg("showMeta", v)} />
+                  <Toggle label="লোগো"checked={cfg.showLogo} onChange={(v) => updateCfg("showLogo", v)} />
+                  <Toggle label="ফুটার"checked={cfg.showFooter} onChange={(v) => updateCfg("showFooter", v)} />
+                  <Toggle label="পৃষ্ঠা নম্বর"checked={cfg.showPageNumbers} onChange={(v) => updateCfg("showPageNumbers", v)} />
+                  <Toggle label="সঠিক উত্তর"checked={cfg.showAnswers} onChange={(v) => updateCfg("showAnswers", v)} />
+                  <Toggle label="ব্যাখ্যা"checked={cfg.showExplanations} onChange={(v) => updateCfg("showExplanations", v)} />
+                  <Toggle label="প্রশ্নের ছবি"checked={cfg.showQuestionImages} onChange={(v) => updateCfg("showQuestionImages", v)} />
+                  <Toggle label="অপশনের ছবি"checked={cfg.showOptionImages} onChange={(v) => updateCfg("showOptionImages", v)} />
+                  <Toggle label="হেডার শুধু ১ম পৃষ্ঠায়"checked={cfg.headerFirstPageOnly} onChange={(v) => updateCfg("headerFirstPageOnly", v)} />
+                  <Toggle label="লোগো ওয়াটারমার্ক"checked={cfg.showWatermark} onChange={(v) => updateCfg("showWatermark", v)} />
+                  <Toggle label="Debug মোড (overlap দেখাও)" checked={cfg.debugMode} onChange={(v) => updateCfg("debugMode", v)} />
                 </div>
                 {cfg.showWatermark && (
                   <div className="grid sm:grid-cols-2 gap-3 mt-3">
-                    <NumberInput label="ওয়াটারমার্ক opacity" value={cfg.watermarkOpacity} min={0.02} max={0.25} step={0.01} onChange={(v) => updateCfg("watermarkOpacity", v)} />
-                    <NumberInput label="ওয়াটারমার্ক সাইজ %" value={cfg.watermarkSize} min={20} max={80} step={1} onChange={(v) => updateCfg("watermarkSize", v)} />
+                    <NumberInput label="ওয়াটারমার্ক opacity"value={cfg.watermarkOpacity} min={0.02} max={0.25} step={0.01} onChange={(v) => updateCfg("watermarkOpacity", v)} />
+                    <NumberInput label="ওয়াটারমার্ক সাইজ %"value={cfg.watermarkSize} min={20} max={80} step={1} onChange={(v) => updateCfg("watermarkSize", v)} />
                   </div>
                 )}
               </section>
@@ -833,7 +833,7 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
                 <h3 className="text-xs font-bold mb-2">ফুটার (বাম / মাঝ / ডান)</h3>
                 <div className="grid gap-2">
                   {(["left", "center", "right"] as const).map((p) => (
-                    <SlotEditor key={p} slot={cfg.footer[p]} label={p === "left" ? "বাম" : p === "center" ? "মাঝ" : "ডান"} onText={(v) => updateFooter(p, "text", v)} onLink={(v) => updateFooter(p, "link", v)} />
+                    <SlotEditor key={p} slot={cfg.footer[p]} label={p === "left"? "বাম": p === "center"? "মাঝ": "ডান"} onText={(v) => updateFooter(p, "text", v)} onLink={(v) => updateFooter(p, "link", v)} />
                   ))}
                 </div>
               </section>
@@ -841,36 +841,36 @@ export default function Exporter({ exam, open, onClose }: { exam: Exam; open: bo
               <div className="sticky bottom-0 bg-card pt-2 space-y-2">
                 <div className="grid grid-cols-3 gap-2">
                   <button
-                    onClick={() => { saveDefault(cfg); toast({ title: "ডিফল্ট সেভ হয়েছে ✅", description: "পরের বার এটাই অটো-লোড হবে" }); }}
+                    onClick={() => { saveDefault(cfg); toast({ title: "ডিফল্ট সেভ হয়েছে ", description: "পরের বার এটাই অটো-লোড হবে"}); }}
                     className="py-2 rounded-lg border border-border text-[11px] font-semibold flex items-center justify-center gap-1 hover:bg-muted">
                     <Save size={13} /> লোকাল সেভ
                   </button>
                   <button
                     onClick={() => {
                       const saved = loadSavedDefault();
-                      if (!saved) { toast({ title: "কোনো সেভ করা ডিফল্ট নেই", variant: "destructive" }); return; }
+                      if (!saved) { toast({ title: "কোনো সেভ করা ডিফল্ট নেই", variant: "destructive"}); return; }
                       setCfg({ ...DEFAULT_CFG, ...saved, title: cfg.title, subtitle: cfg.subtitle });
-                      toast({ title: "সেভ করা ডিফল্ট লোড হয়েছে" });
+                      toast({ title: "সেভ করা ডিফল্ট লোড হয়েছে"});
                     }}
                     className="py-2 rounded-lg border border-border text-[11px] font-semibold flex items-center justify-center gap-1 hover:bg-muted">
                     <RefreshCcw size={13} /> ডিফল্ট লোড
                   </button>
                   <button
-                    onClick={() => { clearSavedDefault(); setCfg({ ...DEFAULT_CFG, title: cfg.title, subtitle: cfg.subtitle }); toast({ title: "ফ্যাক্টরি রিসেট হয়েছে" }); }}
+                    onClick={() => { clearSavedDefault(); setCfg({ ...DEFAULT_CFG, title: cfg.title, subtitle: cfg.subtitle }); toast({ title: "ফ্যাক্টরি রিসেট হয়েছে"}); }}
                     className="py-2 rounded-lg border border-border text-[11px] font-semibold flex items-center justify-center gap-1 hover:bg-muted">
                     <RotateCcw size={13} /> রিসেট
                   </button>
                 </div>
                 <button onClick={downloadPdf} disabled={busy} className="w-full py-3 rounded-xl bg-primary text-primary-foreground text-sm font-bold flex items-center justify-center gap-2 disabled:opacity-50">
-                  {generating ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />}
-                  {generating ? progress || "তৈরি হচ্ছে..." : 'PDF সেভ করুন (Save as PDF)'}
+                  {generating ? <Loader2 className="animate-spin"size={16} /> : <Download size={16} />}
+                  {generating ? progress || "তৈরি হচ্ছে...": 'PDF সেভ করুন (Save as PDF)'}
                 </button>
                 <button
                   onClick={saveAsSiteDefault}
                   disabled={saveSite.isPending}
                   className="w-full py-2 rounded-xl border border-primary/40 bg-primary/5 text-primary text-[11px] font-semibold flex items-center justify-center gap-1.5 disabled:opacity-50 hover:bg-primary/10"
                   title="ফন্ট সাইজ, মার্জিন, কালার, ফুটার, লোগো — সব এডমিনের জন্য ডিফল্ট হিসেবে সাইট সেটিংসে সেভ করো">
-                  <Save size={13} /> 🌐 সাইট ডিফল্ট হিসেবে সেভ করো (সব এডমিনের জন্য)
+                  <Save size={13} /> সাইট ডিফল্ট হিসেবে সেভ করো (সব এডমিনের জন্য)
                 </button>
               </div>
             </div>
@@ -887,7 +887,7 @@ function TextInput({ label, value, onChange, placeholder }: { label: string; val
   return (
     <label className="block">
       <span className="text-xs text-muted-foreground">{label}</span>
-      <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="w-full mt-1 rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+      <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="w-full mt-1 rounded-lg border border-border bg-background px-3 py-2 text-sm"/>
     </label>
   );
 }
@@ -896,9 +896,9 @@ function NumberInput({ label, value, onChange, min, max, step }: { label: string
   return (
     <label className="block">
       <span className="text-xs text-muted-foreground">{label}</span>
-      <input type="number" value={value} min={min} max={max} step={step}
+      <input type="number"value={value} min={min} max={max} step={step}
         onChange={(e) => onChange(Math.min(max, Math.max(min, Number(e.target.value) || min)))}
-        className="w-full mt-1 rounded-lg border border-border bg-background px-3 py-2 text-sm" />
+        className="w-full mt-1 rounded-lg border border-border bg-background px-3 py-2 text-sm"/>
     </label>
   );
 }
@@ -908,8 +908,8 @@ function ColorInput({ label, value, onChange }: { label: string; value: string; 
     <label className="block">
       <span className="text-xs text-muted-foreground">{label}</span>
       <div className="mt-1 flex rounded-lg border border-border bg-background overflow-hidden">
-        <input type="color" value={value} onChange={(e) => onChange(e.target.value)} className="h-10 w-12 bg-transparent" />
-        <input value={value} onChange={(e) => onChange(e.target.value)} className="min-w-0 flex-1 bg-background px-2 text-xs outline-none" />
+        <input type="color"value={value} onChange={(e) => onChange(e.target.value)} className="h-10 w-12 bg-transparent"/>
+        <input value={value} onChange={(e) => onChange(e.target.value)} className="min-w-0 flex-1 bg-background px-2 text-xs outline-none"/>
       </div>
     </label>
   );
@@ -919,7 +919,7 @@ function Toggle({ label, checked, onChange }: { label: string; checked: boolean;
   return (
     <label className="flex items-center justify-between gap-3 rounded-lg border border-border px-3 py-2 text-xs cursor-pointer hover:bg-muted/60">
       <span>{label}</span>
-      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+      <input type="checkbox"checked={checked} onChange={(e) => onChange(e.target.checked)} />
     </label>
   );
 }
@@ -928,10 +928,10 @@ function SlotEditor({ slot, label, onText, onLink }: { slot: Slot; label: string
   return (
     <div className="rounded-xl border border-border p-2 space-y-1.5">
       <p className="text-[10px] font-semibold text-muted-foreground">{label}</p>
-      <input value={slot.text} onChange={(e) => onText(e.target.value)} placeholder="লেখা" className="w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs" />
+      <input value={slot.text} onChange={(e) => onText(e.target.value)} placeholder="লেখা"className="w-full rounded-md border border-border bg-background px-2 py-1.5 text-xs"/>
       <div className="relative">
-        <LinkIcon size={11} className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <input value={slot.link} onChange={(e) => onLink(e.target.value)} placeholder="লিংক (ঐচ্ছিক)" className="w-full rounded-md border border-border bg-background pl-7 pr-2 py-1.5 text-xs" />
+        <LinkIcon size={11} className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground"/>
+        <input value={slot.link} onChange={(e) => onLink(e.target.value)} placeholder="লিংক (ঐচ্ছিক)"className="w-full rounded-md border border-border bg-background pl-7 pr-2 py-1.5 text-xs" />
       </div>
     </div>
   );

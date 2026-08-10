@@ -78,7 +78,7 @@ const StudentLiveExams = () => {
     void syncLiveStatuses(rows);
 
     const live = decorated
-      .filter((e) => e.status === "scheduled" || e.status === "live")
+      .filter((e) => e.status === "scheduled"|| e.status === "live")
       .sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
     const ended = decorated
       .filter((e) => e.status === "ended")
@@ -130,10 +130,10 @@ const StudentLiveExams = () => {
   const joinExam = async (exam: LiveExam) => {
     if (!user) return;
     if (exam.status !== "live") {
-      return toast({ title: "পরীক্ষা এখনও শুরু হয়নি", variant: "destructive" });
+      return toast({ title: "পরীক্ষা এখনও শুরু হয়নি", variant: "destructive"});
     }
     if (!canAccess(exam.exam_id)) {
-      return toast({ title: "এই পরীক্ষার অ্যাক্সেস নেই", description: "এডমিন প্রিমিয়াম ব্যাচে অ্যাক্সেস দিলে পরীক্ষা দেখা/দেয়া যাবে।", variant: "destructive" });
+      return toast({ title: "এই পরীক্ষার অ্যাক্সেস নেই", description: "এডমিন প্রিমিয়াম ব্যাচে অ্যাক্সেস দিলে পরীক্ষা দেখা/দেয়া যাবে।", variant: "destructive"});
     }
 
     setJoiningExamId(exam.id);
@@ -145,12 +145,12 @@ const StudentLiveExams = () => {
       });
 
       if (error && !error.message.toLowerCase().includes("duplicate") && !error.message.toLowerCase().includes("unique")) {
-        return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
+        return toast({ title: "ত্রুটি", description: error.message, variant: "destructive"});
       }
 
       navigate(`/live-exam/${exam.id}`);
     } catch (error: any) {
-      toast({ title: "যোগ দেওয়া যায়নি", description: error.message, variant: "destructive" });
+      toast({ title: "যোগ দেওয়া যায়নি", description: error.message, variant: "destructive"});
     } finally {
       setJoiningExamId(null);
     }
@@ -184,8 +184,8 @@ const StudentLiveExams = () => {
         <div>
           <h2 className="text-base font-bold mb-3 flex items-center gap-2">
             <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-success" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"/>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-success"/>
             </span>
             {getLabel("liveExamSectionLive")} ({liveNow.length})
           </h2>
@@ -199,13 +199,13 @@ const StudentLiveExams = () => {
 
       <div>
         <h2 className="text-base font-bold mb-3 flex items-center gap-2">
-          <Calendar size={16} className="text-primary" /> {getLabel("liveExamSectionUpcoming")} ({upcoming.length})
+          <Calendar size={16} className="text-primary"/> {getLabel("liveExamSectionUpcoming")} ({upcoming.length})
         </h2>
         {accessLoading ? (
           <div className="glass-card-static p-10 text-center text-sm text-muted-foreground">লোড হচ্ছে...</div>
         ) : upcoming.length === 0 && liveNow.length === 0 ? (
           <div className="glass-card-static p-10 text-center">
-            <Trophy className="mx-auto text-muted-foreground/40 mb-3" size={40} />
+            <Trophy className="mx-auto text-muted-foreground/40 mb-3"size={40} />
             <p className="text-sm font-medium mb-1">{getLabel("liveExamEmptyTitle")}</p>
             <p className="text-xs text-muted-foreground">{getLabel("liveExamEmptySubtitle")}</p>
           </div>
@@ -221,7 +221,7 @@ const StudentLiveExams = () => {
       {finishedBoards.length > 0 && (
         <div>
           <h2 className="text-base font-bold mb-3 flex items-center gap-2">
-            <Trophy size={16} className="text-warning" /> ফলাফল ও র‍্যাঙ্কিং ({finishedBoards.length})
+            <Trophy size={16} className="text-warning"/> ফলাফল ও র‍্যাঙ্কিং ({finishedBoards.length})
           </h2>
           <div className="grid gap-3 md:grid-cols-2">
             {finishedBoards.map((exam) => {
@@ -230,7 +230,7 @@ const StudentLiveExams = () => {
                 <div key={exam.id} className="glass-card-static p-4 flex items-center gap-3">
                   <div className="w-11 h-11 rounded-xl bg-warning/15 text-warning flex items-center justify-center shrink-0 overflow-hidden">
                     {reportCfg.liveExamLogo ? (
-                      <img src={reportCfg.liveExamLogo} alt="logo" className="w-full h-full object-cover" />
+                      <img src={reportCfg.liveExamLogo} alt="logo"className="w-full h-full object-cover"/>
                     ) : (
                       <Medal size={20} />
                     )}
@@ -238,15 +238,15 @@ const StudentLiveExams = () => {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-bold truncate">{exam.title}</p>
                     <p className="text-[11px] text-muted-foreground mt-0.5">
-                      {new Date(exam.end_time).toLocaleDateString("bn-BD")} • {exam.status === "ended" ? "সম্পন্ন" : "আপনি জমা দিয়েছেন"}
+                      {new Date(exam.end_time).toLocaleDateString("bn-BD")} • {exam.status === "ended"? "সম্পন্ন": "আপনি জমা দিয়েছেন"}
                     </p>
                     <div className="flex flex-wrap gap-1.5 mt-2">
                       <button onClick={() => openBoard(exam)} className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary">
-                        <Trophy size={12} className="inline -mt-0.5 mr-1" />র‍্যাঙ্কিং
+                        <Trophy size={12} className="inline -mt-0.5 mr-1"/>র‍্যাঙ্কিং
                       </button>
-                      {submitted && exam.status === "ended" && (
+                      {submitted && exam.status === "ended"&& (
                         <button onClick={() => navigate(`/live-exam/${exam.id}/review`)} className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-success/10 text-success">
-                          <FileText size={12} className="inline -mt-0.5 mr-1" />উত্তর পর্যালোচনা
+                          <FileText size={12} className="inline -mt-0.5 mr-1"/>উত্তর পর্যালোচনা
                         </button>
                       )}
                     </div>
@@ -286,35 +286,35 @@ function ExamCardLive({
         <div className="flex-1 min-w-0 flex items-center gap-2.5">
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center overflow-hidden shrink-0 ring-1 ring-primary/20">
             {logo
-              ? <img src={logo} alt="" className="w-full h-full object-cover" />
-              : <Radio size={18} className="text-primary" />}
+              ? <img src={logo} alt=""className="w-full h-full object-cover"/>
+              : <Radio size={18} className="text-primary"/>}
           </div>
           <h3 className="font-bold text-sm leading-tight truncate">{exam.title}</h3>
         </div>
         <span
           className={`shrink-0 text-[10px] px-2 py-0.5 rounded-full font-bold ${
-            isLive ? "bg-success/15 text-success" : "bg-warning/15 text-warning"
+            isLive ? "bg-success/15 text-success": "bg-warning/15 text-warning"
           }`}
         >
-          {isLive ? "🔴 লাইভ" : "নির্ধারিত"}
+          {isLive ? "লাইভ" : "নির্ধারিত"}
         </span>
       </div>
 
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div className="bg-muted/40 rounded-lg px-2.5 py-2 flex items-center gap-1.5">
-          <Clock size={12} className="text-primary" /> {exam.duration} মিনিট
+          <Clock size={12} className="text-primary"/> {exam.duration} মিনিট
         </div>
         <div className="bg-muted/40 rounded-lg px-2.5 py-2 flex items-center gap-1.5">
-          <FileText size={12} className="text-primary" /> {meta?.question_count ?? "—"} প্রশ্ন
+          <FileText size={12} className="text-primary"/> {meta?.question_count ?? "—"} প্রশ্ন
         </div>
         <div className="bg-muted/40 rounded-lg px-2.5 py-2 flex items-center gap-1.5">
-          <Minus size={12} className="text-destructive" /> ন্যাগেটিভ: {(() => {
+          <Minus size={12} className="text-destructive"/> ন্যাগেটিভ: {(() => {
             const override = (exam as any).negative_marking;
             if (override !== null && override !== undefined) return Number(override);
             return meta ? meta.negative_marking : "—";
           })()}
         </div>
-        <div className={`rounded-lg px-2.5 py-2 flex items-center justify-center gap-1.5 ${premium ? "bg-warning/15 text-warning" : "bg-success/15 text-success"}`}>
+        <div className={`rounded-lg px-2.5 py-2 flex items-center justify-center gap-1.5 ${premium ? "bg-warning/15 text-warning": "bg-success/15 text-success"}`}>
           {premium ? <Lock size={14} /> : <LockOpen size={14} />}
         </div>
       </div>
@@ -329,7 +329,7 @@ function ExamCardLive({
         onClick={onJoin}
         disabled={!isLive || joining}
         className={`mt-auto w-full px-4 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5 transition active:scale-[0.98] ${
-          isLive ? "bg-primary text-primary-foreground hover:bg-primary/90" : "bg-muted text-muted-foreground cursor-not-allowed"
+          isLive ? "bg-primary text-primary-foreground hover:bg-primary/90": "bg-muted text-muted-foreground cursor-not-allowed"
         }`}
       >
         <Play size={14} />

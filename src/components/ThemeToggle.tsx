@@ -12,18 +12,18 @@ const ThemeToggle = () => {
     // Re-apply active theme from cached settings for new mode
     const settings = getCachedSettings();
     const themeId = settings.activeThemeId || "ocean-blue";
-    if (themeId === "custom" && settings.customTheme) {
+    if (themeId === "custom"&& settings.customTheme) {
       applyThemeColors(settings.customTheme[theme], theme);
     } else {
       const preset = themePresets.find((t) => t.id === themeId);
       if (preset) {
-        applyThemeColors(theme === "dark" ? preset.dark : preset.light, theme);
+        applyThemeColors(theme === "dark"? preset.dark : preset.light, theme);
       }
     }
   }, [theme]);
 
   const toggle = () => {
-    const next = theme === "light" ? "dark" : "light";
+    const next = theme === "light"? "dark": "light";
     setLocal(next);
   };
 
@@ -33,7 +33,7 @@ const ThemeToggle = () => {
       className="p-2 rounded-xl hover:bg-muted transition-colors"
       aria-label="Toggle theme"
     >
-      {theme === "light" ? <Moon size={18} className="text-muted-foreground" /> : <Sun size={18} className="text-warning" />}
+      {theme === "light"? <Moon size={18} className="text-muted-foreground"/> : <Sun size={18} className="text-warning" />}
     </button>
   );
 };

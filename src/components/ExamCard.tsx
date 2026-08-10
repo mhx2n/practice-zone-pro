@@ -4,9 +4,9 @@ import { Clock, HelpCircle } from "lucide-react";
 import { getLabel } from "@/lib/labels";
 
 const difficultyConfig = {
-  easy: { labelKey: "diffEasy", fallback: "সহজ", className: "bg-success/15 text-success dark:bg-success/20 dark:text-success" },
-  medium: { labelKey: "diffMedium", fallback: "মাঝারি", className: "bg-warning/15 text-warning dark:bg-warning/20 dark:text-warning" },
-  hard: { labelKey: "diffHard", fallback: "কঠিন", className: "bg-destructive/15 text-destructive dark:bg-destructive/20 dark:text-destructive" },
+  easy: { labelKey: "diffEasy", fallback: "সহজ", className: "bg-success/15 text-success dark:bg-success/20 dark:text-success"},
+  medium: { labelKey: "diffMedium", fallback: "মাঝারি", className: "bg-warning/15 text-warning dark:bg-warning/20 dark:text-warning"},
+  hard: { labelKey: "diffHard", fallback: "কঠিন", className: "bg-destructive/15 text-destructive dark:bg-destructive/20 dark:text-destructive"},
 };
 
 const ExamCard = ({ exam }: { exam: Exam }) => {

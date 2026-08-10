@@ -22,7 +22,7 @@ const AdminReminders = () => {
     if (!title.trim() || !targetDate) return;
     const target = new Date(targetDate);
     if (target.getTime() <= Date.now()) {
-      toast({ title: "ভবিষ্যতের তারিখ দিন", variant: "destructive" });
+      toast({ title: "ভবিষ্যতের তারিখ দিন", variant: "destructive"});
       return;
     }
     const reminder: Reminder = {
@@ -36,14 +36,14 @@ const AdminReminders = () => {
     upsertReminder.mutate(reminder, {
       onSuccess: () => {
         setTitle(""); setDescription(""); setTargetDate("");
-        toast({ title: "রিমাইন্ডার যোগ করা হয়েছে ✅" });
+        toast({ title: "রিমাইন্ডার যোগ করা হয়েছে "});
       },
     });
   };
 
   const handleDelete = (id: string) => {
     deleteReminderMut.mutate(id, {
-      onSuccess: () => toast({ title: "রিমাইন্ডার মুছে ফেলা হয়েছে" }),
+      onSuccess: () => toast({ title: "রিমাইন্ডার মুছে ফেলা হয়েছে"}),
     });
   };
 
@@ -61,24 +61,24 @@ const AdminReminders = () => {
       </p>
 
       <div className="glass-card-static p-5 mb-6">
-        <h2 className="text-sm font-semibold mb-3">➕ নতুন রিমাইন্ডার</h2>
+        <h2 className="text-sm font-semibold mb-3"> নতুন রিমাইন্ডার</h2>
         <div className="space-y-3">
-          <input type="text" placeholder="শিরোনাম (যেমন: পরীক্ষা শুরু হচ্ছে!)" value={title} onChange={(e) => setTitle(e.target.value)}
-            className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
-          <input type="text" placeholder="বিবরণ (ঐচ্ছিক)" value={description} onChange={(e) => setDescription(e.target.value)}
-            className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+          <input type="text"placeholder="শিরোনাম (যেমন: পরীক্ষা শুরু হচ্ছে!)"value={title} onChange={(e) => setTitle(e.target.value)}
+            className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
+          <input type="text"placeholder="বিবরণ (ঐচ্ছিক)"value={description} onChange={(e) => setDescription(e.target.value)}
+            className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1">
-              <label className="text-xs text-muted-foreground mb-1 block">📅 তারিখ ও সময়</label>
-              <input type="datetime-local" value={targetDate} onChange={(e) => setTargetDate(e.target.value)}
-                className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+              <label className="text-xs text-muted-foreground mb-1 block"> তারিখ ও সময়</label>
+              <input type="datetime-local"value={targetDate} onChange={(e) => setTargetDate(e.target.value)}
+                className="w-full glass-strong rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1"><Palette size={12} /> রঙ বেছে নিন</label>
               <div className="flex gap-2 mt-1">
                 {colorOptions.map((c) => (
                   <button key={c} onClick={() => setColor(c)}
-                    className={`w-7 h-7 rounded-full border-2 transition-all ${color === c ? "border-foreground scale-110" : "border-transparent"}`}
+                    className={`w-7 h-7 rounded-full border-2 transition-all ${color === c ? "border-foreground scale-110": "border-transparent"}`}
                     style={{ backgroundColor: c }} />
                 ))}
               </div>
@@ -100,7 +100,7 @@ const AdminReminders = () => {
             .sort((a, b) => new Date(a.targetDate).getTime() - new Date(b.targetDate).getTime())
             .map((r) => (
               <div key={r.id} className="glass-card-static p-4 flex items-start gap-3 overflow-hidden">
-                <div className="w-1 self-stretch rounded-full flex-shrink-0" style={{ backgroundColor: r.color }} />
+                <div className="w-1 self-stretch rounded-full flex-shrink-0"style={{ backgroundColor: r.color }} />
                 <div className="flex-1 min-w-0">
                   <h3 className="text-sm font-bold">{r.title}</h3>
                   {r.description && <p className="text-xs text-muted-foreground mt-0.5">{r.description}</p>}

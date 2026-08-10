@@ -29,14 +29,14 @@ const LiveExamReview = () => {
   const [participant, setParticipant] = useState<Participant | null>(null);
   const [questions, setQuestions] = useState<QRow[]>([]);
   const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [filter, setFilter] = useState<"all" | "correct" | "wrong" | "skipped">("all");
+  const [filter, setFilter] = useState<"all"| "correct"| "wrong"| "skipped">("all");
 
   useEffect(() => {
     if (!id || !user) return;
     (async () => {
       setLoading(true);
       const { data: le } = await supabase.from("live_exams").select("*").eq("id", id).single();
-      if (!le) { toast({ title: "পরীক্ষা পাওয়া যায়নি", variant: "destructive" }); navigate("/live-exams"); return; }
+      if (!le) { toast({ title: "পরীক্ষা পাওয়া যায়নি", variant: "destructive"}); navigate("/live-exams"); return; }
       const effective = computeLiveStatus(le.start_time, le.end_time, le.status);
 
       // Fetch participant — student must have submitted
@@ -45,13 +45,13 @@ const LiveExamReview = () => {
         .eq("live_exam_id", id).eq("user_id", user.id).maybeSingle();
 
       if (!p || p.status !== "submitted") {
-        toast({ title: "জমা দেওয়ার পরে পর্যালোচনা দেখা যাবে", variant: "destructive" });
+        toast({ title: "জমা দেওয়ার পরে পর্যালোচনা দেখা যাবে", variant: "destructive"});
         navigate("/live-exams");
         return;
       }
       // Strict: review available ONLY after the live exam has ended (anti-cheating)
       if (effective !== "ended") {
-        toast({ title: "পরীক্ষা শেষ হওয়ার পর উত্তর পর্যালোচনা দেখা যাবে", variant: "destructive" });
+        toast({ title: "পরীক্ষা শেষ হওয়ার পর উত্তর পর্যালোচনা দেখা যাবে", variant: "destructive"});
         navigate("/live-exams");
         return;
       }
@@ -71,7 +71,7 @@ const LiveExamReview = () => {
       const parsed: QRow[] = (q || []).map((row: any) => {
         const opts = Array.isArray(row.options)
           ? row.options
-          : (typeof row.options === "string" ? (() => { try { return JSON.parse(row.options); } catch { return []; } })() : []);
+          : (typeof row.options === "string"? (() => { try { return JSON.parse(row.options); } catch { return []; } })() : []);
         return {
           id: row.id,
           question: row.question,
@@ -95,16 +95,16 @@ const LiveExamReview = () => {
   const total = questions.length;
   const counted = questions.map((q) => {
     const sel = answers[q.id];
-    if (!sel) return "skipped" as const;
-    return isAnswerMatch(sel, resolveCorrectOptionText(q as any)) ? "correct" : "wrong";
+    if (!sel) return "skipped"as const;
+    return isAnswerMatch(sel, resolveCorrectOptionText(q as any)) ? "correct": "wrong";
   });
-  const filtered = questions.filter((_, i) => filter === "all" || counted[i] === filter);
+  const filtered = questions.filter((_, i) => filter === "all"|| counted[i] === filter);
 
   const tabs: Array<{ key: typeof filter; label: string; count: number; cls: string }> = [
-    { key: "all", label: "সব", count: total, cls: "bg-primary/15 text-primary" },
-    { key: "correct", label: "সঠিক", count: counted.filter((x) => x === "correct").length, cls: "bg-success/15 text-success" },
-    { key: "wrong", label: "ভুল", count: counted.filter((x) => x === "wrong").length, cls: "bg-destructive/15 text-destructive" },
-    { key: "skipped", label: "স্কিপ", count: counted.filter((x) => x === "skipped").length, cls: "bg-muted text-muted-foreground" },
+    { key: "all", label: "সব", count: total, cls: "bg-primary/15 text-primary"},
+    { key: "correct", label: "সঠিক", count: counted.filter((x) => x === "correct").length, cls: "bg-success/15 text-success"},
+    { key: "wrong", label: "ভুল", count: counted.filter((x) => x === "wrong").length, cls: "bg-destructive/15 text-destructive"},
+    { key: "skipped", label: "স্কিপ", count: counted.filter((x) => x === "skipped").length, cls: "bg-muted text-muted-foreground"},
   ];
 
   return (
@@ -115,7 +115,7 @@ const LiveExamReview = () => {
           <p className="text-[11px] text-muted-foreground">পর্যালোচনা</p>
           <h1 className="text-base font-bold truncate">{exam.title}</h1>
         </div>
-        <Link to="/live-exams" className="text-xs text-primary font-semibold inline-flex items-center gap-1">
+        <Link to="/live-exams"className="text-xs text-primary font-semibold inline-flex items-center gap-1">
           <Trophy size={14} /> র‍্যাঙ্কিং
         </Link>
       </div>
@@ -123,7 +123,7 @@ const LiveExamReview = () => {
       <div className="glass-card-static p-4 grid grid-cols-4 gap-2 text-center">
         {tabs.map((t) => (
           <button key={t.key} onClick={() => setFilter(t.key)}
-            className={`p-2 rounded-xl ${filter === t.key ? "ring-2 ring-primary" : ""} ${t.cls}`}>
+            className={`p-2 rounded-xl ${filter === t.key ? "ring-2 ring-primary": ""} ${t.cls}`}>
             <p className="text-xl font-extrabold tabular-nums">{t.count}</p>
             <p className="text-[10px] font-semibold">{t.label}</p>
           </button>
@@ -141,10 +141,10 @@ const LiveExamReview = () => {
           const selected = answers[q.id] || "";
 
           const stateMeta = state === "correct"
-            ? { icon: <CheckCircle2 size={14} />, label: "সঠিক", cls: "bg-success/15 text-success border-success/30" }
+            ? { icon: <CheckCircle2 size={14} />, label: "সঠিক", cls: "bg-success/15 text-success border-success/30"}
             : state === "wrong"
-            ? { icon: <XCircle size={14} />, label: "ভুল", cls: "bg-destructive/15 text-destructive border-destructive/30" }
-            : { icon: <MinusCircle size={14} />, label: "স্কিপ", cls: "bg-muted text-muted-foreground border-border" };
+            ? { icon: <XCircle size={14} />, label: "ভুল", cls: "bg-destructive/15 text-destructive border-destructive/30"}
+            : { icon: <MinusCircle size={14} />, label: "স্কিপ", cls: "bg-muted text-muted-foreground border-border"};
 
           return (
             <div key={q.id} className="glass-card-static p-4 space-y-3">
@@ -166,8 +166,8 @@ const LiveExamReview = () => {
                     <div key={i} className={`p-2.5 rounded-lg border-2 text-sm flex items-start gap-2 ${cls}`}>
                       <span className="font-bold shrink-0">{String.fromCharCode(65 + i)}.</span>
                       <span className="flex-1 min-w-0"><MathText text={opt} /></span>
-                      {isCorrect && <CheckCircle2 size={14} className="text-success shrink-0 mt-0.5" />}
-                      {isPicked && !isCorrect && <XCircle size={14} className="text-destructive shrink-0 mt-0.5" />}
+                      {isCorrect && <CheckCircle2 size={14} className="text-success shrink-0 mt-0.5"/>}
+                      {isPicked && !isCorrect && <XCircle size={14} className="text-destructive shrink-0 mt-0.5"/>}
                     </div>
                   );
                 })}

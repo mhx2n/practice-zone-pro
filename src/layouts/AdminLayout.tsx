@@ -42,7 +42,7 @@ const AdminLayout = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3"/>
           <p className="text-sm text-muted-foreground">লোড হচ্ছে...</p>
         </div>
       </div>
@@ -55,7 +55,7 @@ const AdminLayout = () => {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="glass-card-static p-8 text-center max-w-sm">
-          <p className="text-4xl mb-4">🚫</p>
+          <p className="text-4xl mb-4"></p>
           <h1 className="text-xl font-bold mb-2">অ্যাক্সেস নেই</h1>
           <p className="text-sm text-muted-foreground mb-4">আপনার অ্যাডমিন অনুমতি নেই। প্রথম রেজিস্ট্রেশনকারী স্বয়ংক্রিয়ভাবে অ্যাডমিন হন।</p>
           <button onClick={() => { signOut(); navigate("/secure-admin-login"); }} className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
@@ -78,10 +78,10 @@ const AdminLayout = () => {
       <header className="glass-nav fixed top-0 left-0 right-0 z-50 border-b border-border/50">
         <div className="flex items-center justify-between h-14 px-4">
           <div className="flex items-center gap-3">
-            <button className="md:hidden p-1.5" onClick={() => setMobileOpen(!mobileOpen)}>
+            <button className="md:hidden p-1.5"onClick={() => setMobileOpen(!mobileOpen)}>
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
-            <Link to="/admin/dashboard" className="flex items-center gap-2 font-bold">
+            <Link to="/admin/dashboard"className="flex items-center gap-2 font-bold">
               <span className="text-xl">🎯</span>
               <span className="gradient-text text-lg">Target</span>
               <span className="text-xs bg-destructive/10 text-destructive px-2 py-0.5 rounded-full font-medium">Admin</span>
@@ -102,7 +102,7 @@ const AdminLayout = () => {
           {navItems.map((item) => (
             <Link key={item.to} to={item.to}
               className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                isActive(item.to) ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                isActive(item.to) ? "bg-primary text-primary-foreground": "text-muted-foreground hover:text-foreground hover:bg-muted"
               }`}>
               <item.icon size={16} />{item.label}
             </Link>
@@ -110,12 +110,12 @@ const AdminLayout = () => {
         </aside>
 
         {mobileOpen && (
-          <div className="md:hidden fixed inset-0 z-40 bg-background/80 backdrop-blur-sm" onClick={() => setMobileOpen(false)}>
-            <aside className="w-64 h-full glass-strong p-4 pt-20 space-y-1 animate-fade-in" onClick={(e) => e.stopPropagation()}>
+          <div className="md:hidden fixed inset-0 z-40 bg-background/80 backdrop-blur-sm"onClick={() => setMobileOpen(false)}>
+            <aside className="w-64 h-full glass-strong p-4 pt-20 space-y-1 animate-fade-in"onClick={(e) => e.stopPropagation()}>
               {navItems.map((item) => (
                 <Link key={item.to} to={item.to} onClick={() => setMobileOpen(false)}
                   className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                    isActive(item.to) ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    isActive(item.to) ? "bg-primary text-primary-foreground": "text-muted-foreground hover:text-foreground hover:bg-muted"
                   }`}>
                   <item.icon size={16} />{item.label}
                 </Link>

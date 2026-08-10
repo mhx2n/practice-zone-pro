@@ -9,7 +9,7 @@ import { BUILTIN_TEMPLATES } from "@/lib/photocardTemplates";
 
 type LayerBase = {
   id: string;
-  type: "text" | "image" | "overlay";
+  type: "text"| "image"| "overlay";
   x: number; y: number; w: number; h: number;
   rotation: number;
   opacity: number;
@@ -22,7 +22,7 @@ type TextLayer = LayerBase & {
   fontSize: number;
   fontWeight: number;
   color: string;
-  align: "left" | "center" | "right";
+  align: "left"| "center"| "right";
   italic: boolean;
   lineHeight: number;
   letterSpacing: number;
@@ -34,9 +34,9 @@ type TextLayer = LayerBase & {
 type ImageLayer = LayerBase & {
   type: "image";
   src: string;
-  fit: "cover" | "contain";
+  fit: "cover"| "contain";
   radius: number;
-  filter: "none" | "grayscale" | "blur" | "sepia";
+  filter: "none"| "grayscale"| "blur"| "sepia";
   glow?: boolean;
   glowColor?: string;
   // Advanced editing
@@ -70,13 +70,13 @@ type OverlayLayer = LayerBase & {
 type Layer = TextLayer | ImageLayer | OverlayLayer;
 
 type Background = {
-  type: "color" | "gradient" | "image";
+  type: "color"| "gradient"| "image";
   color: string;
   gradientFrom: string;
   gradientTo: string;
   gradientAngle: number;
   imageSrc: string;
-  imageFit: "cover" | "contain";
+  imageFit: "cover"| "contain";
 };
 
 type Doc = {
@@ -198,7 +198,7 @@ const imageFilterCSS = (l: ImageLayer): string => {
   if (l.filter === "grayscale") parts.push("grayscale(1)");
   else if (l.filter === "sepia") parts.push("sepia(1)");
   // Blur: preset blur + custom slider, additive
-  const blurTotal = (l.filter === "blur" ? 8 : 0) + (l.blurPx ?? 0);
+  const blurTotal = (l.filter === "blur"? 8 : 0) + (l.blurPx ?? 0);
   if (blurTotal > 0) parts.push(`blur(${blurTotal}px)`);
   if (l.vintage) parts.push("sepia(0.35) contrast(1.05) saturate(1.1)");
   return parts.join(" ");
@@ -222,7 +222,7 @@ const overlayStyle = (l: OverlayLayer): React.CSSProperties => {
         backgroundImage:
           "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
         opacity: a * 0.85,
-        mixBlendMode: (l.blend === "normal" ? "overlay" : l.blend) as any,
+        mixBlendMode: (l.blend === "normal"? "overlay": l.blend) as any,
       };
     case "scanlines":
       return {
@@ -231,9 +231,9 @@ const overlayStyle = (l: OverlayLayer): React.CSSProperties => {
         opacity: a * 0.6,
       };
     case "lightleak-tl":
-      return { ...base, background: `radial-gradient(circle at 0% 0%, ${c} 0%, transparent 55%)`, opacity: a, mixBlendMode: "screen" };
+      return { ...base, background: `radial-gradient(circle at 0% 0%, ${c} 0%, transparent 55%)`, opacity: a, mixBlendMode: "screen"};
     case "lightleak-br":
-      return { ...base, background: `radial-gradient(circle at 100% 100%, ${c} 0%, transparent 55%)`, opacity: a, mixBlendMode: "screen" };
+      return { ...base, background: `radial-gradient(circle at 100% 100%, ${c} 0%, transparent 55%)`, opacity: a, mixBlendMode: "screen"};
     case "lensflare":
       return {
         ...base,
@@ -253,26 +253,26 @@ const overlayStyle = (l: OverlayLayer): React.CSSProperties => {
     case "frame-thick":
       return { ...base, boxShadow: `inset 0 0 0 ${Math.max(8, a * 28)}px ${c}`, opacity: 1 };
     case "duotone-blue":
-      return { ...base, background: `linear-gradient(135deg, rgba(29,78,216,${a}), rgba(217,70,239,${a}))`, mixBlendMode: "color" };
+      return { ...base, background: `linear-gradient(135deg, rgba(29,78,216,${a}), rgba(217,70,239,${a}))`, mixBlendMode: "color"};
     case "duotone-pink":
-      return { ...base, background: `linear-gradient(135deg, rgba(244,63,94,${a}), rgba(251,146,60,${a}))`, mixBlendMode: "color" };
+      return { ...base, background: `linear-gradient(135deg, rgba(244,63,94,${a}), rgba(251,146,60,${a}))`, mixBlendMode: "color"};
     default:
       return base;
   }
 };
 
 const OVERLAY_PRESETS: { kind: OverlayKind; label: string; icon: string }[] = [
-  { kind: "vignette", label: "ভিনিয়েট", icon: "⚫" },
-  { kind: "grain", label: "গ্রেইন", icon: "✨" },
-  { kind: "scanlines", label: "স্ক্যানলাইন", icon: "📺" },
-  { kind: "lightleak-tl", label: "লাইট লিক ↖", icon: "💡" },
-  { kind: "lightleak-br", label: "লাইট লিক ↘", icon: "🌅" },
-  { kind: "lensflare", label: "লেন্স ফ্লেয়ার", icon: "🔆" },
-  { kind: "halftone", label: "হাফটোন", icon: "⚪" },
-  { kind: "frame-thin", label: "পাতলা ফ্রেম", icon: "▫️" },
-  { kind: "frame-thick", label: "মোটা ফ্রেম", icon: "🔲" },
-  { kind: "duotone-blue", label: "ডুওটোন নীল", icon: "🟦" },
-  { kind: "duotone-pink", label: "ডুওটোন গোলাপি", icon: "🟪" },
+  { kind: "vignette", label: "ভিনিয়েট", icon: ""},
+  { kind: "grain", label: "গ্রেইন", icon: ""},
+  { kind: "scanlines", label: "স্ক্যানলাইন", icon: ""},
+  { kind: "lightleak-tl", label: "লাইট লিক ↖", icon: ""},
+  { kind: "lightleak-br", label: "লাইট লিক ↘", icon: ""},
+  { kind: "lensflare", label: "লেন্স ফ্লেয়ার", icon: ""},
+  { kind: "halftone", label: "হাফটোন", icon: ""},
+  { kind: "frame-thin", label: "পাতলা ফ্রেম", icon: "▫"},
+  { kind: "frame-thick", label: "মোটা ফ্রেম", icon: ""},
+  { kind: "duotone-blue", label: "ডুওটোন নীল", icon: ""},
+  { kind: "duotone-pink", label: "ডুওটোন গোলাপি", icon: ""},
 ];
 
 function loadTemplates(): Template[] {
@@ -295,7 +295,7 @@ const AdminPhotocardBuilder = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [templates, setTemplates] = useState<Template[]>(() => loadTemplates());
   const [showTemplates, setShowTemplates] = useState(false);
-  const [tplTab, setTplTab] = useState<"builtin" | "saved">("builtin");
+  const [tplTab, setTplTab] = useState<"builtin"| "saved">("builtin");
   const stageWrapRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const [stageW, setStageW] = useState(600);
@@ -342,7 +342,7 @@ const AdminPhotocardBuilder = () => {
   };
 
   // Drag/resize via pointer events. Coordinates in canvas-space (we divide deltas by scale).
-  const dragRef = useRef<{ id: string; mode: "move" | "resize" | "rotate"; startX: number; startY: number; orig: Layer; cx: number; cy: number; startAngle: number } | null>(null);
+  const dragRef = useRef<{ id: string; mode: "move"| "resize"| "rotate"; startX: number; startY: number; orig: Layer; cx: number; cy: number; startAngle: number } | null>(null);
 
   const onLayerPointerDown = (e: React.PointerEvent, layer: Layer) => {
     if (layer.locked) { setSelectedId(layer.id); return; }
@@ -416,7 +416,7 @@ const AdminPhotocardBuilder = () => {
 
   const exportPNG = async () => {
     if (!frameRef.current) return;
-    toast({ title: "ছবি তৈরি হচ্ছে… (পিক্সেল-পারফেক্ট)" });
+    toast({ title: "ছবি তৈরি হচ্ছে… (পিক্সেল-পারফেক্ট)"});
     // Wait for all web fonts to load so text wrapping matches the preview exactly.
     try { await (document as Document & { fonts?: { ready?: Promise<unknown> } }).fonts?.ready; } catch { /* ignore */ }
     // Temporarily neutralise the preview transform so html-to-image captures
@@ -436,17 +436,17 @@ const AdminPhotocardBuilder = () => {
         canvasWidth: doc.width * 3,
         canvasHeight: doc.height * 3,
         backgroundColor: undefined,
-        style: { transform: "none" },
+        style: { transform: "none"},
         skipFonts: false,
       });
       const a = document.createElement("a");
       a.href = dataUrl;
       a.download = `photocard-${Date.now()}.png`;
       a.click();
-      toast({ title: `ডাউনলোড সম্পন্ন ✅ (${doc.width * 3}×${doc.height * 3})` });
+      toast({ title: `ডাউনলোড সম্পন্ন  (${doc.width * 3}×${doc.height * 3})` });
     } catch (err) {
       console.error(err);
-      toast({ title: "ডাউনলোড ব্যর্থ", description: err instanceof Error ? err.message : String(err), variant: "destructive" });
+      toast({ title: "ডাউনলোড ব্যর্থ", description: err instanceof Error ? err.message : String(err), variant: "destructive"});
     } finally {
       node.style.transform = prevTransform;
     }
@@ -459,7 +459,7 @@ const AdminPhotocardBuilder = () => {
     const list = [t, ...templates];
     setTemplates(list);
     saveTemplates(list);
-    toast({ title: "টেমপ্লেট সেভ হয়েছে ✅" });
+    toast({ title: "টেমপ্লেট সেভ হয়েছে "});
   };
   const loadTemplate = (t: Template) => {
     setDoc(JSON.parse(JSON.stringify(t.doc)));
@@ -476,7 +476,7 @@ const AdminPhotocardBuilder = () => {
     const b = doc.background;
     if (b.type === "color") return { background: b.color };
     if (b.type === "gradient") return { background: `linear-gradient(${b.gradientAngle}deg, ${b.gradientFrom}, ${b.gradientTo})` };
-    if (b.type === "image" && b.imageSrc) return { backgroundImage: `url(${b.imageSrc})`, backgroundSize: b.imageFit, backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundColor: b.color };
+    if (b.type === "image"&& b.imageSrc) return { backgroundImage: `url(${b.imageSrc})`, backgroundSize: b.imageFit, backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundColor: b.color };
     return { background: b.color };
   };
 
@@ -484,7 +484,7 @@ const AdminPhotocardBuilder = () => {
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold">📸 ফটোকার্ড বিল্ডার</h1>
+          <h1 className="text-2xl font-bold"> ফটোকার্ড বিল্ডার</h1>
           <p className="text-xs text-muted-foreground mt-1">কাস্টম লেআউট তৈরি করুন, টেমপ্লেট সেভ করুন, হাই-রেজ PNG ডাউনলোড করুন</p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -503,10 +503,10 @@ const AdminPhotocardBuilder = () => {
             <button onClick={addText} className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg bg-muted hover:bg-muted/70"><Type size={14} /> টেক্সট</button>
             <label className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold rounded-lg bg-muted hover:bg-muted/70 cursor-pointer">
               <ImageIcon size={14} /> ছবি আপলোড
-              <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && addImageFromFile(e.target.files[0])} />
+              <input type="file"accept="image/*"className="hidden"onChange={(e) => e.target.files?.[0] && addImageFromFile(e.target.files[0])} />
             </label>
             <div className="pt-2 border-t border-border/40">
-              <p className="text-[10px] text-muted-foreground mb-1.5">✨ ওভারলে / ইফেক্ট</p>
+              <p className="text-[10px] text-muted-foreground mb-1.5"> ওভারলে / ইফেক্ট</p>
               <div className="grid grid-cols-2 gap-1">
                 {OVERLAY_PRESETS.map((p) => (
                   <button key={p.kind} onClick={() => addOverlay(p.kind)}
@@ -531,8 +531,8 @@ const AdminPhotocardBuilder = () => {
               {PRESETS.map((p) => <option key={p.name} value={`${p.w}x${p.h}`}>{p.name} ({p.w}×{p.h})</option>)}
             </select>
             <div className="flex gap-2">
-              <input type="number" value={doc.width} onChange={(e) => setDoc((d) => ({ ...d, width: Math.max(100, +e.target.value || 100) }))} className="flex-1 text-xs px-2 py-1.5 rounded bg-background border border-border" />
-              <input type="number" value={doc.height} onChange={(e) => setDoc((d) => ({ ...d, height: Math.max(100, +e.target.value || 100) }))} className="flex-1 text-xs px-2 py-1.5 rounded bg-background border border-border" />
+              <input type="number"value={doc.width} onChange={(e) => setDoc((d) => ({ ...d, width: Math.max(100, +e.target.value || 100) }))} className="flex-1 text-xs px-2 py-1.5 rounded bg-background border border-border"/>
+              <input type="number"value={doc.height} onChange={(e) => setDoc((d) => ({ ...d, height: Math.max(100, +e.target.value || 100) }))} className="flex-1 text-xs px-2 py-1.5 rounded bg-background border border-border"/>
             </div>
           </div>
 
@@ -541,27 +541,27 @@ const AdminPhotocardBuilder = () => {
             <div className="flex gap-1">
               {(["color", "gradient", "image"] as const).map((t) => (
                 <button key={t} onClick={() => setDoc((d) => ({ ...d, background: { ...d.background, type: t } }))}
-                  className={`flex-1 text-[11px] py-1.5 rounded ${doc.background.type === t ? "bg-primary text-primary-foreground" : "bg-muted"}`}>{t}</button>
+                  className={`flex-1 text-[11px] py-1.5 rounded ${doc.background.type === t ? "bg-primary text-primary-foreground": "bg-muted"}`}>{t}</button>
               ))}
             </div>
-            {doc.background.type === "color" && (
+            {doc.background.type === "color"&& (
               <>
-                <input type="color" value={doc.background.color} onChange={(e) => setDoc((d) => ({ ...d, background: { ...d.background, color: e.target.value } }))} className="w-full h-9 rounded cursor-pointer" />
+                <input type="color"value={doc.background.color} onChange={(e) => setDoc((d) => ({ ...d, background: { ...d.background, color: e.target.value } }))} className="w-full h-9 rounded cursor-pointer"/>
                 <div className="grid grid-cols-8 gap-1 pt-1">
                   {COLOR_SWATCHES.map((c) => (
                     <button key={c} title={c} onClick={() => setDoc((d) => ({ ...d, background: { ...d.background, color: c } }))}
-                      className="aspect-square rounded ring-1 ring-border hover:ring-2 hover:ring-primary transition" style={{ background: c }} />
+                      className="aspect-square rounded ring-1 ring-border hover:ring-2 hover:ring-primary transition"style={{ background: c }} />
                   ))}
                 </div>
               </>
             )}
-            {doc.background.type === "gradient" && (
+            {doc.background.type === "gradient"&& (
               <div className="space-y-2">
                 <div className="flex gap-2">
-                  <input type="color" value={doc.background.gradientFrom} onChange={(e) => setDoc((d) => ({ ...d, background: { ...d.background, gradientFrom: e.target.value } }))} className="flex-1 h-9 rounded cursor-pointer" />
-                  <input type="color" value={doc.background.gradientTo} onChange={(e) => setDoc((d) => ({ ...d, background: { ...d.background, gradientTo: e.target.value } }))} className="flex-1 h-9 rounded cursor-pointer" />
+                  <input type="color"value={doc.background.gradientFrom} onChange={(e) => setDoc((d) => ({ ...d, background: { ...d.background, gradientFrom: e.target.value } }))} className="flex-1 h-9 rounded cursor-pointer"/>
+                  <input type="color"value={doc.background.gradientTo} onChange={(e) => setDoc((d) => ({ ...d, background: { ...d.background, gradientTo: e.target.value } }))} className="flex-1 h-9 rounded cursor-pointer"/>
                 </div>
-                <input type="range" min={0} max={360} value={doc.background.gradientAngle} onChange={(e) => setDoc((d) => ({ ...d, background: { ...d.background, gradientAngle: +e.target.value } }))} className="w-full" />
+                <input type="range"min={0} max={360} value={doc.background.gradientAngle} onChange={(e) => setDoc((d) => ({ ...d, background: { ...d.background, gradientAngle: +e.target.value } }))} className="w-full"/>
                 <p className="text-[10px] text-muted-foreground pt-1">প্রিসেট গ্রাডিয়েন্ট</p>
                 <div className="grid grid-cols-4 gap-1.5">
                   {GRADIENT_PRESETS.map((g) => (
@@ -573,11 +573,11 @@ const AdminPhotocardBuilder = () => {
                 </div>
               </div>
             )}
-            {doc.background.type === "image" && (
+            {doc.background.type === "image"&& (
               <div className="space-y-2">
                 <label className="flex items-center justify-center text-xs px-2 py-2 rounded bg-muted hover:bg-muted/70 cursor-pointer">
                   ছবি বাছুন
-                  <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && setBgImageFromFile(e.target.files[0])} />
+                  <input type="file"accept="image/*"className="hidden"onChange={(e) => e.target.files?.[0] && setBgImageFromFile(e.target.files[0])} />
                 </label>
                 <select value={doc.background.imageFit} onChange={(e) => setDoc((d) => ({ ...d, background: { ...d.background, imageFit: e.target.value as any } }))} className="w-full text-xs px-2 py-1.5 rounded bg-background border border-border">
                   <option value="cover">cover</option>
@@ -592,9 +592,9 @@ const AdminPhotocardBuilder = () => {
             <div className="space-y-1 max-h-60 overflow-y-auto">
               {[...doc.layers].reverse().map((l) => (
                 <button key={l.id} onClick={() => setSelectedId(l.id)}
-                  className={`w-full flex items-center gap-2 text-[11px] px-2 py-1.5 rounded ${selectedId === l.id ? "bg-primary/15 text-primary" : "hover:bg-muted"}`}>
-                  {l.type === "text" ? <Type size={12} /> : <ImageIcon size={12} />}
-                  <span className="truncate flex-1 text-left">{l.type === "text" ? (l as TextLayer).text.slice(0, 22) : "ছবি"}</span>
+                  className={`w-full flex items-center gap-2 text-[11px] px-2 py-1.5 rounded ${selectedId === l.id ? "bg-primary/15 text-primary": "hover:bg-muted"}`}>
+                  {l.type === "text"? <Type size={12} /> : <ImageIcon size={12} />}
+                  <span className="truncate flex-1 text-left">{l.type === "text"? (l as TextLayer).text.slice(0, 22) : "ছবি"}</span>
                   {l.locked && <Lock size={11} />}
                 </button>
               ))}
@@ -607,7 +607,7 @@ const AdminPhotocardBuilder = () => {
         <div ref={stageWrapRef} className="order-1 lg:order-2 min-w-0">
           <div className="glass-card-static p-3 overflow-auto">
             <div
-              style={{ width: doc.width * scale, height: doc.height * scale, position: "relative", margin: "0 auto" }}
+              style={{ width: doc.width * scale, height: doc.height * scale, position: "relative", margin: "0 auto"}}
               onPointerDown={() => setSelectedId(null)}
             >
               <div
@@ -630,12 +630,12 @@ const AdminPhotocardBuilder = () => {
                       left: l.x, top: l.y, width: l.w, height: l.h,
                       transform: `rotate(${l.rotation}deg)`,
                       opacity: l.opacity,
-                      cursor: l.locked ? "default" : "move",
+                      cursor: l.locked ? "default": "move",
                       outline: selectedId === l.id ? `${Math.max(2, 2/scale)}px dashed hsl(var(--primary))` : "none",
                       outlineOffset: 2,
                     }}
                   >
-                    {l.type === "text" ? (
+                    {l.type === "text"? (
                       <div
                         style={{
                           width: "100%", height: "100%",
@@ -644,13 +644,13 @@ const AdminPhotocardBuilder = () => {
                           fontWeight: (l as TextLayer).fontWeight,
                           color: (l as TextLayer).color,
                           textAlign: (l as TextLayer).align,
-                          fontStyle: (l as TextLayer).italic ? "italic" : "normal",
+                          fontStyle: (l as TextLayer).italic ? "italic": "normal",
                           lineHeight: (l as TextLayer).lineHeight,
                           letterSpacing: (l as TextLayer).letterSpacing,
-                          background: (l as TextLayer).bg === "transparent" ? "transparent" : (l as TextLayer).bg,
+                          background: (l as TextLayer).bg === "transparent"? "transparent": (l as TextLayer).bg,
                           padding: (l as TextLayer).padding,
                           borderRadius: (l as TextLayer).radius,
-                          textShadow: (l as TextLayer).shadow ? "0 4px 16px rgba(0,0,0,0.45)" : "none",
+                          textShadow: (l as TextLayer).shadow ? "0 4px 16px rgba(0,0,0,0.45)": "none",
                           whiteSpace: "pre-wrap",
                           wordBreak: "break-word",
                           // Use block + flex column to vertically center, while letting
@@ -665,7 +665,7 @@ const AdminPhotocardBuilder = () => {
                           {(l as TextLayer).text}
                         </div>
                       </div>
-                    ) : l.type === "image" ? (
+                    ) : l.type === "image"? (
                       <img
                         src={(l as ImageLayer).src}
                         alt=""
@@ -712,7 +712,7 @@ const AdminPhotocardBuilder = () => {
                             display: "flex", alignItems: "center", justifyContent: "center",
                           }}
                         >
-                          <RotateCw size={12/scale} color="white" />
+                          <RotateCw size={12/scale} color="white"/>
                         </div>
                       </>
                     )}
@@ -732,32 +732,32 @@ const AdminPhotocardBuilder = () => {
             {selected && (
               <div className="space-y-2">
                 <div className="flex gap-1">
-                  <button onClick={() => duplicateLayer(selected.id)} title="ডুপ্লিকেট" className="flex-1 p-1.5 rounded bg-muted hover:bg-muted/70 flex items-center justify-center"><Copy size={13} /></button>
-                  <button onClick={() => moveLayer(selected.id, 1)} title="উপরে" className="flex-1 p-1.5 rounded bg-muted hover:bg-muted/70 flex items-center justify-center"><ArrowUp size={13} /></button>
-                  <button onClick={() => moveLayer(selected.id, -1)} title="নিচে" className="flex-1 p-1.5 rounded bg-muted hover:bg-muted/70 flex items-center justify-center"><ArrowDown size={13} /></button>
-                  <button onClick={() => updateLayer(selected.id, { locked: !selected.locked } as any)} title="লক" className="flex-1 p-1.5 rounded bg-muted hover:bg-muted/70 flex items-center justify-center">{selected.locked ? <Unlock size={13} /> : <Lock size={13} />}</button>
-                  <button onClick={() => removeLayer(selected.id)} title="মুছুন" className="flex-1 p-1.5 rounded bg-destructive/15 text-destructive hover:bg-destructive/25 flex items-center justify-center"><Trash2 size={13} /></button>
+                  <button onClick={() => duplicateLayer(selected.id)} title="ডুপ্লিকেট"className="flex-1 p-1.5 rounded bg-muted hover:bg-muted/70 flex items-center justify-center"><Copy size={13} /></button>
+                  <button onClick={() => moveLayer(selected.id, 1)} title="উপরে"className="flex-1 p-1.5 rounded bg-muted hover:bg-muted/70 flex items-center justify-center"><ArrowUp size={13} /></button>
+                  <button onClick={() => moveLayer(selected.id, -1)} title="নিচে"className="flex-1 p-1.5 rounded bg-muted hover:bg-muted/70 flex items-center justify-center"><ArrowDown size={13} /></button>
+                  <button onClick={() => updateLayer(selected.id, { locked: !selected.locked } as any)} title="লক"className="flex-1 p-1.5 rounded bg-muted hover:bg-muted/70 flex items-center justify-center">{selected.locked ? <Unlock size={13} /> : <Lock size={13} />}</button>
+                  <button onClick={() => removeLayer(selected.id)} title="মুছুন"className="flex-1 p-1.5 rounded bg-destructive/15 text-destructive hover:bg-destructive/25 flex items-center justify-center"><Trash2 size={13} /></button>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
-                  <NumField label="X" value={Math.round(selected.x)} onChange={(v) => updateLayer(selected.id, { x: v })} />
-                  <NumField label="Y" value={Math.round(selected.y)} onChange={(v) => updateLayer(selected.id, { y: v })} />
-                  <NumField label="W" value={Math.round(selected.w)} onChange={(v) => updateLayer(selected.id, { w: Math.max(20, v) })} />
-                  <NumField label="H" value={Math.round(selected.h)} onChange={(v) => updateLayer(selected.id, { h: Math.max(20, v) })} />
+                  <NumField label="X"value={Math.round(selected.x)} onChange={(v) => updateLayer(selected.id, { x: v })} />
+                  <NumField label="Y"value={Math.round(selected.y)} onChange={(v) => updateLayer(selected.id, { y: v })} />
+                  <NumField label="W"value={Math.round(selected.w)} onChange={(v) => updateLayer(selected.id, { w: Math.max(20, v) })} />
+                  <NumField label="H"value={Math.round(selected.h)} onChange={(v) => updateLayer(selected.id, { h: Math.max(20, v) })} />
                 </div>
 
                 <div>
                   <label className="text-[10px] text-muted-foreground">রোটেশন: {Math.round(selected.rotation)}°</label>
-                  <input type="range" min={-180} max={180} value={selected.rotation} onChange={(e) => updateLayer(selected.id, { rotation: +e.target.value })} className="w-full" />
+                  <input type="range"min={-180} max={180} value={selected.rotation} onChange={(e) => updateLayer(selected.id, { rotation: +e.target.value })} className="w-full"/>
                 </div>
                 <div>
                   <label className="text-[10px] text-muted-foreground">অপাসিটি: {Math.round(selected.opacity * 100)}%</label>
-                  <input type="range" min={0} max={100} value={selected.opacity * 100} onChange={(e) => updateLayer(selected.id, { opacity: +e.target.value / 100 })} className="w-full" />
+                  <input type="range"min={0} max={100} value={selected.opacity * 100} onChange={(e) => updateLayer(selected.id, { opacity: +e.target.value / 100 })} className="w-full"/>
                 </div>
 
-                {selected.type === "text" && <TextProps layer={selected as TextLayer} update={(p) => updateLayer(selected.id, p)} />}
-                {selected.type === "image" && <ImageProps layer={selected as ImageLayer} update={(p) => updateLayer(selected.id, p)} />}
-                {selected.type === "overlay" && <OverlayProps layer={selected as OverlayLayer} update={(p) => updateLayer(selected.id, p)} />}
+                {selected.type === "text"&& <TextProps layer={selected as TextLayer} update={(p) => updateLayer(selected.id, p)} />}
+                {selected.type === "image"&& <ImageProps layer={selected as ImageLayer} update={(p) => updateLayer(selected.id, p)} />}
+                {selected.type === "overlay"&& <OverlayProps layer={selected as OverlayLayer} update={(p) => updateLayer(selected.id, p)} />}
               </div>
             )}
           </div>
@@ -765,18 +765,18 @@ const AdminPhotocardBuilder = () => {
       </div>
 
       {showTemplates && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4" onClick={() => setShowTemplates(false)}>
-          <div className="bg-background rounded-2xl p-4 max-w-3xl w-full max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4"onClick={() => setShowTemplates(false)}>
+          <div className="bg-background rounded-2xl p-4 max-w-3xl w-full max-h-[85vh] overflow-y-auto"onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-bold">টেমপ্লেট গ্যালারি</h3>
               <button onClick={() => setShowTemplates(false)} className="p-1.5 hover:bg-muted rounded"><X size={16} /></button>
             </div>
             <div className="flex gap-1 mb-4 p-1 bg-muted rounded-lg w-fit">
-              <button onClick={() => setTplTab("builtin")} className={`px-3 py-1.5 text-xs font-semibold rounded-md ${tplTab === "builtin" ? "bg-background shadow" : ""}`}>✨ বিল্ট-ইন থিম ({BUILTIN_TEMPLATES.length})</button>
-              <button onClick={() => setTplTab("saved")} className={`px-3 py-1.5 text-xs font-semibold rounded-md ${tplTab === "saved" ? "bg-background shadow" : ""}`}>📁 সেভ করা ({templates.length})</button>
+              <button onClick={() => setTplTab("builtin")} className={`px-3 py-1.5 text-xs font-semibold rounded-md ${tplTab === "builtin"? "bg-background shadow": ""}`}> বিল্ট-ইন থিম ({BUILTIN_TEMPLATES.length})</button>
+              <button onClick={() => setTplTab("saved")} className={`px-3 py-1.5 text-xs font-semibold rounded-md ${tplTab === "saved"? "bg-background shadow": ""}`}> সেভ করা ({templates.length})</button>
             </div>
 
-            {tplTab === "builtin" && (
+            {tplTab === "builtin"&& (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {BUILTIN_TEMPLATES.map((t) => (
                   <div key={t.id} className="border border-border rounded-xl p-2 hover:border-primary transition-colors">
@@ -789,7 +789,7 @@ const AdminPhotocardBuilder = () => {
                           : { background: t.doc.background.color }
                       }
                     >
-                      <span className="text-white text-xs font-bold drop-shadow-lg" style={{ color: t.doc.background.type === "color" && t.doc.background.color === "#ffffff" ? "#0f172a" : "#fff" }}>{t.name}</span>
+                      <span className="text-white text-xs font-bold drop-shadow-lg"style={{ color: t.doc.background.type === "color"&& t.doc.background.color === "#ffffff"? "#0f172a": "#fff"}}>{t.name}</span>
                     </div>
                     <p className="text-xs font-semibold truncate">{t.name}</p>
                     <p className="text-[10px] text-muted-foreground">{t.doc.width}×{t.doc.height}</p>
@@ -799,9 +799,9 @@ const AdminPhotocardBuilder = () => {
               </div>
             )}
 
-            {tplTab === "saved" && (
+            {tplTab === "saved"&& (
               <>
-                {templates.length === 0 && <p className="text-xs text-muted-foreground text-center py-8">কোনো সেভ করা টেমপ্লেট নেই। উপরের "সেভ" বাটন দিয়ে তৈরি করুন।</p>}
+                {templates.length === 0 && <p className="text-xs text-muted-foreground text-center py-8">কোনো সেভ করা টেমপ্লেট নেই। উপরের "সেভ"বাটন দিয়ে তৈরি করুন।</p>}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {templates.map((t) => (
                     <div key={t.id} className="border border-border rounded-xl p-2">
@@ -817,7 +817,7 @@ const AdminPhotocardBuilder = () => {
                       <p className="text-xs font-semibold truncate">{t.name}</p>
                       <div className="flex gap-1 mt-1">
                         <button onClick={() => loadTemplate(t)} className="flex-1 text-[10px] py-1 rounded bg-primary text-primary-foreground">লোড</button>
-                        <button onClick={() => deleteTemplate(t.id)} className="text-[10px] px-2 py-1 rounded bg-destructive/15 text-destructive">✕</button>
+                        <button onClick={() => deleteTemplate(t.id)} className="text-[10px] px-2 py-1 rounded bg-destructive/15 text-destructive"></button>
                       </div>
                     </div>
                   ))}
@@ -834,18 +834,18 @@ const AdminPhotocardBuilder = () => {
 const NumField = ({ label, value, onChange }: { label: string; value: number; onChange: (v: number) => void }) => (
   <label className="block">
     <span className="text-[10px] text-muted-foreground">{label}</span>
-    <input type="number" value={value} onChange={(e) => onChange(+e.target.value)} className="w-full text-xs px-2 py-1.5 rounded bg-background border border-border" />
+    <input type="number"value={value} onChange={(e) => onChange(+e.target.value)} className="w-full text-xs px-2 py-1.5 rounded bg-background border border-border"/>
   </label>
 );
 
 const TextProps = ({ layer, update }: { layer: TextLayer; update: (p: Partial<TextLayer>) => void }) => (
   <div className="space-y-2 pt-2 border-t border-border/50">
-    <textarea value={layer.text} onChange={(e) => update({ text: e.target.value })} rows={3} className="w-full text-xs px-2 py-1.5 rounded bg-background border border-border resize-none" />
+    <textarea value={layer.text} onChange={(e) => update({ text: e.target.value })} rows={3} className="w-full text-xs px-2 py-1.5 rounded bg-background border border-border resize-none"/>
     <select value={layer.fontFamily} onChange={(e) => update({ fontFamily: e.target.value })} className="w-full text-xs px-2 py-1.5 rounded bg-background border border-border">
       {FONTS.map((f) => <option key={f} value={f} style={{ fontFamily: f }}>{f.split(",")[0].replace(/'/g, "")}</option>)}
     </select>
     <div className="grid grid-cols-2 gap-2">
-      <NumField label="সাইজ" value={layer.fontSize} onChange={(v) => update({ fontSize: Math.max(8, v) })} />
+      <NumField label="সাইজ"value={layer.fontSize} onChange={(v) => update({ fontSize: Math.max(8, v) })} />
       <label className="block">
         <span className="text-[10px] text-muted-foreground">ওয়েট</span>
         <select value={layer.fontWeight} onChange={(e) => update({ fontWeight: +e.target.value })} className="w-full text-xs px-2 py-1.5 rounded bg-background border border-border">
@@ -856,13 +856,13 @@ const TextProps = ({ layer, update }: { layer: TextLayer; update: (p: Partial<Te
     <div className="flex items-center gap-2">
       <label className="flex-1">
         <span className="text-[10px] text-muted-foreground">কালার</span>
-        <input type="color" value={layer.color} onChange={(e) => update({ color: e.target.value })} className="w-full h-8 rounded cursor-pointer" />
+        <input type="color"value={layer.color} onChange={(e) => update({ color: e.target.value })} className="w-full h-8 rounded cursor-pointer"/>
       </label>
       <label className="flex-1">
         <span className="text-[10px] text-muted-foreground">BG</span>
-        <input type="color" value={layer.bg === "transparent" ? "#ffffff" : layer.bg} onChange={(e) => update({ bg: e.target.value })} className="w-full h-8 rounded cursor-pointer" />
+        <input type="color"value={layer.bg === "transparent"? "#ffffff": layer.bg} onChange={(e) => update({ bg: e.target.value })} className="w-full h-8 rounded cursor-pointer"/>
       </label>
-      <button onClick={() => update({ bg: "transparent" })} className="text-[10px] px-2 py-1 rounded bg-muted self-end">×</button>
+      <button onClick={() => update({ bg: "transparent"})} className="text-[10px] px-2 py-1 rounded bg-muted self-end">×</button>
     </div>
     <div className="grid grid-cols-10 gap-0.5">
       {COLOR_SWATCHES.slice(0, 30).map((c) => (
@@ -873,14 +873,14 @@ const TextProps = ({ layer, update }: { layer: TextLayer; update: (p: Partial<Te
     </div>
     <div className="flex gap-1">
       {(["left", "center", "right"] as const).map((a) => (
-        <button key={a} onClick={() => update({ align: a })} className={`flex-1 text-[10px] py-1 rounded ${layer.align === a ? "bg-primary text-primary-foreground" : "bg-muted"}`}>{a}</button>
+        <button key={a} onClick={() => update({ align: a })} className={`flex-1 text-[10px] py-1 rounded ${layer.align === a ? "bg-primary text-primary-foreground": "bg-muted"}`}>{a}</button>
       ))}
-      <button onClick={() => update({ italic: !layer.italic })} className={`flex-1 text-[10px] py-1 rounded italic ${layer.italic ? "bg-primary text-primary-foreground" : "bg-muted"}`}>I</button>
-      <button onClick={() => update({ shadow: !layer.shadow })} className={`flex-1 text-[10px] py-1 rounded ${layer.shadow ? "bg-primary text-primary-foreground" : "bg-muted"}`}>Shdw</button>
+      <button onClick={() => update({ italic: !layer.italic })} className={`flex-1 text-[10px] py-1 rounded italic ${layer.italic ? "bg-primary text-primary-foreground": "bg-muted"}`}>I</button>
+      <button onClick={() => update({ shadow: !layer.shadow })} className={`flex-1 text-[10px] py-1 rounded ${layer.shadow ? "bg-primary text-primary-foreground": "bg-muted"}`}>Shdw</button>
     </div>
     <div className="grid grid-cols-2 gap-2">
-      <NumField label="প্যাডিং" value={layer.padding} onChange={(v) => update({ padding: Math.max(0, v) })} />
-      <NumField label="রেডিয়াস" value={layer.radius} onChange={(v) => update({ radius: Math.max(0, v) })} />
+      <NumField label="প্যাডিং"value={layer.padding} onChange={(v) => update({ padding: Math.max(0, v) })} />
+      <NumField label="রেডিয়াস"value={layer.radius} onChange={(v) => update({ radius: Math.max(0, v) })} />
     </div>
   </div>
 );
@@ -889,17 +889,17 @@ const ImageProps = ({ layer, update }: { layer: ImageLayer; update: (p: Partial<
   <div className="space-y-2 pt-2 border-t border-border/50">
     <label className="flex items-center justify-center text-xs px-2 py-2 rounded bg-muted hover:bg-muted/70 cursor-pointer">
       ছবি পরিবর্তন
-      <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+      <input type="file"accept="image/*"className="hidden"onChange={async (e) => {
         const f = e.target.files?.[0]; if (!f) return;
         const src = await fileToDataURL(f); update({ src });
       }} />
     </label>
     <div className="flex gap-1">
       {(["cover", "contain"] as const).map((f) => (
-        <button key={f} onClick={() => update({ fit: f })} className={`flex-1 text-[10px] py-1 rounded ${layer.fit === f ? "bg-primary text-primary-foreground" : "bg-muted"}`}>{f}</button>
+        <button key={f} onClick={() => update({ fit: f })} className={`flex-1 text-[10px] py-1 rounded ${layer.fit === f ? "bg-primary text-primary-foreground": "bg-muted"}`}>{f}</button>
       ))}
     </div>
-    <NumField label="রেডিয়াস" value={layer.radius} onChange={(v) => update({ radius: Math.max(0, v) })} />
+    <NumField label="রেডিয়াস"value={layer.radius} onChange={(v) => update({ radius: Math.max(0, v) })} />
     <label className="block">
       <span className="text-[10px] text-muted-foreground">ফিল্টার</span>
       <select value={layer.filter} onChange={(e) => update({ filter: e.target.value as any })} className="w-full text-xs px-2 py-1.5 rounded bg-background border border-border">
@@ -911,45 +911,45 @@ const ImageProps = ({ layer, update }: { layer: ImageLayer; update: (p: Partial<
     </label>
     <div className="flex items-center gap-2 pt-1">
       <button onClick={() => update({ glow: !layer.glow })}
-        className={`flex-1 text-[10px] py-1.5 rounded ${layer.glow ? "bg-primary text-primary-foreground" : "bg-muted"}`}>✨ গ্লো</button>
-      <input type="color" value={layer.glowColor || "#22d3ee"} onChange={(e) => update({ glowColor: e.target.value })} className="h-8 w-12 rounded cursor-pointer" />
+        className={`flex-1 text-[10px] py-1.5 rounded ${layer.glow ? "bg-primary text-primary-foreground": "bg-muted"}`}> গ্লো</button>
+      <input type="color"value={layer.glowColor || "#22d3ee"} onChange={(e) => update({ glowColor: e.target.value })} className="h-8 w-12 rounded cursor-pointer"/>
     </div>
     <div className="pt-2 mt-1 border-t border-border/50 space-y-2">
-      <p className="text-[10px] font-bold text-muted-foreground">🎛️ অ্যাডভান্স অ্যাডজাস্টমেন্ট</p>
-      <SliderRow label="ব্রাইটনেস" value={layer.brightness ?? 100} min={0} max={200} onChange={(v) => update({ brightness: v })} />
-      <SliderRow label="কন্ট্রাস্ট" value={layer.contrast ?? 100} min={0} max={200} onChange={(v) => update({ contrast: v })} />
-      <SliderRow label="স্যাচুরেশন" value={layer.saturate ?? 100} min={0} max={200} onChange={(v) => update({ saturate: v })} />
-      <SliderRow label="হিউ" value={layer.hueRotate ?? 0} min={-180} max={180} onChange={(v) => update({ hueRotate: v })} unit="°" />
-      <SliderRow label="ব্লার" value={layer.blurPx ?? 0} min={0} max={20} onChange={(v) => update({ blurPx: v })} unit="px" />
-      <SliderRow label="ইনভার্ট" value={layer.invert ?? 0} min={0} max={100} onChange={(v) => update({ invert: v })} unit="%" />
+      <p className="text-[10px] font-bold text-muted-foreground"> অ্যাডভান্স অ্যাডজাস্টমেন্ট</p>
+      <SliderRow label="ব্রাইটনেস"value={layer.brightness ?? 100} min={0} max={200} onChange={(v) => update({ brightness: v })} />
+      <SliderRow label="কন্ট্রাস্ট"value={layer.contrast ?? 100} min={0} max={200} onChange={(v) => update({ contrast: v })} />
+      <SliderRow label="স্যাচুরেশন"value={layer.saturate ?? 100} min={0} max={200} onChange={(v) => update({ saturate: v })} />
+      <SliderRow label="হিউ"value={layer.hueRotate ?? 0} min={-180} max={180} onChange={(v) => update({ hueRotate: v })} unit="°"/>
+      <SliderRow label="ব্লার"value={layer.blurPx ?? 0} min={0} max={20} onChange={(v) => update({ blurPx: v })} unit="px"/>
+      <SliderRow label="ইনভার্ট"value={layer.invert ?? 0} min={0} max={100} onChange={(v) => update({ invert: v })} unit="%"/>
       <button onClick={() => update({ vintage: !layer.vintage })}
-        className={`w-full text-[10px] py-1.5 rounded ${layer.vintage ? "bg-primary text-primary-foreground" : "bg-muted"}`}>📷 ভিনটেজ {layer.vintage ? "✓" : ""}</button>
-      <button onClick={() => update({ brightness: 100, contrast: 100, saturate: 100, hueRotate: 0, blurPx: 0, invert: 0, vintage: false, filter: "none" })}
-        className="w-full text-[10px] py-1 rounded bg-muted hover:bg-muted/70">🔄 রিসেট</button>
+        className={`w-full text-[10px] py-1.5 rounded ${layer.vintage ? "bg-primary text-primary-foreground": "bg-muted"}`}> ভিনটেজ {layer.vintage ? "": ""}</button>
+      <button onClick={() => update({ brightness: 100, contrast: 100, saturate: 100, hueRotate: 0, blurPx: 0, invert: 0, vintage: false, filter: "none"})}
+        className="w-full text-[10px] py-1 rounded bg-muted hover:bg-muted/70"> রিসেট</button>
     </div>
   </div>
 );
 
-const SliderRow = ({ label, value, min, max, onChange, unit = "" }: { label: string; value: number; min: number; max: number; onChange: (v: number) => void; unit?: string }) => (
+const SliderRow = ({ label, value, min, max, onChange, unit = ""}: { label: string; value: number; min: number; max: number; onChange: (v: number) => void; unit?: string }) => (
   <div>
     <div className="flex justify-between text-[10px] text-muted-foreground">
       <span>{label}</span><span>{Math.round(value)}{unit}</span>
     </div>
-    <input type="range" min={min} max={max} value={value} onChange={(e) => onChange(+e.target.value)} className="w-full" />
+    <input type="range"min={min} max={max} value={value} onChange={(e) => onChange(+e.target.value)} className="w-full"/>
   </div>
 );
 
 const OverlayProps = ({ layer, update }: { layer: OverlayLayer; update: (p: Partial<OverlayLayer>) => void }) => (
   <div className="space-y-2 pt-2 border-t border-border/50">
-    <p className="text-[10px] font-bold text-muted-foreground">✨ ওভারলে: {OVERLAY_PRESETS.find((p) => p.kind === layer.kind)?.label}</p>
+    <p className="text-[10px] font-bold text-muted-foreground"> ওভারলে: {OVERLAY_PRESETS.find((p) => p.kind === layer.kind)?.label}</p>
     <select value={layer.kind} onChange={(e) => update({ kind: e.target.value as OverlayKind })}
       className="w-full text-xs px-2 py-1.5 rounded bg-background border border-border">
       {OVERLAY_PRESETS.map((p) => <option key={p.kind} value={p.kind}>{p.icon} {p.label}</option>)}
     </select>
-    <SliderRow label="ইনটেনসিটি" value={layer.intensity} min={0} max={100} onChange={(v) => update({ intensity: v })} unit="%" />
+    <SliderRow label="ইনটেনসিটি"value={layer.intensity} min={0} max={100} onChange={(v) => update({ intensity: v })} unit="%"/>
     <label className="block">
       <span className="text-[10px] text-muted-foreground">কালার</span>
-      <input type="color" value={layer.color} onChange={(e) => update({ color: e.target.value })} className="w-full h-8 rounded cursor-pointer" />
+      <input type="color"value={layer.color} onChange={(e) => update({ color: e.target.value })} className="w-full h-8 rounded cursor-pointer"/>
     </label>
     <label className="block">
       <span className="text-[10px] text-muted-foreground">ব্লেন্ড মোড</span>

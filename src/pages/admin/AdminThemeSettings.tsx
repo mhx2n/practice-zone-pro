@@ -8,15 +8,15 @@ import { Save, Palette, Check, Sliders, FileText, Plus, Trash2, Link2, Image as 
 import { getTheme } from "@/lib/theme";
 
 const colorFields: { key: keyof ThemeColors; label: string }[] = [
-  { key: "primary", label: "প্রাইমারি" },
-  { key: "background", label: "ব্যাকগ্রাউন্ড" },
-  { key: "foreground", label: "টেক্সট" },
-  { key: "card", label: "কার্ড" },
-  { key: "muted", label: "মিউটেড" },
-  { key: "accent", label: "অ্যাকসেন্ট" },
-  { key: "border", label: "বর্ডার" },
-  { key: "success", label: "সাকসেস" },
-  { key: "warning", label: "ওয়ার্নিং" },
+  { key: "primary", label: "প্রাইমারি"},
+  { key: "background", label: "ব্যাকগ্রাউন্ড"},
+  { key: "foreground", label: "টেক্সট"},
+  { key: "card", label: "কার্ড"},
+  { key: "muted", label: "মিউটেড"},
+  { key: "accent", label: "অ্যাকসেন্ট"},
+  { key: "border", label: "বর্ডার"},
+  { key: "success", label: "সাকসেস"},
+  { key: "warning", label: "ওয়ার্নিং"},
 ];
 
 const hslToHex = (hsl: string): string => {
@@ -75,10 +75,10 @@ const AdminThemeSettings = () => {
     const preset = themePresets.find((t) => t.id === id);
     if (!preset) return;
     setSettings((prev) => prev ? { ...prev, activeThemeId: id } : prev);
-    applyThemeColors(currentMode === "dark" ? preset.dark : preset.light, currentMode);
+    applyThemeColors(currentMode === "dark"? preset.dark : preset.light, currentMode);
   };
 
-  const updateCustomColor = (mode: "light" | "dark", key: keyof ThemeColors, hex: string) => {
+  const updateCustomColor = (mode: "light"| "dark", key: keyof ThemeColors, hex: string) => {
     const hsl = hexToHsl(hex);
     setSettings((prev) => {
       if (!prev) return prev;
@@ -96,12 +96,12 @@ const AdminThemeSettings = () => {
 
   const save = () => {
     saveMut.mutate(settings, {
-      onSuccess: () => toast({ title: "থিম সেভ হয়েছে ✅" }),
+      onSuccess: () => toast({ title: "থিম সেভ হয়েছে "}),
     });
   };
 
   const getEditableColors = (): ThemeColors => {
-    if (settings.activeThemeId === "custom" && settings.customTheme) return settings.customTheme[currentMode];
+    if (settings.activeThemeId === "custom"&& settings.customTheme) return settings.customTheme[currentMode];
     return activePreset ? activePreset[currentMode] : themePresets[0][currentMode];
   };
 
@@ -109,21 +109,21 @@ const AdminThemeSettings = () => {
   const updateReport = (patch: Partial<typeof reportSettings>) => {
     setSettings((p) => p ? { ...p, reportSettings: { ...reportSettings, ...patch } } : p);
   };
-  const updateFooterLink = (idx: number, field: "label" | "url", value: string) => {
+  const updateFooterLink = (idx: number, field: "label"| "url", value: string) => {
     const links = [...reportSettings.footerLinks];
     links[idx] = { ...links[idx], [field]: value };
     updateReport({ footerLinks: links });
   };
-  const addFooterLink = () => updateReport({ footerLinks: [...reportSettings.footerLinks, { label: "", url: "" }] });
+  const addFooterLink = () => updateReport({ footerLinks: [...reportSettings.footerLinks, { label: "", url: ""}] });
   const removeFooterLink = (idx: number) => updateReport({ footerLinks: reportSettings.footerLinks.filter((_, i) => i !== idx) });
-  const podium = reportSettings.podiumColors || { gold: "#eab308", silver: "#94a3b8", bronze: "#ca8a04" };
-  const updatePodium = (key: "gold" | "silver" | "bronze", value: string) =>
+  const podium = reportSettings.podiumColors || { gold: "#eab308", silver: "#94a3b8", bronze: "#ca8a04"};
+  const updatePodium = (key: "gold"| "silver"| "bronze", value: string) =>
     updateReport({ podiumColors: { ...podium, [key]: value } });
 
   const onLogoUpload = (file: File | null) => {
     if (!file) return;
     if (file.size > 600 * 1024) {
-      toast({ title: "ছবি বড় (সর্বোচ্চ 600KB)", variant: "destructive" });
+      toast({ title: "ছবি বড় (সর্বোচ্চ 600KB)", variant: "destructive"});
       return;
     }
     const reader = new FileReader();
@@ -134,57 +134,57 @@ const AdminThemeSettings = () => {
   return (
     <div className="animate-fade-in max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold flex items-center gap-2"><Palette size={22} className="text-primary" /> থিম কাস্টমাইজার</h1>
+        <h1 className="text-xl font-bold flex items-center gap-2"><Palette size={22} className="text-primary"/> থিম কাস্টমাইজার</h1>
         <button onClick={save} disabled={saveMut.isPending} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-all">
           <Save size={16} /> সেভ করুন
         </button>
       </div>
 
       <div className="glass-card-static p-5 space-y-4 mb-6">
-        <h2 className="text-sm font-bold">🏷️ ব্র্যান্ড সেটিংস</h2>
+        <h2 className="text-sm font-bold"> ব্র্যান্ড সেটিংস</h2>
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1">
             <label className="text-xs font-semibold">ব্র্যান্ড নাম</label>
             <input value={settings.brandName} onChange={(e) => setSettings((p) => p ? { ...p, brandName: e.target.value } : p)}
-              className="w-full glass-strong rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+              className="w-full glass-strong rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
           </div>
           <div className="space-y-1">
             <label className="text-xs font-semibold">ব্র্যান্ড ইমোজি</label>
             <input value={settings.brandEmoji} onChange={(e) => setSettings((p) => p ? { ...p, brandEmoji: e.target.value } : p)}
-              className="w-full glass-strong rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+              className="w-full glass-strong rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
           </div>
         </div>
         <div className="space-y-1">
           <label className="text-xs font-semibold">হিরো ট্যাগলাইন</label>
           <input value={settings.heroTagline} onChange={(e) => setSettings((p) => p ? { ...p, heroTagline: e.target.value } : p)}
-            className="w-full glass-strong rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            className="w-full glass-strong rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
         </div>
         <div className="space-y-1">
           <label className="text-xs font-semibold">হিরো সাবটাইটেল</label>
           <input value={settings.heroSubtitle} onChange={(e) => setSettings((p) => p ? { ...p, heroSubtitle: e.target.value } : p)}
-            className="w-full glass-strong rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" placeholder="ঐচ্ছিক" />
+            className="w-full glass-strong rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"placeholder="ঐচ্ছিক"/>
         </div>
       </div>
 
       <div className="glass-card-static p-5 space-y-4 mb-6">
-        <h2 className="text-sm font-bold">🎨 প্রিসেট থিম</h2>
+        <h2 className="text-sm font-bold"> প্রিসেট থিম</h2>
         <p className="text-xs text-muted-foreground">একটি থিম নির্বাচন করুন — লাইভ প্রিভিউ দেখুন</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {themePresets.map((preset) => {
             const isActive = settings.activeThemeId === preset.id;
-            const colors = currentMode === "dark" ? preset.dark : preset.light;
+            const colors = currentMode === "dark"? preset.dark : preset.light;
             return (
               <button key={preset.id} onClick={() => selectPreset(preset.id)}
-                className={`relative p-4 rounded-xl border-2 transition-all text-left ${isActive ? "border-primary shadow-lg scale-[1.02]" : "border-border hover:border-primary/40"}`}>
+                className={`relative p-4 rounded-xl border-2 transition-all text-left ${isActive ? "border-primary shadow-lg scale-[1.02]": "border-border hover:border-primary/40"}`}>
                 {isActive && (
                   <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                    <Check size={12} className="text-primary-foreground" />
+                    <Check size={12} className="text-primary-foreground"/>
                   </div>
                 )}
                 <div className="flex gap-1.5 mb-2">
-                  <div className="w-6 h-6 rounded-full border" style={{ backgroundColor: `hsl(${colors.primary})` }} />
-                  <div className="w-6 h-6 rounded-full border" style={{ backgroundColor: `hsl(${colors.accent})` }} />
-                  <div className="w-6 h-6 rounded-full border" style={{ backgroundColor: `hsl(${colors.background})` }} />
+                  <div className="w-6 h-6 rounded-full border"style={{ backgroundColor: `hsl(${colors.primary})` }} />
+                  <div className="w-6 h-6 rounded-full border"style={{ backgroundColor: `hsl(${colors.accent})` }} />
+                  <div className="w-6 h-6 rounded-full border"style={{ backgroundColor: `hsl(${colors.background})` }} />
                 </div>
                 <p className="text-xs font-semibold">{preset.name}</p>
               </button>
@@ -195,13 +195,13 @@ const AdminThemeSettings = () => {
 
       <div className="glass-card-static p-5 space-y-4 mb-6">
         <button onClick={() => setShowCustom(!showCustom)} className="flex items-center gap-2 text-sm font-bold w-full">
-          <Sliders size={16} className="text-primary" /> কাস্টম কালার এডিটর
-          <span className="text-xs text-muted-foreground ml-auto">{showCustom ? "বন্ধ করুন" : "খুলুন"}</span>
+          <Sliders size={16} className="text-primary"/> কাস্টম কালার এডিটর
+          <span className="text-xs text-muted-foreground ml-auto">{showCustom ? "বন্ধ করুন": "খুলুন"}</span>
         </button>
         {showCustom && (
           <div className="space-y-4 pt-2">
             <p className="text-xs text-muted-foreground">
-              বর্তমান মোড: <span className="font-semibold">{currentMode === "dark" ? "ডার্ক" : "লাইট"}</span> — পরিবর্তন করলে কাস্টম থিম সক্রিয় হবে
+              বর্তমান মোড: <span className="font-semibold">{currentMode === "dark"? "ডার্ক": "লাইট"}</span> — পরিবর্তন করলে কাস্টম থিম সক্রিয় হবে
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {colorFields.map((field) => {
@@ -210,8 +210,8 @@ const AdminThemeSettings = () => {
                   <div key={field.key} className="space-y-1">
                     <label className="text-xs font-medium">{field.label}</label>
                     <div className="flex items-center gap-2">
-                      <input type="color" value={hslToHex(colors[field.key])} onChange={(e) => updateCustomColor(currentMode, field.key, e.target.value)}
-                        className="w-8 h-8 rounded-lg border border-border cursor-pointer" />
+                      <input type="color"value={hslToHex(colors[field.key])} onChange={(e) => updateCustomColor(currentMode, field.key, e.target.value)}
+                        className="w-8 h-8 rounded-lg border border-border cursor-pointer"/>
                       <span className="text-[10px] text-muted-foreground font-mono">{colors[field.key]}</span>
                     </div>
                   </div>
@@ -223,7 +223,7 @@ const AdminThemeSettings = () => {
       </div>
 
       <div className="glass-card-static p-5 space-y-4 mb-6">
-        <h2 className="text-sm font-bold flex items-center gap-2"><FileText size={16} className="text-primary" /> PDF রিপোর্ট থিম ও ফুটার</h2>
+        <h2 className="text-sm font-bold flex items-center gap-2"><FileText size={16} className="text-primary"/> PDF রিপোর্ট থিম ও ফুটার</h2>
         <p className="text-xs text-muted-foreground">লাইভ পরীক্ষার লিডারবোর্ড PDF এ এই থিম ও ফুটার ব্যবহৃত হবে।</p>
 
         <div>
@@ -233,43 +233,43 @@ const AdminThemeSettings = () => {
               const active = reportSettings.themeId === p.id;
               return (
                 <button key={p.id} onClick={() => updateReport({ themeId: p.id })}
-                  className={`p-3 rounded-xl border-2 text-left transition-all ${active ? "border-primary scale-[1.02]" : "border-border hover:border-primary/40"}`}>
+                  className={`p-3 rounded-xl border-2 text-left transition-all ${active ? "border-primary scale-[1.02]": "border-border hover:border-primary/40"}`}>
                   <div className="flex gap-1.5 mb-1.5">
-                    <div className="w-5 h-5 rounded-md border" style={{ backgroundColor: p.header }} />
-                    <div className="w-5 h-5 rounded-md border" style={{ backgroundColor: p.accent }} />
+                    <div className="w-5 h-5 rounded-md border"style={{ backgroundColor: p.header }} />
+                    <div className="w-5 h-5 rounded-md border"style={{ backgroundColor: p.accent }} />
                   </div>
                   <p className="text-xs font-semibold">{p.name}</p>
                 </button>
               );
             })}
-            <button onClick={() => updateReport({ themeId: "custom" })}
-              className={`p-3 rounded-xl border-2 text-left transition-all ${reportSettings.themeId === "custom" ? "border-primary scale-[1.02]" : "border-border hover:border-primary/40"}`}>
+            <button onClick={() => updateReport({ themeId: "custom"})}
+              className={`p-3 rounded-xl border-2 text-left transition-all ${reportSettings.themeId === "custom"? "border-primary scale-[1.02]": "border-border hover:border-primary/40"}`}>
               <div className="flex gap-1.5 mb-1.5">
-                <div className="w-5 h-5 rounded-md border" style={{ backgroundColor: reportSettings.customHeader || "#888" }} />
-                <div className="w-5 h-5 rounded-md border" style={{ backgroundColor: reportSettings.customAccent || "#888" }} />
+                <div className="w-5 h-5 rounded-md border"style={{ backgroundColor: reportSettings.customHeader || "#888"}} />
+                <div className="w-5 h-5 rounded-md border"style={{ backgroundColor: reportSettings.customAccent || "#888"}} />
               </div>
               <p className="text-xs font-semibold">কাস্টম</p>
             </button>
           </div>
         </div>
 
-        {reportSettings.themeId === "custom" && (
+        {reportSettings.themeId === "custom"&& (
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
               <label className="text-xs font-medium">হেডার কালার</label>
               <div className="flex items-center gap-2">
-                <input type="color" value={reportSettings.customHeader || "#2563eb"}
+                <input type="color"value={reportSettings.customHeader || "#2563eb"}
                   onChange={(e) => updateReport({ customHeader: e.target.value })}
-                  className="w-10 h-10 rounded-lg border border-border cursor-pointer" />
+                  className="w-10 h-10 rounded-lg border border-border cursor-pointer"/>
                 <span className="text-[11px] text-muted-foreground font-mono">{reportSettings.customHeader || "#2563eb"}</span>
               </div>
             </div>
             <div className="space-y-1">
               <label className="text-xs font-medium">অ্যাকসেন্ট কালার</label>
               <div className="flex items-center gap-2">
-                <input type="color" value={reportSettings.customAccent || "#3b82f6"}
+                <input type="color"value={reportSettings.customAccent || "#3b82f6"}
                   onChange={(e) => updateReport({ customAccent: e.target.value })}
-                  className="w-10 h-10 rounded-lg border border-border cursor-pointer" />
+                  className="w-10 h-10 rounded-lg border border-border cursor-pointer"/>
                 <span className="text-[11px] text-muted-foreground font-mono">{reportSettings.customAccent || "#3b82f6"}</span>
               </div>
             </div>
@@ -280,7 +280,7 @@ const AdminThemeSettings = () => {
           <label className="text-xs font-semibold">ফুটার টেক্সট</label>
           <input value={reportSettings.footerText} onChange={(e) => updateReport({ footerText: e.target.value })}
             placeholder="Target — Smart Exam Platform"
-            className="w-full glass-strong rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+            className="w-full glass-strong rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
         </div>
 
         <div className="space-y-2">
@@ -294,10 +294,10 @@ const AdminThemeSettings = () => {
             <div key={i} className="flex gap-2 items-center">
               <input value={lnk.label} onChange={(e) => updateFooterLink(i, "label", e.target.value)}
                 placeholder="Website / Facebook / Telegram"
-                className="flex-1 glass-strong rounded-lg px-3 py-2 text-xs" />
+                className="flex-1 glass-strong rounded-lg px-3 py-2 text-xs"/>
               <input value={lnk.url} onChange={(e) => updateFooterLink(i, "url", e.target.value)}
                 placeholder="https://..."
-                className="flex-[1.5] glass-strong rounded-lg px-3 py-2 text-xs" />
+                className="flex-[1.5] glass-strong rounded-lg px-3 py-2 text-xs"/>
               <button onClick={() => removeFooterLink(i)} className="p-2 rounded-lg bg-destructive/10 text-destructive">
                 <Trash2 size={12} />
               </button>
@@ -310,21 +310,21 @@ const AdminThemeSettings = () => {
       </div>
 
       <div className="glass-card-static p-5 space-y-4 mb-6">
-        <h2 className="text-sm font-bold flex items-center gap-2"><Trophy size={16} className="text-warning" /> লিডারবোর্ড ও লাইভ পরীক্ষা</h2>
+        <h2 className="text-sm font-bold flex items-center gap-2"><Trophy size={16} className="text-warning"/> লিডারবোর্ড ও লাইভ পরীক্ষা</h2>
 
         <div>
           <label className="text-xs font-semibold mb-2 block">পডিয়াম কালার (১ম / ২য় / ৩য়)</label>
           <div className="grid grid-cols-3 gap-3">
             {([
-              { key: "gold" as const, label: "১ম স্থান" },
-              { key: "silver" as const, label: "২য় স্থান" },
-              { key: "bronze" as const, label: "৩য় স্থান" },
+              { key: "gold"as const, label: "১ম স্থান"},
+              { key: "silver"as const, label: "২য় স্থান"},
+              { key: "bronze"as const, label: "৩য় স্থান"},
             ]).map((m) => (
               <div key={m.key} className="space-y-1">
                 <label className="text-[11px] font-medium">{m.label}</label>
                 <div className="flex items-center gap-2">
-                  <input type="color" value={podium[m.key]} onChange={(e) => updatePodium(m.key, e.target.value)}
-                    className="w-10 h-10 rounded-lg border border-border cursor-pointer" />
+                  <input type="color"value={podium[m.key]} onChange={(e) => updatePodium(m.key, e.target.value)}
+                    className="w-10 h-10 rounded-lg border border-border cursor-pointer"/>
                   <span className="text-[10px] text-muted-foreground font-mono">{podium[m.key]}</span>
                 </div>
               </div>
@@ -334,15 +334,15 @@ const AdminThemeSettings = () => {
           <div className="mt-3 flex items-end justify-center gap-2 p-3 rounded-xl bg-muted/30">
             <div className="flex-1 text-center">
               <p className="text-[10px] text-muted-foreground mb-1">২য়</p>
-              <div className="h-12 rounded-t-lg" style={{ background: `linear-gradient(to bottom, ${podium.silver}cc, ${podium.silver})` }} />
+              <div className="h-12 rounded-t-lg"style={{ background: `linear-gradient(to bottom, ${podium.silver}cc, ${podium.silver})` }} />
             </div>
             <div className="flex-1 text-center">
               <p className="text-[10px] text-muted-foreground mb-1">১ম</p>
-              <div className="h-16 rounded-t-lg" style={{ background: `linear-gradient(to bottom, ${podium.gold}cc, ${podium.gold})` }} />
+              <div className="h-16 rounded-t-lg"style={{ background: `linear-gradient(to bottom, ${podium.gold}cc, ${podium.gold})` }} />
             </div>
             <div className="flex-1 text-center">
               <p className="text-[10px] text-muted-foreground mb-1">৩য়</p>
-              <div className="h-10 rounded-t-lg" style={{ background: `linear-gradient(to bottom, ${podium.bronze}cc, ${podium.bronze})` }} />
+              <div className="h-10 rounded-t-lg"style={{ background: `linear-gradient(to bottom, ${podium.bronze}cc, ${podium.bronze})` }} />
             </div>
           </div>
         </div>
@@ -353,13 +353,13 @@ const AdminThemeSettings = () => {
           <div className="flex items-center gap-3">
             <div className="w-14 h-14 rounded-xl bg-muted/50 border border-border flex items-center justify-center overflow-hidden shrink-0">
               {reportSettings.liveExamLogo
-                ? <img src={reportSettings.liveExamLogo} alt="logo" className="w-full h-full object-cover" />
-                : <ImageIcon size={20} className="text-muted-foreground" />}
+                ? <img src={reportSettings.liveExamLogo} alt="logo"className="w-full h-full object-cover"/>
+                : <ImageIcon size={20} className="text-muted-foreground"/>}
             </div>
             <div className="flex-1 flex flex-wrap gap-2">
               <label className="px-3 py-2 rounded-lg bg-primary/10 text-primary text-xs font-semibold cursor-pointer">
                 আপলোড
-                <input type="file" accept="image/*" className="hidden"
+                <input type="file"accept="image/*"className="hidden"
                   onChange={(e) => onLogoUpload(e.target.files?.[0] || null)} />
               </label>
               {reportSettings.liveExamLogo && (
@@ -384,8 +384,8 @@ const AdminThemeSettings = () => {
                 বন্ধ থাকলে শুধু টপ ৩ পডিয়াম দেখাবে — চালু করলে সবার র‍্যাঙ্কিং স্ক্রল করে দেখা যাবে
               </p>
             </div>
-            <div className={`relative w-10 h-5 rounded-full transition-colors shrink-0 ${reportSettings.showFullLeaderboardToStudents ? "bg-primary" : "bg-muted"}`}>
-              <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${reportSettings.showFullLeaderboardToStudents ? "left-[22px]" : "left-0.5"}`} />
+            <div className={`relative w-10 h-5 rounded-full transition-colors shrink-0 ${reportSettings.showFullLeaderboardToStudents ? "bg-primary": "bg-muted"}`}>
+              <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${reportSettings.showFullLeaderboardToStudents ? "left-[22px]": "left-0.5"}`} />
             </div>
           </button>
         </div>

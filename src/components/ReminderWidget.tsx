@@ -41,7 +41,7 @@ const ReminderWidget = () => {
         onClick={() => setCollapsed(!collapsed)}
         className="flex items-center gap-1 px-2.5 py-1.5 md:px-3 md:py-2 rounded-full bg-primary text-primary-foreground text-[10px] md:text-xs font-medium shadow-lg hover:shadow-xl transition-all"
       >
-        <Bell size={12} className="md:hidden" /><Bell size={14} className="hidden md:block" />
+        <Bell size={12} className="md:hidden"/><Bell size={14} className="hidden md:block"/>
         {visible.length} রিমাইন্ডার
         {collapsed ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
       </button>
@@ -53,7 +53,7 @@ const ReminderWidget = () => {
             if (!timeLeft) return null;
             return (
               <div key={r.id} className="rounded-lg md:rounded-xl border border-border bg-background/95 backdrop-blur-md shadow-lg overflow-hidden">
-                <div className="h-1" style={{ backgroundColor: r.color || "hsl(var(--primary))" }} />
+                <div className="h-1"style={{ backgroundColor: r.color || "hsl(var(--primary))"}} />
                 <div className="p-2 md:p-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0 flex-1">
@@ -61,11 +61,11 @@ const ReminderWidget = () => {
                       {r.description && <p className="text-[9px] md:text-[10px] text-muted-foreground mt-0.5 line-clamp-1 md:line-clamp-2">{r.description}</p>}
                     </div>
                     <button onClick={() => setDismissed((prev) => new Set(prev).add(r.id))} className="p-1 rounded-lg hover:bg-muted transition-colors flex-shrink-0">
-                      <X size={12} className="text-muted-foreground" />
+                      <X size={12} className="text-muted-foreground"/>
                     </button>
                   </div>
                   <div className="mt-2 flex items-center gap-2">
-                    <div className="text-[11px] font-bold px-2 py-1 rounded-lg" style={{ backgroundColor: `${r.color || "hsl(var(--primary))"}20`, color: r.color || "hsl(var(--primary))" }}>
+                    <div className="text-[11px] font-bold px-2 py-1 rounded-lg"style={{ backgroundColor: `${r.color || "hsl(var(--primary))"}20`, color: r.color || "hsl(var(--primary))"}}>
                       ⏳ {formatCountdown(timeLeft)}
                     </div>
                     <span className="text-[10px] text-muted-foreground">{new Date(r.targetDate).toLocaleDateString("bn-BD")}</span>

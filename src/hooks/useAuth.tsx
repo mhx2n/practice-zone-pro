@@ -149,7 +149,7 @@ export async function signIn(email: string, password: string) {
     if (isBackendConnectivityError(error)) {
       const session = await restoreLocalSession(email);
       if (session?.user) return { session, user: session.user };
-      await supabase.auth.signOut({ scope: "local" }).catch(() => undefined);
+      await supabase.auth.signOut({ scope: "local"}).catch(() => undefined);
     }
     throw toUserFacingError(error, "লগইন");
   }
@@ -161,7 +161,7 @@ export async function signUp(email: string, password: string, fullName?: string)
       email,
       password,
       options: {
-        emailRedirectTo: typeof window !== "undefined" ? window.location.origin : undefined,
+        emailRedirectTo: typeof window !== "undefined"? window.location.origin : undefined,
         data: fullName ? { full_name: fullName } : undefined,
       },
     });
@@ -169,7 +169,7 @@ export async function signUp(email: string, password: string, fullName?: string)
     return data;
   } catch (error) {
     if (isBackendConnectivityError(error)) {
-      await supabase.auth.signOut({ scope: "local" }).catch(() => undefined);
+      await supabase.auth.signOut({ scope: "local"}).catch(() => undefined);
     }
     throw toUserFacingError(error, "অ্যাকাউন্ট তৈরি");
   }
@@ -180,12 +180,12 @@ export async function signInWithGoogle() {
   // (Vercel, custom domains, etc.) — the lovable cloud auth helper
   // requires the /~oauth/* endpoints which are only served on
   // Lovable preview/hosting and 404 elsewhere.
-  const redirectTo = typeof window !== "undefined" ? `${window.location.origin}/` : undefined;
+  const redirectTo = typeof window !== "undefined"? `${window.location.origin}/` : undefined;
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
       redirectTo,
-      queryParams: { prompt: "select_account" },
+      queryParams: { prompt: "select_account"},
     },
   });
   if (error) {
@@ -207,7 +207,7 @@ export async function signOut() {
     if (error) throw error;
   } catch (error) {
     if (isBackendConnectivityError(error)) {
-      const { error: localError } = await supabase.auth.signOut({ scope: "local" });
+      const { error: localError } = await supabase.auth.signOut({ scope: "local"});
       if (!localError) return;
       throw toUserFacingError(localError, "লগআউট");
     }

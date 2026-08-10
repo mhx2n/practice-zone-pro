@@ -78,7 +78,7 @@ const AdminLiveExams = () => {
     } else {
       const { error } = await supabase.from("live_exam_premium_batches")
         .insert({ live_exam_id: liveExamId, premium_batch_id: batchId });
-      if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
+      if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive"});
     }
     const { data } = await supabase.from("live_exam_premium_batches").select("id,live_exam_id,premium_batch_id");
     setBatchLinks((data || []) as any);
@@ -108,7 +108,7 @@ const AdminLiveExams = () => {
 
   const createLiveExam = async () => {
     if (!form.title || !form.exam_id || !form.start_time || !form.end_time) {
-      return toast({ title: "সব তথ্য পূরণ করুন", variant: "destructive" });
+      return toast({ title: "সব তথ্য পূরণ করুন", variant: "destructive"});
     }
     const { data: created, error } = await supabase.from("live_exams").insert({
       title: form.title,
@@ -117,18 +117,18 @@ const AdminLiveExams = () => {
       start_time: new Date(form.start_time).toISOString(),
       end_time: new Date(form.end_time).toISOString(),
       duration: Number(form.duration),
-      access_mode: form.premium_batch_ids.length ? "premium" : "open",
+      access_mode: form.premium_batch_ids.length ? "premium": "open",
       show_leaderboard: form.show_leaderboard,
       status: "scheduled",
     }).select("id").single();
-    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
+    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive"});
     if (created && form.premium_batch_ids.length) {
       const { error: linkErr } = await supabase.from("live_exam_premium_batches").insert(
         form.premium_batch_ids.map((bid) => ({ live_exam_id: created.id, premium_batch_id: bid }))
       );
-      if (linkErr) toast({ title: "ব্যাচ যুক্ত করা যায়নি", description: linkErr.message, variant: "destructive" });
+      if (linkErr) toast({ title: "ব্যাচ যুক্ত করা যায়নি", description: linkErr.message, variant: "destructive"});
     }
-    toast({ title: "লাইভ পরীক্ষা তৈরি হয়েছে" });
+    toast({ title: "লাইভ পরীক্ষা তৈরি হয়েছে"});
     setShowForm(false);
     setForm({ title: "", description: "", exam_id: "", start_time: "", end_time: "", duration: 60, show_leaderboard: true, premium_batch_ids: [] });
     load();
@@ -153,14 +153,14 @@ const AdminLiveExams = () => {
     if (!selected) return;
     (async () => {
       const sorted = [...parts].sort((a, b) => b.score - a.score || a.time_taken_seconds - b.time_taken_seconds);
-      const submitted = parts.filter((p) => p.status === "submitted" || p.submitted_at);
-      const fmt = (d: string) => new Date(d).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" });
+      const submitted = parts.filter((p) => p.status === "submitted"|| p.submitted_at);
+      const fmt = (d: string) => new Date(d).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short"});
       const timeText = (seconds = 0) => {
         const mm = Math.floor(seconds / 60);
         const ss = seconds % 60;
         return `${mm}:${String(ss).padStart(2, "0")}`;
       };
-      const esc = (s: any) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string));
+      const esc = (s: any) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c] as string));
 
       const reportCfg = siteSettings?.reportSettings || defaultReportSettings;
       const theme = resolveReportTheme(reportCfg);
@@ -201,7 +201,7 @@ const AdminLiveExams = () => {
         const av = avatarMap[p.user_id];
         const initial = esc((pr?.full_name || "U")[0].toUpperCase());
         const avatarCell = av
-          ? `<img src="${av}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;margin:0 auto;" />`
+          ? `<img src="${av}"style="width:28px;height:28px;border-radius:50%;object-fit:cover;display:block;margin:0 auto;"/>`
           : `<div style="width:28px;height:28px;border-radius:50%;background:${theme.accent};color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;margin:0 auto;">${initial}</div>`;
         const rank = i + 1;
         const rankBadge =
@@ -220,7 +220,7 @@ const AdminLiveExams = () => {
             <td style="text-align:center;color:#64748B;">${esc(p.skipped ?? 0)}</td>
             <td style="text-align:center;font-weight:600;">${p.percentage.toFixed(1)}%</td>
             <td style="text-align:center;color:#475569;">${timeText(p.time_taken_seconds || 0)}</td>
-            <td style="text-align:center;font-size:11px;color:#475569;text-transform:capitalize;">${esc(p.status || (p.submitted_at ? "submitted" : "started"))}</td>
+            <td style="text-align:center;font-size:11px;color:#475569;text-transform:capitalize;">${esc(p.status || (p.submitted_at ? "submitted": "started"))}</td>
           </tr>
         `;
       }).join("");
@@ -229,7 +229,7 @@ const AdminLiveExams = () => {
       const negMark =
         liveOverride !== null && liveOverride !== undefined
           ? Number(liveOverride)
-          : (examDetail && "negative_marking" in examDetail ? Number((examDetail as any).negative_marking) : null);
+          : (examDetail && "negative_marking"in examDetail ? Number((examDetail as any).negative_marking) : null);
       const infoBlock = `
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px 18px;padding:14px 18px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;margin:14px 0 16px;font-size:12px;">
           ${[
@@ -237,7 +237,7 @@ const AdminLiveExams = () => {
             ["Live Title", selected.title || "—"],
             ["Duration", `${selected.duration || examDetail?.duration || 0} min`],
             ["Questions", `${examDetail?.question_count ?? "—"}`],
-            ["Negative Mark", negMark === null ? "—" : String(negMark)],
+            ["Negative Mark", negMark === null ? "—": String(negMark)],
             ["Participants", String(parts.length)],
             ["Submitted", String(submitted.length)],
             ["Window", `${fmt(selected.start_time)} → ${fmt(selected.end_time)}`],
@@ -252,7 +252,7 @@ const AdminLiveExams = () => {
 
       const footerLinks = (reportCfg.footerLinks || [])
         .filter((l) => l.label && l.url)
-        .map((l) => `<a href="${esc(l.url)}" style="color:${theme.accent};text-decoration:none;margin:0 6px;">${esc(l.label || l.url)}</a>`)
+        .map((l) => `<a href="${esc(l.url)}"style="color:${theme.accent};text-decoration:none;margin:0 6px;">${esc(l.label || l.url)}</a>`)
         .join('<span style="color:#CBD5E1;">•</span>');
 
       // Build offscreen container
@@ -263,7 +263,7 @@ const AdminLiveExams = () => {
           <div style="background:linear-gradient(135deg, ${theme.header}, ${theme.accent});color:#fff;padding:24px 28px;">
             <div style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.85;font-weight:600;">Final Result Report</div>
             <div style="font-size:24px;font-weight:800;margin-top:4px;line-height:1.2;">${esc(selected.title || "Live Exam Report")}</div>
-            <div style="font-size:11.5px;margin-top:6px;opacity:.9;">Generated: ${esc(new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" }))}</div>
+            <div style="font-size:11.5px;margin-top:6px;opacity:.9;">Generated: ${esc(new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short"}))}</div>
           </div>
           <div style="padding:18px 24px 28px;">
             ${infoBlock}
@@ -275,7 +275,7 @@ const AdminLiveExams = () => {
                 </tr>
               </thead>
               <tbody>
-                ${rows || `<tr><td colspan="10" style="text-align:center;padding:30px;color:#94A3B8;">No participants yet</td></tr>`}
+                ${rows || `<tr><td colspan="10"style="text-align:center;padding:30px;color:#94A3B8;">No participants yet</td></tr>`}
               </tbody>
             </table>
             <div style="margin-top:22px;padding-top:14px;border-top:2px solid ${theme.header};display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#475569;">
@@ -344,7 +344,7 @@ const AdminLiveExams = () => {
           doc.setPage(pn);
           doc.setFontSize(8.5);
           doc.setTextColor(100, 116, 139);
-          doc.text(`Page ${pn} / ${total}`, pageW - 8, pageH - 4, { align: "right" });
+          doc.text(`Page ${pn} / ${total}`, pageW - 8, pageH - 4, { align: "right"});
         }
 
         doc.save(`report-${selected.title.replace(/[\\/:*?"<>|]+/g, "_")}.pdf`);
@@ -359,7 +359,7 @@ const AdminLiveExams = () => {
   const downloadAvatar = async (uid: string) => {
     const pr = profiles[uid];
     if (!pr?.avatar_url) {
-      toast({ title: "এই ইউজারের কোনো প্রোফাইল ছবি নেই", variant: "destructive" });
+      toast({ title: "এই ইউজারের কোনো প্রোফাইল ছবি নেই", variant: "destructive"});
       return;
     }
     try {
@@ -377,7 +377,7 @@ const AdminLiveExams = () => {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (e: any) {
-      toast({ title: "ডাউনলোড ব্যর্থ", description: e.message, variant: "destructive" });
+      toast({ title: "ডাউনলোড ব্যর্থ", description: e.message, variant: "destructive"});
     }
   };
 
@@ -395,17 +395,17 @@ const AdminLiveExams = () => {
 
       {showForm && (
         <div className="glass-card-static p-5 space-y-3">
-          <input className="w-full glass-strong rounded-lg px-3 py-2 text-sm" placeholder="টাইটেল"
+          <input className="w-full glass-strong rounded-lg px-3 py-2 text-sm"placeholder="টাইটেল"
             value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
-          <textarea className="w-full glass-strong rounded-lg px-3 py-2 text-sm" placeholder="বিবরণ" rows={2}
+          <textarea className="w-full glass-strong rounded-lg px-3 py-2 text-sm"placeholder="বিবরণ"rows={2}
             value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           <select className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
             value={form.exam_id} onChange={(e) => setForm({ ...form, exam_id: e.target.value })}>
             <option value="">পরীক্ষা সিলেক্ট করুন</option>
-            {exams.map((x) => <option key={x.id} value={x.id}>{x.title} ({x.question_count}টি) {x.published ? "✓" : "• অপ্রকাশিত"}</option>)}
+            {exams.map((x) => <option key={x.id} value={x.id}>{x.title} ({x.question_count}টি) {x.published ? "": "• অপ্রকাশিত"}</option>)}
           </select>
           <div className="rounded-xl border border-border p-3 space-y-2">
-            <p className="text-xs font-semibold flex items-center gap-1.5"><Crown size={13} className="text-warning" /> প্রিমিয়াম ব্যাচ অ্যাক্সেস (ঐচ্ছিক)</p>
+            <p className="text-xs font-semibold flex items-center gap-1.5"><Crown size={13} className="text-warning"/> প্রিমিয়াম ব্যাচ অ্যাক্সেস (ঐচ্ছিক)</p>
             <p className="text-[11px] text-muted-foreground">কোনো ব্যাচ সিলেক্ট না করলে সবাই দেখতে পাবে। সিলেক্ট করলে শুধু ঐ ব্যাচের সদস্যরাই পরীক্ষাটি দেখতে ও দিতে পারবে — বাকিদের আইডিতে এটি একেবারেই দেখাবে না।</p>
             {premiumBatches.length === 0 ? (
               <p className="text-[11px] text-muted-foreground">কোনো প্রিমিয়াম ব্যাচ নেই — আগে ব্যাচ তৈরি করুন।</p>
@@ -420,7 +420,7 @@ const AdminLiveExams = () => {
                         premium_batch_ids: on ? f.premium_batch_ids.filter((x) => x !== b.id) : [...f.premium_batch_ids, b.id],
                       }))}
                       className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors inline-flex items-center gap-1.5 ${
-                        on ? "bg-warning/15 text-warning border-warning/40" : "border-border text-muted-foreground hover:bg-muted"
+                        on ? "bg-warning/15 text-warning border-warning/40": "border-border text-muted-foreground hover:bg-muted"
                       }`}>
                       {on ? <Lock size={11} /> : <LockOpen size={11} />} {b.name}
                     </button>
@@ -433,22 +433,22 @@ const AdminLiveExams = () => {
           <div className="grid grid-cols-2 gap-2">
             <div>
               <label className="text-xs text-muted-foreground">শুরু</label>
-              <input type="datetime-local" className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
+              <input type="datetime-local"className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
                 value={form.start_time} onChange={(e) => setForm({ ...form, start_time: e.target.value })} />
             </div>
             <div>
               <label className="text-xs text-muted-foreground">শেষ</label>
-              <input type="datetime-local" className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
+              <input type="datetime-local"className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
                 value={form.end_time} onChange={(e) => setForm({ ...form, end_time: e.target.value })} />
             </div>
           </div>
           <div>
             <label className="text-xs text-muted-foreground">সময়কাল (মিনিট)</label>
-            <input type="number" className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
+            <input type="number"className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
               value={form.duration} onChange={(e) => setForm({ ...form, duration: Number(e.target.value) })} />
           </div>
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={form.show_leaderboard}
+            <input type="checkbox"checked={form.show_leaderboard}
               onChange={(e) => setForm({ ...form, show_leaderboard: e.target.checked })} />
             জমা দেওয়ার পরে র‍্যাঙ্কিং দেখাও
           </label>
@@ -470,8 +470,8 @@ const AdminLiveExams = () => {
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-semibold truncate">{le.title}</p>
                     <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
-                      le.status === "live" ? "bg-success/15 text-success" :
-                      le.status === "ended" ? "bg-muted text-muted-foreground" :
+                      le.status === "live"? "bg-success/15 text-success":
+                      le.status === "ended"? "bg-muted text-muted-foreground":
                       "bg-warning/15 text-warning"
                     }`}>{le.status}</span>
                   </div>
@@ -494,7 +494,7 @@ const AdminLiveExams = () => {
                           const on = linksOf(le.id).some((l) => l.premium_batch_id === b.id);
                           return (
                             <button key={b.id} onClick={() => toggleBatchLink(le.id, b.id)}
-                              className={`px-2.5 py-1 rounded-full text-[11px] border ${on ? "bg-warning/15 text-warning border-warning/40" : "border-border text-muted-foreground hover:bg-muted"}`}>
+                              className={`px-2.5 py-1 rounded-full text-[11px] border ${on ? "bg-warning/15 text-warning border-warning/40": "border-border text-muted-foreground hover:bg-muted"}`}>
                               {b.name}
                             </button>
                           );
@@ -505,8 +505,8 @@ const AdminLiveExams = () => {
                 <div className="flex gap-1.5 flex-wrap">
                   <button onClick={() => loadDetail(le)} className="px-2.5 py-1.5 rounded-lg bg-primary/10 text-primary text-xs">বিস্তারিত</button>
                   <button onClick={() => setAccessFor(accessFor === le.id ? null : le.id)} className="px-2.5 py-1.5 rounded-lg bg-warning/10 text-warning text-xs inline-flex items-center gap-1"><Crown size={12} /> অ্যাক্সেস</button>
-                  {le.status !== "live" && <button onClick={() => updateStatus(le.id, "live")} className="px-2.5 py-1.5 rounded-lg bg-success/10 text-success text-xs">শুরু</button>}
-                  {le.status === "live" && <button onClick={() => updateStatus(le.id, "ended")} className="px-2.5 py-1.5 rounded-lg bg-warning/10 text-warning text-xs">শেষ</button>}
+                  {le.status !== "live"&& <button onClick={() => updateStatus(le.id, "live")} className="px-2.5 py-1.5 rounded-lg bg-success/10 text-success text-xs">শুরু</button>}
+                  {le.status === "live"&& <button onClick={() => updateStatus(le.id, "ended")} className="px-2.5 py-1.5 rounded-lg bg-warning/10 text-warning text-xs">শেষ</button>}
                   <button onClick={() => deleteLiveExam(le.id)} className="px-2.5 py-1.5 rounded-lg bg-destructive/10 text-destructive text-xs"><Trash2 size={12} /></button>
                 </div>
               </div>
@@ -545,7 +545,7 @@ const AdminLiveExams = () => {
                         <td className="p-2">
                           <div className="flex items-center gap-2">
                             {pr?.avatar_url ? (
-                              <img src={pr.avatar_url} alt="" className="w-8 h-8 rounded-full object-cover shrink-0" />
+                              <img src={pr.avatar_url} alt=""className="w-8 h-8 rounded-full object-cover shrink-0"/>
                             ) : (
                               <div className="w-8 h-8 rounded-full bg-primary/15 text-primary flex items-center justify-center text-[10px] font-bold shrink-0">
                                 {(pr?.full_name || "U")[0].toUpperCase()}
@@ -567,7 +567,7 @@ const AdminLiveExams = () => {
                           <button
                             onClick={() => downloadAvatar(p.user_id)}
                             disabled={!pr?.avatar_url}
-                            title={pr?.avatar_url ? "প্রোফাইল ছবি ডাউনলোড" : "ছবি নেই"}
+                            title={pr?.avatar_url ? "প্রোফাইল ছবি ডাউনলোড": "ছবি নেই"}
                             className="p-1.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 disabled:opacity-40 disabled:cursor-not-allowed">
                             <ImageDown size={12} />
                           </button>

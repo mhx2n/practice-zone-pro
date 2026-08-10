@@ -22,13 +22,13 @@ const defaultSiteSettings: SiteSettings = {
   contactContent: "<p>আমাদের সাথে Telegram এ যোগাযোগ করুন।</p>",
   footerDescription: "আপনার পরীক্ষার প্রস্তুতি এখন আরও সহজ। অনুশীলন করুন, শিখুন, সফল হোন।",
   footerLinks: [
-    { label: "পরীক্ষা সমূহ", url: "/exams" },
-    { label: "ফলাফল", url: "/results" },
-    { label: "নোটিস বোর্ড", url: "/notices" },
-    { label: "সম্পর্কে", url: "/about" },
+    { label: "পরীক্ষা সমূহ", url: "/exams"},
+    { label: "ফলাফল", url: "/results"},
+    { label: "নোটিস বোর্ড", url: "/notices"},
+    { label: "সম্পর্কে", url: "/about"},
   ],
   socialLinks: [
-    { label: "Telegram", url: "https://t.me/FX_Ur_Target" },
+    { label: "Telegram", url: "https://t.me/FX_Ur_Target"},
   ],
   brandName: "Target",
   brandEmoji: "🎯",

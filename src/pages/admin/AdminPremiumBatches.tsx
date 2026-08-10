@@ -8,12 +8,12 @@ interface Member { id: string; user_id: string; premium_batch_id: string; }
 interface Profile { user_id: string; full_name: string | null; email: string | null; }
 interface Link { id: string; premium_batch_id: string; ref: string; }
 
-type ContentKind = "subject" | "section" | "exam";
+type ContentKind = "subject"| "section"| "exam";
 
 const KIND_META: Record<ContentKind, { table: string; column: string; label: string }> = {
-  subject: { table: "subject_premium_batches", column: "subject_id", label: "বিষয়" },
-  section: { table: "section_premium_batches", column: "section_id", label: "সেকশন" },
-  exam: { table: "exam_premium_batches", column: "exam_id", label: "পরীক্ষা" },
+  subject: { table: "subject_premium_batches", column: "subject_id", label: "বিষয়"},
+  section: { table: "section_premium_batches", column: "section_id", label: "সেকশন"},
+  exam: { table: "exam_premium_batches", column: "exam_id", label: "পরীক্ষা"},
 };
 
 const AdminPremiumBatches = () => {
@@ -25,13 +25,13 @@ const AdminPremiumBatches = () => {
   const [desc, setDesc] = useState("");
   const [selected, setSelected] = useState<PB | null>(null);
   const [addUserId, setAddUserId] = useState("");
-  const [panel, setPanel] = useState<"members" | "content">("members");
+  const [panel, setPanel] = useState<"members"| "content">("members");
 
   const [subjects, setSubjects] = useState<{ id: string; name: string }[]>([]);
   const [sections, setSections] = useState<{ id: string; name: string }[]>([]);
   const [exams, setExams] = useState<{ id: string; title: string }[]>([]);
   const [links, setLinks] = useState<Record<ContentKind, Link[]>>({ subject: [], section: [], exam: [] });
-  const [pick, setPick] = useState<Record<ContentKind, string>>({ subject: "", section: "", exam: "" });
+  const [pick, setPick] = useState<Record<ContentKind, string>>({ subject: "", section: "", exam: ""});
 
   const load = async () => {
     const [b, m, u, s, sec, ex, ls, lsec, lex] = await Promise.all([
@@ -62,9 +62,9 @@ const AdminPremiumBatches = () => {
   const create = async () => {
     if (!name.trim()) return;
     const { error } = await supabase.from("premium_batches").insert({ name: name.trim(), description: desc.trim() });
-    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
+    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive"});
     setName(""); setDesc("");
-    toast({ title: "প্রিমিয়াম ব্যাচ তৈরি হয়েছে ✅" });
+    toast({ title: "প্রিমিয়াম ব্যাচ তৈরি হয়েছে "});
     load();
   };
 
@@ -80,9 +80,9 @@ const AdminPremiumBatches = () => {
     const { error } = await supabase.from("premium_batch_members").insert({
       premium_batch_id: selected.id, user_id: addUserId,
     });
-    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
+    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive"});
     setAddUserId("");
-    toast({ title: "ইউজার যোগ হয়েছে ✅" });
+    toast({ title: "ইউজার যোগ হয়েছে "});
     load();
   };
 
@@ -98,9 +98,9 @@ const AdminPremiumBatches = () => {
     const { error } = await supabase.from(meta.table as never).insert({
       premium_batch_id: selected.id, [meta.column]: value,
     } as never);
-    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive" });
-    setPick((p) => ({ ...p, [kind]: "" }));
-    toast({ title: `${meta.label} লক করা হয়েছে 🔒` });
+    if (error) return toast({ title: "ত্রুটি", description: error.message, variant: "destructive"});
+    setPick((p) => ({ ...p, [kind]: ""}));
+    toast({ title: `${meta.label} লক করা হয়েছে ` });
     load();
   };
 
@@ -114,8 +114,8 @@ const AdminPremiumBatches = () => {
   const selLinks = (kind: ContentKind) => (selected ? links[kind].filter((l) => l.premium_batch_id === selected.id) : []);
 
   const optionsFor = (kind: ContentKind): { id: string; label: string }[] =>
-    kind === "subject" ? subjects.map((s) => ({ id: s.id, label: s.name }))
-      : kind === "section" ? sections.map((s) => ({ id: s.id, label: s.name }))
+    kind === "subject"? subjects.map((s) => ({ id: s.id, label: s.name }))
+      : kind === "section"? sections.map((s) => ({ id: s.id, label: s.name }))
         : exams.map((e) => ({ id: e.id, label: e.title }));
 
   const labelOf = (kind: ContentKind, ref: string) => optionsFor(kind).find((o) => o.id === ref)?.label || ref.slice(0, 8);
@@ -123,14 +123,14 @@ const AdminPremiumBatches = () => {
   return (
     <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-2xl font-bold mb-1 flex items-center gap-2"><Crown size={22} className="text-warning" /> প্রিমিয়াম ব্যাচ</h1>
+        <h1 className="text-2xl font-bold mb-1 flex items-center gap-2"><Crown size={22} className="text-warning"/> প্রিমিয়াম ব্যাচ</h1>
         <p className="text-sm text-muted-foreground">ব্যাচে ইউজার যোগ করুন এবং বিষয়/সেকশন/পরীক্ষা লক করুন। লক করা কনটেন্ট শুধুমাত্র ব্যাচের সদস্যরাই দেখতে পাবে — অন্যদের কাছে এটি সম্পূর্ণ অদৃশ্য থাকবে।</p>
       </div>
 
       <div className="glass-card-static p-5 space-y-3">
         <h2 className="text-sm font-bold">নতুন প্রিমিয়াম ব্যাচ</h2>
-        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="ব্যাচ নাম (যেমন: VIP-2026)" className="w-full glass-strong rounded-lg px-3 py-2 text-sm" />
-        <textarea value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="বিবরণ (ঐচ্ছিক)" rows={2} className="w-full glass-strong rounded-lg px-3 py-2 text-sm" />
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="ব্যাচ নাম (যেমন: VIP-2026)"className="w-full glass-strong rounded-lg px-3 py-2 text-sm"/>
+        <textarea value={desc} onChange={(e) => setDesc(e.target.value)} placeholder="বিবরণ (ঐচ্ছিক)"rows={2} className="w-full glass-strong rounded-lg px-3 py-2 text-sm"/>
         <button onClick={create} className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold inline-flex items-center gap-1"><Plus size={14} /> তৈরি</button>
       </div>
 
@@ -144,7 +144,7 @@ const AdminPremiumBatches = () => {
               return (
                 <div key={b.id} className="glass-strong rounded-xl p-3 flex items-center gap-3">
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold truncate flex items-center gap-2"><Crown size={12} className="text-warning" /> {b.name}</p>
+                    <p className="text-sm font-semibold truncate flex items-center gap-2"><Crown size={12} className="text-warning"/> {b.name}</p>
                     {b.description && <p className="text-xs text-muted-foreground truncate">{b.description}</p>}
                     <p className="text-[11px] text-primary mt-0.5">{count} সদস্য • {locked} লকড কনটেন্ট</p>
                   </div>
@@ -159,20 +159,20 @@ const AdminPremiumBatches = () => {
       {selected && (
         <div className="glass-card-static p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-base font-bold flex items-center gap-2"><Crown size={16} className="text-warning" /> {selected.name}</h2>
+            <h2 className="text-base font-bold flex items-center gap-2"><Crown size={16} className="text-warning"/> {selected.name}</h2>
             <button onClick={() => setSelected(null)} className="p-1.5 hover:bg-muted rounded-lg"><X size={16} /></button>
           </div>
 
           <div className="flex gap-2">
             {(["members", "content"] as const).map((p) => (
               <button key={p} onClick={() => setPanel(p)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium ${panel === p ? "bg-primary text-primary-foreground" : "glass-strong text-muted-foreground"}`}>
-                {p === "members" ? "সদস্য" : "লকড কনটেন্ট"}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium ${panel === p ? "bg-primary text-primary-foreground": "glass-strong text-muted-foreground"}`}>
+                {p === "members"? "সদস্য": "লকড কনটেন্ট"}
               </button>
             ))}
           </div>
 
-          {panel === "members" && (
+          {panel === "members"&& (
             <>
               <div className="flex gap-2">
                 <select value={addUserId} onChange={(e) => setAddUserId(e.target.value)} className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm">
@@ -204,7 +204,7 @@ const AdminPremiumBatches = () => {
             </>
           )}
 
-          {panel === "content" && (
+          {panel === "content"&& (
             <div className="space-y-5">
               {(["subject", "section", "exam"] as ContentKind[]).map((kind) => {
                 const meta = KIND_META[kind];
@@ -212,7 +212,7 @@ const AdminPremiumBatches = () => {
                 const available = optionsFor(kind).filter((o) => !current.some((l) => l.ref === o.id));
                 return (
                   <div key={kind} className="space-y-2">
-                    <h3 className="text-sm font-bold flex items-center gap-2"><Lock size={13} className="text-warning" /> {meta.label}</h3>
+                    <h3 className="text-sm font-bold flex items-center gap-2"><Lock size={13} className="text-warning"/> {meta.label}</h3>
                     <div className="flex gap-2">
                       <select value={pick[kind]} onChange={(e) => setPick((p) => ({ ...p, [kind]: e.target.value }))} className="flex-1 glass-strong rounded-lg px-3 py-2 text-sm">
                         <option value="">— {meta.label} সিলেক্ট করুন —</option>
@@ -223,7 +223,7 @@ const AdminPremiumBatches = () => {
                     <div className="flex flex-wrap gap-2">
                       {current.map((l) => (
                         <span key={l.id} className="text-xs glass-strong px-3 py-1.5 rounded-full inline-flex items-center gap-2">
-                          🔒 {labelOf(kind, l.ref)}
+                           {labelOf(kind, l.ref)}
                           <button onClick={() => unlockContent(kind, l.id)} className="text-destructive"><X size={12} /></button>
                         </span>
                       ))}
@@ -232,7 +232,7 @@ const AdminPremiumBatches = () => {
                   </div>
                 );
               })}
-              <p className="text-[11px] text-muted-foreground">💡 একটি বিষয় লক করলে তার সব পত্র, অধ্যায় ও পরীক্ষা স্বয়ংক্রিয়ভাবে লুকিয়ে যাবে।</p>
+              <p className="text-[11px] text-muted-foreground"> একটি বিষয় লক করলে তার সব পত্র, অধ্যায় ও পরীক্ষা স্বয়ংক্রিয়ভাবে লুকিয়ে যাবে।</p>
             </div>
           )}
         </div>

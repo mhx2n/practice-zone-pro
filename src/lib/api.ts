@@ -21,7 +21,7 @@ function dbExamToApp(row: any, questions: Question[] = []): Exam {
     chapter: row.chapter || "",
     sectionId: row.section_id || undefined,
     chapterId: row.chapter_id || undefined,
-    difficulty: row.difficulty as "easy" | "medium" | "hard",
+    difficulty: row.difficulty as "easy"| "medium"| "hard",
     questionCount: row.question_count,
     duration: row.duration,
     negativeMarking: Number(row.negative_marking),
@@ -225,7 +225,7 @@ export async function deleteExam(id: string): Promise<void> {
 }
 
 export async function updateExamField(id: string, field: string, value: any): Promise<void> {
-  const dbField = field === "sectionId" ? "section_id" : field;
+  const dbField = field === "sectionId"? "section_id": field;
 
   writeLocalExams(
     store.getExams().map((exam) =>
@@ -409,12 +409,12 @@ const defaultSiteSettings: SiteSettings = {
   contactContent: "<p>আমাদের সাথে Telegram এ যোগাযোগ করুন।</p>",
   footerDescription: "আপনার পরীক্ষার প্রস্তুতি এখন আরও সহজ।",
   footerLinks: [
-    { label: "পরীক্ষা সমূহ", url: "/exams" },
-    { label: "ফলাফল", url: "/results" },
-    { label: "নোটিস বোর্ড", url: "/notices" },
-    { label: "সম্পর্কে", url: "/about" },
+    { label: "পরীক্ষা সমূহ", url: "/exams"},
+    { label: "ফলাফল", url: "/results"},
+    { label: "নোটিস বোর্ড", url: "/notices"},
+    { label: "সম্পর্কে", url: "/about"},
   ],
-  socialLinks: [{ label: "Telegram", url: "https://t.me/FX_Ur_Target" }],
+  socialLinks: [{ label: "Telegram", url: "https://t.me/FX_Ur_Target"}],
   brandName: "Target",
   brandEmoji: "🎯",
   heroTagline: "সীমাহীন অনুশীলন, নিখুঁত প্রস্তুতি",

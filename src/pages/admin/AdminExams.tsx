@@ -54,19 +54,19 @@ const AdminExams = () => {
 
   const togglePublish = (examId: string, current: boolean) => {
     updateFieldMut.mutate({ id: examId, field: "published", value: !current }, {
-      onSuccess: () => toast({ title: current ? "অপ্রকাশিত হয়েছে" : "প্রকাশিত হয়েছে" }),
+      onSuccess: () => toast({ title: current ? "অপ্রকাশিত হয়েছে": "প্রকাশিত হয়েছে"}),
     });
   };
 
   const deleteExam = (examId: string) => {
     deleteExamMut.mutate(examId, {
-      onSuccess: () => toast({ title: "পরীক্ষা মুছে ফেলা হয়েছে" }),
+      onSuccess: () => toast({ title: "পরীক্ষা মুছে ফেলা হয়েছে"}),
     });
   };
 
   const assignSection = (examId: string, sectionId: string) => {
     updateFieldMut.mutate({ id: examId, field: "sectionId", value: sectionId || null }, {
-      onSuccess: () => toast({ title: "সেকশন আপডেট হয়েছে" }),
+      onSuccess: () => toast({ title: "সেকশন আপডেট হয়েছে"}),
     });
   };
 
@@ -82,7 +82,7 @@ const AdminExams = () => {
     
     const updatedExam = { ...exam, mandatorySubjects: updated };
     upsertExam.mutate(updatedExam, {
-      onSuccess: () => toast({ title: "বাধ্যতামূলক বিষয় আপডেট হয়েছে" }),
+      onSuccess: () => toast({ title: "বাধ্যতামূলক বিষয় আপডেট হয়েছে"}),
     });
   };
 
@@ -108,7 +108,7 @@ const AdminExams = () => {
     }
     
     if (ranges.length === 0) {
-      ranges.push({ from: 1, to: exam.questions.length, subject: "" });
+      ranges.push({ from: 1, to: exam.questions.length, subject: ""});
     }
     
     setRangeInputs((prev) => ({ ...prev, [exam.id]: ranges }));
@@ -117,7 +117,7 @@ const AdminExams = () => {
   const addRange = (examId: string) => {
     setRangeInputs((prev) => ({
       ...prev,
-      [examId]: [...(prev[examId] || []), { from: 1, to: 1, subject: "" }],
+      [examId]: [...(prev[examId] || []), { from: 1, to: 1, subject: ""}],
     }));
   };
 
@@ -142,11 +142,11 @@ const AdminExams = () => {
     // Validate ranges
     for (const r of ranges) {
       if (!r.subject.trim()) {
-        toast({ title: "ত্রুটি", description: "সব রেঞ্জে বিষয়ের নাম দিন", variant: "destructive" });
+        toast({ title: "ত্রুটি", description: "সব রেঞ্জে বিষয়ের নাম দিন", variant: "destructive"});
         return;
       }
       if (r.from < 1 || r.to > exam.questions.length || r.from > r.to) {
-        toast({ title: "ত্রুটি", description: `রেঞ্জ ${r.from}-${r.to} সঠিক নয় (মোট ${exam.questions.length} প্রশ্ন)`, variant: "destructive" });
+        toast({ title: "ত্রুটি", description: `রেঞ্জ ${r.from}-${r.to} সঠিক নয় (মোট ${exam.questions.length} প্রশ্ন)`, variant: "destructive"});
         return;
       }
     }
@@ -161,7 +161,7 @@ const AdminExams = () => {
     const updatedExam = { ...exam, questions: updatedQuestions };
     upsertExam.mutate(updatedExam, {
       onSuccess: () => {
-        toast({ title: "বিষয় রেঞ্জ আপডেট হয়েছে!" });
+        toast({ title: "বিষয় রেঞ্জ আপডেট হয়েছে!"});
         setEditingRanges(null);
       },
     });
@@ -173,7 +173,7 @@ const AdminExams = () => {
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-xl font-bold mb-5">📝 পরীক্ষা ব্যবস্থাপনা</h1>
+      <h1 className="text-xl font-bold mb-5"> পরীক্ষা ব্যবস্থাপনা</h1>
 
       {sorted.length === 0 ? (
         <div className="glass-card-static p-12 text-center text-muted-foreground">কোনো পরীক্ষা নেই</div>
@@ -192,57 +192,57 @@ const AdminExams = () => {
                     <h3 className="font-semibold text-sm truncate">{e.title}</h3>
                     <p className="text-xs text-muted-foreground">
                       {e.subject} • {e.questionCount} প্রশ্ন • {e.createdAt}
-                      {section && <span className="text-primary"> • 📂 {section.name}</span>}
+                      {section && <span className="text-primary"> •  {section.name}</span>}
                     </p>
                     {hasMultipleSubjects && (
                       <div className="flex flex-wrap gap-1 mt-1">
                         {examSubjects.map((s) => (
                           <span key={s} className={`text-[10px] px-2 py-0.5 rounded-full ${
                             (e.mandatorySubjects || []).includes(s) 
-                              ? "bg-primary/15 text-primary font-medium" 
+                              ? "bg-primary/15 text-primary font-medium"
                               : "bg-muted text-muted-foreground"
                           }`}>
-                            {(e.mandatorySubjects || []).includes(s) && "🔒 "}{s} ({e.questions.filter((q) => q.section === s).length})
+                            {(e.mandatorySubjects || []).includes(s) && " "}{s} ({e.questions.filter((q) => q.section === s).length})
                           </span>
                         ))}
                       </div>
                     )}
                   </div>
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${e.published ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}`}>
-                    {e.published ? "প্রকাশিত" : "অপ্রকাশিত"}
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${e.published ? "bg-success/10 text-success": "bg-muted text-muted-foreground"}`}>
+                    {e.published ? "প্রকাশিত": "অপ্রকাশিত"}
                   </span>
                   <button onClick={() => {
                     if (editingRanges === e.id) { setEditingRanges(null); } 
                     else { setEditingRanges(e.id); initRangeInputs(e); }
-                  }} className="p-2 rounded-lg hover:bg-accent/10 transition-colors" title="বিষয় রেঞ্জ">
-                    <Layers size={16} className={editingRanges === e.id ? "text-primary" : "text-muted-foreground"} />
+                  }} className="p-2 rounded-lg hover:bg-accent/10 transition-colors"title="বিষয় রেঞ্জ">
+                    <Layers size={16} className={editingRanges === e.id ? "text-primary": "text-muted-foreground"} />
                   </button>
                   {hasMultipleSubjects && (
-                    <button onClick={() => setEditingMandatory(isEditingMandatory ? null : e.id)} className="p-2 rounded-lg hover:bg-accent/10 transition-colors" title="বাধ্যতামূলক বিষয়">
-                      <Lock size={16} className={isEditingMandatory ? "text-primary" : "text-muted-foreground"} />
+                    <button onClick={() => setEditingMandatory(isEditingMandatory ? null : e.id)} className="p-2 rounded-lg hover:bg-accent/10 transition-colors"title="বাধ্যতামূলক বিষয়">
+                      <Lock size={16} className={isEditingMandatory ? "text-primary": "text-muted-foreground"} />
                     </button>
                   )}
-                  <button onClick={() => setEditingExam(e)} className="p-2 rounded-lg hover:bg-primary/10 transition-colors" title="প্রশ্ন সম্পাদনা">
-                    <Pencil size={16} className="text-primary" />
+                  <button onClick={() => setEditingExam(e)} className="p-2 rounded-lg hover:bg-primary/10 transition-colors"title="প্রশ্ন সম্পাদনা">
+                    <Pencil size={16} className="text-primary"/>
                   </button>
-                  <button onClick={() => setPdfExam(e)} className="p-2 rounded-lg hover:bg-primary/10 transition-colors" title="PDF এক্সপোর্ট">
-                    <FileDown size={16} className="text-primary" />
+                  <button onClick={() => setPdfExam(e)} className="p-2 rounded-lg hover:bg-primary/10 transition-colors"title="PDF এক্সপোর্ট">
+                    <FileDown size={16} className="text-primary"/>
                   </button>
-                  <button onClick={() => setPremiumExam(premiumExam?.id === e.id ? null : e)} className="p-2 rounded-lg hover:bg-warning/10 transition-colors" title="প্রিমিয়াম ব্যাচ অ্যাক্সেস">
-                    <Crown size={16} className={(examPremiumMap[e.id]?.length || 0) > 0 ? "text-warning" : "text-muted-foreground"} />
+                  <button onClick={() => setPremiumExam(premiumExam?.id === e.id ? null : e)} className="p-2 rounded-lg hover:bg-warning/10 transition-colors"title="প্রিমিয়াম ব্যাচ অ্যাক্সেস">
+                    <Crown size={16} className={(examPremiumMap[e.id]?.length || 0) > 0 ? "text-warning": "text-muted-foreground"} />
                   </button>
                   <button onClick={() => togglePublish(e.id, e.published)} className="p-2 rounded-lg hover:bg-muted transition-colors">
-                    {e.published ? <Eye size={16} className="text-success" /> : <EyeOff size={16} className="text-muted-foreground" />}
+                    {e.published ? <Eye size={16} className="text-success"/> : <EyeOff size={16} className="text-muted-foreground"/>}
                   </button>
                   <button onClick={() => deleteExam(e.id)} className="p-2 rounded-lg hover:bg-destructive/10 transition-colors">
-                    <Trash2 size={16} className="text-destructive" />
+                    <Trash2 size={16} className="text-destructive"/>
                   </button>
                 </div>
 
                 {/* Mandatory subject editor */}
                 {isEditingMandatory && hasMultipleSubjects && (
                   <div className="mt-3 p-3 bg-accent/5 rounded-xl border border-accent/20">
-                    <p className="text-xs font-semibold mb-2">🔒 বাধ্যতামূলক বিষয় নির্বাচন করুন:</p>
+                    <p className="text-xs font-semibold mb-2"> বাধ্যতামূলক বিষয় নির্বাচন করুন:</p>
                     <div className="flex flex-wrap gap-2">
                       {examSubjects.map((s) => {
                         const isMandatory = (e.mandatorySubjects || []).includes(s);
@@ -269,12 +269,12 @@ const AdminExams = () => {
                 {/* Subject range editor */}
                 {editingRanges === e.id && (
                   <div className="mt-3 p-3 bg-accent/5 rounded-xl border border-accent/20">
-                    <p className="text-xs font-semibold mb-2">📐 প্রশ্ন সিরিয়াল অনুযায়ী বিষয় ভাগ করুন (মোট {e.questions.length} প্রশ্ন)</p>
+                    <p className="text-xs font-semibold mb-2"> প্রশ্ন সিরিয়াল অনুযায়ী বিষয় ভাগ করুন (মোট {e.questions.length} প্রশ্ন)</p>
                     <div className="space-y-2">
                       {(rangeInputs[e.id] || []).map((r, ri) => (
                         <div key={ri} className="flex items-center gap-2 flex-wrap">
                           <input
-                            type="number" min={1} max={e.questions.length}
+                            type="number"min={1} max={e.questions.length}
                             value={r.from}
                             onChange={(ev) => updateRange(e.id, ri, "from", Number(ev.target.value))}
                             className="w-16 glass-strong rounded-lg px-2 py-1.5 text-xs text-center focus:outline-none focus:ring-1 focus:ring-primary/30"
@@ -282,7 +282,7 @@ const AdminExams = () => {
                           />
                           <span className="text-xs text-muted-foreground">থেকে</span>
                           <input
-                            type="number" min={1} max={e.questions.length}
+                            type="number"min={1} max={e.questions.length}
                             value={r.to}
                             onChange={(ev) => updateRange(e.id, ri, "to", Number(ev.target.value))}
                             className="w-16 glass-strong rounded-lg px-2 py-1.5 text-xs text-center focus:outline-none focus:ring-1 focus:ring-primary/30"
@@ -296,7 +296,7 @@ const AdminExams = () => {
                             placeholder="বিষয়ের নাম"
                           />
                           <button onClick={() => removeRange(e.id, ri)} className="p-1 rounded hover:bg-destructive/10">
-                            <X size={14} className="text-destructive" />
+                            <X size={14} className="text-destructive"/>
                           </button>
                         </div>
                       ))}
@@ -306,7 +306,7 @@ const AdminExams = () => {
                         + রেঞ্জ যোগ করুন
                       </button>
                       <button onClick={() => applyRanges(e)} className="text-xs px-3 py-1.5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
-                        ✓ প্রয়োগ করুন
+                         প্রয়োগ করুন
                       </button>
                     </div>
                     <p className="text-[10px] text-muted-foreground mt-2">
@@ -317,7 +317,7 @@ const AdminExams = () => {
 
                 {sections.length > 0 && (
                   <div className="mt-2 flex items-center gap-2">
-                    <FolderOpen size={14} className="text-muted-foreground" />
+                    <FolderOpen size={14} className="text-muted-foreground"/>
                     <select
                       value={e.sectionId || ""}
                       onChange={(ev) => assignSection(e.id, ev.target.value)}
@@ -333,17 +333,17 @@ const AdminExams = () => {
 
                 {premiumExam?.id === e.id && (
                   <div className="mt-3 p-3 bg-warning/5 rounded-xl border border-warning/20">
-                    <p className="text-xs font-semibold mb-2 flex items-center gap-1.5"><Crown size={12} className="text-warning" /> প্রিমিয়াম ব্যাচ অ্যাক্সেস</p>
+                    <p className="text-xs font-semibold mb-2 flex items-center gap-1.5"><Crown size={12} className="text-warning"/> প্রিমিয়াম ব্যাচ অ্যাক্সেস</p>
                     <p className="text-[11px] text-muted-foreground mb-2">কোনো ব্যাচ সিলেক্ট না করলে সবাই দেখবে। সিলেক্ট করলে শুধু সেই ব্যাচের সদস্যরাই এই পরীক্ষা দিতে পারবে।</p>
                     {premiumBatches.length === 0 ? (
-                      <p className="text-xs text-muted-foreground">আগে "প্রিমিয়াম ব্যাচ" পেজ থেকে ব্যাচ তৈরি করুন।</p>
+                      <p className="text-xs text-muted-foreground">আগে "প্রিমিয়াম ব্যাচ"পেজ থেকে ব্যাচ তৈরি করুন।</p>
                     ) : (
                       <div className="flex flex-wrap gap-1.5">
                         {premiumBatches.map((b) => {
                           const on = (examPremiumMap[e.id] || []).includes(b.id);
                           return (
                             <button key={b.id} onClick={() => togglePremiumBatchOnExam(e.id, b.id)}
-                              className={`text-xs px-3 py-1 rounded-full transition ${on ? "bg-warning text-warning-foreground" : "bg-muted text-muted-foreground"}`}>
+                              className={`text-xs px-3 py-1 rounded-full transition ${on ? "bg-warning text-warning-foreground": "bg-muted text-muted-foreground"}`}>
                               {on && <Check size={10} className="inline mr-1" />}{b.name}
                             </button>
                           );

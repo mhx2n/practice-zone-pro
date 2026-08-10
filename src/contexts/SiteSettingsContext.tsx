@@ -15,12 +15,12 @@ const defaultSettings: SiteSettings = {
   contactContent: "",
   footerDescription: "আপনার পরীক্ষার প্রস্তুতি এখন আরও সহজ।",
   footerLinks: [
-    { label: "পরীক্ষা সমূহ", url: "/exams" },
-    { label: "ফলাফল", url: "/results" },
-    { label: "নোটিস বোর্ড", url: "/notices" },
-    { label: "সম্পর্কে", url: "/about" },
+    { label: "পরীক্ষা সমূহ", url: "/exams"},
+    { label: "ফলাফল", url: "/results"},
+    { label: "নোটিস বোর্ড", url: "/notices"},
+    { label: "সম্পর্কে", url: "/about"},
   ],
-  socialLinks: [{ label: "Telegram", url: "https://t.me/FX_Ur_Target" }],
+  socialLinks: [{ label: "Telegram", url: "https://t.me/FX_Ur_Target"}],
   brandName: "Target",
   brandEmoji: "🎯",
   heroTagline: "সীমাহীন অনুশীলন, নিখুঁত প্রস্তুতি",
@@ -44,12 +44,12 @@ function applySettingsTheme(settings: SiteSettings) {
   const mode = getTheme();
   const themeId = settings.activeThemeId || "ocean-blue";
 
-  if (themeId === "custom" && settings.customTheme) {
+  if (themeId === "custom"&& settings.customTheme) {
     applyThemeColors(settings.customTheme[mode], mode);
   } else {
     const preset = themePresets.find((t) => t.id === themeId);
     if (preset) {
-      applyThemeColors(mode === "dark" ? preset.dark : preset.light, mode);
+      applyThemeColors(mode === "dark"? preset.dark : preset.light, mode);
     }
   }
 

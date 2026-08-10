@@ -107,7 +107,7 @@ export function useUpsertSubject() {
     if (subject.id) payload.id = subject.id;
     const { error } = await supabase.from("subjects").upsert(payload as never);
     if (error) throw error;
-  }, "বিষয় সংরক্ষিত হয়েছে ✅");
+  }, "বিষয় সংরক্ষিত হয়েছে ");
 }
 
 export function useDeleteSubject() {
@@ -129,7 +129,7 @@ export function useUpsertPaper() {
     if (paper.id) payload.id = paper.id;
     const { error } = await supabase.from("subject_papers").upsert(payload as never);
     if (error) throw error;
-  }, "পত্র সংরক্ষিত হয়েছে ✅");
+  }, "পত্র সংরক্ষিত হয়েছে ");
 }
 
 export function useDeletePaper() {
@@ -150,7 +150,7 @@ export function useUpsertChapter() {
     if (chapter.id) payload.id = chapter.id;
     const { error } = await supabase.from("paper_chapters").upsert(payload as never);
     if (error) throw error;
-  }, "অধ্যায় সংরক্ষিত হয়েছে ✅");
+  }, "অধ্যায় সংরক্ষিত হয়েছে ");
 }
 
 export function useDeleteChapter() {
@@ -164,5 +164,5 @@ export function useAssignExamChapter() {
   return useCurriculumMutation<{ examId: string; chapterId: string | null }>(async ({ examId, chapterId }) => {
     const { error } = await supabase.from("exams").update({ chapter_id: chapterId } as never).eq("id", examId);
     if (error) throw error;
-  }, "পরীক্ষা আপডেট হয়েছে ✅");
+  }, "পরীক্ষা আপডেট হয়েছে ");
 }

@@ -36,13 +36,13 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
     };
     setQuestions((prev) => [...prev, newQ]);
     setExpandedId(newQ.id);
-    toast({ title: "✅ নতুন প্রশ্ন যোগ হয়েছে" });
+    toast({ title: "নতুন প্রশ্ন যোগ হয়েছে" });
   };
 
   const deleteQuestion = (id: string) => {
     setQuestions((prev) => prev.filter((q) => q.id !== id));
     if (expandedId === id) setExpandedId(null);
-    toast({ title: "🗑️ প্রশ্ন মুছে ফেলা হয়েছে" });
+    toast({ title: "প্রশ্ন মুছে ফেলা হয়েছে" });
   };
 
   const handleQuestionImage = async (qId: string, file: File) => {
@@ -50,7 +50,7 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
       const compressed = await compressImage(file);
       updateQ(qId, { questionImage: compressed });
     } catch {
-      toast({ title: "ছবি লোড করতে সমস্যা", variant: "destructive" });
+      toast({ title: "ছবি লোড করতে সমস্যা", variant: "destructive"});
     }
   };
 
@@ -66,7 +66,7 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
         })
       );
     } catch {
-      toast({ title: "ছবি লোড করতে সমস্যা", variant: "destructive" });
+      toast({ title: "ছবি লোড করতে সমস্যা", variant: "destructive"});
     }
   };
 
@@ -88,9 +88,9 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
     upsertExam.mutate(updatedExam, {
       onSuccess: () => {
         onSaved(updatedExam);
-        toast({ title: "✅ প্রশ্ন সংরক্ষিত হয়েছে" });
+        toast({ title: " প্রশ্ন সংরক্ষিত হয়েছে"});
       },
-      onError: () => toast({ title: "সংরক্ষণে সমস্যা হয়েছে", variant: "destructive" }),
+      onError: () => toast({ title: "সংরক্ষণে সমস্যা হয়েছে", variant: "destructive"}),
     });
   };
 
@@ -99,7 +99,7 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
       <div className="min-h-full flex flex-col">
         <div className="sticky top-0 z-10 bg-card border-b border-border px-4 sm:px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="font-bold text-base sm:text-lg">✏️ প্রশ্ন সম্পাদনা</h2>
+            <h2 className="font-bold text-base sm:text-lg"> প্রশ্ন সম্পাদনা</h2>
             <p className="text-sm text-muted-foreground">
               {exam.title} • {questions.length} প্রশ্ন
             </p>
@@ -116,7 +116,7 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
               disabled={upsertExam.isPending}
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-all"
             >
-              <Save size={16} /> {upsertExam.isPending ? "সেভ হচ্ছে..." : "সংরক্ষণ"}
+              <Save size={16} /> {upsertExam.isPending ? "সেভ হচ্ছে...": "সংরক্ষণ"}
             </button>
             <button onClick={onClose} className="p-2.5 rounded-xl hover:bg-muted transition-colors">
               <X size={22} />
@@ -135,14 +135,14 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                 >
                   <span
                     className="text-sm sm:text-base font-medium flex-1"
-                    style={{ display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}
+                    style={{ display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden"}}
                   >
                     <span className="text-muted-foreground mr-2 font-bold">{qi + 1}.</span>
                     {q.question || <span className="text-muted-foreground italic">নতুন প্রশ্ন...</span>}
                   </span>
                   <div className="flex items-center gap-2 ml-3 flex-shrink-0">
-                    {q.answer && <span className="text-xs bg-success/20 text-success px-2 py-0.5 rounded-full">✓</span>}
-                    {q.questionImage && <span className="text-sm">🖼️</span>}
+                    {q.answer && <span className="text-xs bg-success/20 text-success px-2 py-0.5 rounded-full"></span>}
+                    {q.questionImage && <span className="text-sm"></span>}
                     {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
                   </div>
                 </button>
@@ -150,7 +150,7 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                 {isOpen && (
                   <div className="px-4 sm:px-5 pb-5 space-y-5 animate-fade-in">
                     <div>
-                      <label className="text-sm font-semibold text-foreground mb-2 block">📝 প্রশ্ন</label>
+                      <label className="text-sm font-semibold text-foreground mb-2 block"> প্রশ্ন</label>
                       <textarea
                         value={q.question}
                         onChange={(e) => updateQ(q.id, { question: e.target.value })}
@@ -160,7 +160,7 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                     </div>
 
                     <div>
-                      <label className="text-sm font-semibold text-foreground mb-2 block">📂 বিষয়/সেকশন</label>
+                      <label className="text-sm font-semibold text-foreground mb-2 block"> বিষয়/সেকশন</label>
                       <input
                         value={q.section}
                         onChange={(e) => updateQ(q.id, { section: e.target.value })}
@@ -170,10 +170,10 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                     </div>
 
                     <div>
-                      <label className="text-sm font-semibold text-foreground mb-2 block">🖼️ প্রশ্নের ছবি</label>
+                      <label className="text-sm font-semibold text-foreground mb-2 block"> প্রশ্নের ছবি</label>
                       {q.questionImage ? (
                         <div className="relative inline-block">
-                          <img src={q.questionImage} alt="" className="max-w-full max-h-56 rounded-xl border border-border" />
+                          <img src={q.questionImage} alt=""className="max-w-full max-h-56 rounded-xl border border-border"/>
                           <button
                             onClick={() => removeQuestionImage(q.id)}
                             className="absolute top-2 right-2 p-2 rounded-full bg-destructive text-destructive-foreground shadow-lg"
@@ -199,11 +199,11 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                     </div>
 
                     <div className="space-y-4">
-                      <label className="text-sm font-semibold text-foreground block">📋 অপশনসমূহ (সঠিক উত্তর সিলেক্ট করুন)</label>
+                      <label className="text-sm font-semibold text-foreground block"> অপশনসমূহ (সঠিক উত্তর সিলেক্ট করুন)</label>
                       {q.options.map((opt, oi) => (
-                        <div key={oi} className={`p-4 rounded-xl border-2 transition-all ${opt === q.answer && opt !== "" ? "border-success/60 bg-success/5 ring-1 ring-success/20" : "border-border"}`}>
+                        <div key={oi} className={`p-4 rounded-xl border-2 transition-all ${opt === q.answer && opt !== ""? "border-success/60 bg-success/5 ring-1 ring-success/20": "border-border"}`}>
                           <div className="flex items-center gap-3 mb-3">
-                            <span className={`w-9 h-9 rounded-full text-sm flex items-center justify-center font-bold flex-shrink-0 ${opt === q.answer && opt !== "" ? "bg-success/20 text-success" : "bg-muted"}`}>
+                            <span className={`w-9 h-9 rounded-full text-sm flex items-center justify-center font-bold flex-shrink-0 ${opt === q.answer && opt !== ""? "bg-success/20 text-success": "bg-muted"}`}>
                               {String.fromCharCode(65 + oi)}
                             </span>
                             <input
@@ -222,14 +222,14 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                             <button
                               onClick={() => updateQ(q.id, { answer: opt })}
                               className={`text-xs px-4 py-2 rounded-lg font-semibold transition-all ${
-                                opt === q.answer && opt !== "" ? "bg-success/20 text-success ring-1 ring-success/30" : "bg-muted text-muted-foreground hover:bg-success/10 hover:text-success"
+                                opt === q.answer && opt !== ""? "bg-success/20 text-success ring-1 ring-success/30": "bg-muted text-muted-foreground hover:bg-success/10 hover:text-success"
                               }`}
                             >
-                              {opt === q.answer && opt !== "" ? "✅ সঠিক উত্তর" : "সঠিক করুন"}
+                              {opt === q.answer && opt !== ""? " সঠিক উত্তর": "সঠিক করুন"}
                             </button>
                             {q.optionImages?.[oi] ? (
                               <div className="relative inline-block">
-                                <img src={q.optionImages[oi]!} alt="" className="max-h-32 rounded-lg border border-border" />
+                                <img src={q.optionImages[oi]!} alt=""className="max-h-32 rounded-lg border border-border"/>
                                 <button
                                   onClick={() => removeOptionImage(q.id, oi)}
                                   className="absolute top-1 right-1 p-1.5 rounded-full bg-destructive text-destructive-foreground shadow-lg"
@@ -255,7 +255,7 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                     </div>
 
                     <div>
-                      <label className="text-sm font-semibold text-foreground mb-2 block">💡 ব্যাখ্যা</label>
+                      <label className="text-sm font-semibold text-foreground mb-2 block"> ব্যাখ্যা</label>
                       <textarea
                         value={q.explanation}
                         onChange={(e) => updateQ(q.id, { explanation: e.target.value })}

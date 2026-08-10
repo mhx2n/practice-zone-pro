@@ -3,7 +3,7 @@ import { store } from "@/lib/store";
 import { Clock, HelpCircle, ArrowLeft } from "lucide-react";
 import { getLabel } from "@/lib/labels";
 
-const diffFallback: Record<string, string> = { easy: "সহজ", medium: "মাঝারি", hard: "কঠিন" };
+const diffFallback: Record<string, string> = { easy: "সহজ", medium: "মাঝারি", hard: "কঠিন"};
 const diffLabelOf = (d: string) =>
   getLabel(`diff${d.charAt(0).toUpperCase() + d.slice(1)}`, diffFallback[d] || d);
 
@@ -16,7 +16,7 @@ const StudentExamDetails = () => {
     return (
       <div className="text-center py-20">
         <p className="text-muted-foreground">পরীক্ষা পাওয়া যায়নি</p>
-        <Link to="/student/exams" className="text-primary text-sm mt-2 inline-block">ফিরে যান</Link>
+        <Link to="/student/exams"className="text-primary text-sm mt-2 inline-block">ফিরে যান</Link>
       </div>
     );
   }
@@ -42,7 +42,7 @@ const StudentExamDetails = () => {
         </div>
 
         <div className="glass-card-static p-4 bg-primary/5 border-primary/20">
-          <h3 className="font-semibold text-sm mb-2">📋 নির্দেশাবলী</h3>
+          <h3 className="font-semibold text-sm mb-2"> নির্দেশাবলী</h3>
           <ul className="text-xs text-muted-foreground space-y-1.5 list-disc list-inside">
             <li>প্রতিটি প্রশ্নের একটি সঠিক উত্তর আছে</li>
             <li>সময় শেষ হলে স্বয়ংক্রিয়ভাবে জমা হবে</li>
@@ -55,7 +55,7 @@ const StudentExamDetails = () => {
           to={`/student/exams/${exam.id}/attempt`}
           className="w-full inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-4 py-3 bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-[0.98]"
         >
-          পরীক্ষা শুরু করুন 🚀
+          পরীক্ষা শুরু করুন 
         </Link>
       </div>
     </div>

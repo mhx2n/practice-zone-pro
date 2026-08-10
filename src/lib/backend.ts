@@ -24,7 +24,7 @@ export const BACKEND_CACHE_KEYS = {
 } as const;
 
 function canUseStorage() {
-  return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
+  return typeof window !== "undefined"&& typeof window.localStorage !== "undefined";
 }
 
 function getCooldownUntil() {
@@ -62,7 +62,7 @@ export function getErrorMessage(error: unknown) {
   if (error instanceof Error) return error.message;
   if (typeof error === "string") return error;
 
-  if (error && typeof error === "object" && "message" in error) {
+  if (error && typeof error === "object"&& "message"in error) {
     const message = (error as { message?: unknown }).message;
     if (typeof message === "string") return message;
   }
@@ -76,7 +76,7 @@ export function isBackendConnectivityError(error: unknown) {
 }
 
 export function toUserFacingError(error: unknown, action = "এই কাজ") {
-  if (error instanceof Error && "__targetFriendly" in error) {
+  if (error instanceof Error && "__targetFriendly"in error) {
     return error;
   }
 
