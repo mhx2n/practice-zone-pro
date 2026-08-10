@@ -19,7 +19,7 @@ const AdminQuestions = () => {
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-xl font-bold mb-5">❓ প্রশ্ন ব্যাংক</h1>
+      <h1 className="text-xl font-bold mb-5">❓ প্রশ্ন ভান্ডার</h1>
 
       <div className="flex flex-col sm:flex-row gap-3 mb-5">
         <div className="relative flex-1">
