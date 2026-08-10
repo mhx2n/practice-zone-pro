@@ -94,6 +94,7 @@ export interface Exam {
   category: string;
   chapter: string;
   sectionId?: string;
+  chapterId?: string;
   difficulty: "easy" | "medium" | "hard";
   questionCount: number;
   duration: number; // minutes

@@ -199,6 +199,7 @@ export type Database = {
         Row: {
           category: string
           chapter: string
+          chapter_id: string | null
           created_at: string
           difficulty: string
           duration: number
@@ -215,6 +216,7 @@ export type Database = {
         Insert: {
           category?: string
           chapter?: string
+          chapter_id?: string | null
           created_at?: string
           difficulty?: string
           duration?: number
@@ -231,6 +233,7 @@ export type Database = {
         Update: {
           category?: string
           chapter?: string
+          chapter_id?: string | null
           created_at?: string
           difficulty?: string
           duration?: number
@@ -245,6 +248,13 @@ export type Database = {
           title?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "exams_chapter_id_fkey"
+            columns: ["chapter_id"]
+            isOneToOne: false
+            referencedRelation: "paper_chapters"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "exams_section_id_fkey"
             columns: ["section_id"]
@@ -464,6 +474,41 @@ export type Database = {
           session_id?: string
         }
         Relationships: []
+      }
+      paper_chapters: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          name: string
+          paper_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          name: string
+          paper_id: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          name?: string
+          paper_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "paper_chapters_paper_id_fkey"
+            columns: ["paper_id"]
+            isOneToOne: false
+            referencedRelation: "subject_papers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       premium_batch_members: {
         Row: {
@@ -699,6 +744,42 @@ export type Database = {
         }
         Relationships: []
       }
+      section_premium_batches: {
+        Row: {
+          created_at: string
+          id: string
+          premium_batch_id: string
+          section_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          premium_batch_id: string
+          section_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          premium_batch_id?: string
+          section_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "section_premium_batches_premium_batch_id_fkey"
+            columns: ["premium_batch_id"]
+            isOneToOne: false
+            referencedRelation: "premium_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "section_premium_batches_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sections: {
         Row: {
           caption: string | null
@@ -798,21 +879,104 @@ export type Database = {
         }
         Relationships: []
       }
-      subjects: {
+      subject_papers: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          image: string | null
+          name: string
+          sort_order: number
+          subject_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          image?: string | null
+          name: string
+          sort_order?: number
+          subject_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          image?: string | null
+          name?: string
+          sort_order?: number
+          subject_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subject_papers_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subject_premium_batches: {
         Row: {
           created_at: string
           id: string
-          name: string
+          premium_batch_id: string
+          subject_id: string
         }
         Insert: {
           created_at?: string
           id?: string
-          name: string
+          premium_batch_id: string
+          subject_id: string
         }
         Update: {
           created_at?: string
           id?: string
+          premium_batch_id?: string
+          subject_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subject_premium_batches_premium_batch_id_fkey"
+            columns: ["premium_batch_id"]
+            isOneToOne: false
+            referencedRelation: "premium_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subject_premium_batches_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subjects: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          image: string | null
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          id?: string
+          image?: string | null
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          image?: string | null
           name?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -897,6 +1061,9 @@ export type Database = {
         Args: { _batch_id: string; _user_id: string }
         Returns: undefined
       }
+      can_view_exam: { Args: { _exam_id: string }; Returns: boolean }
+      can_view_section: { Args: { _section_id: string }; Returns: boolean }
+      can_view_subject: { Args: { _subject_id: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
