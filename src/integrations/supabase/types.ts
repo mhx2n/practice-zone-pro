@@ -50,6 +50,33 @@ export type Database = {
         }
         Relationships: []
       }
+      event_banners: {
+        Row: {
+          active: boolean
+          caption: string
+          created_at: string
+          id: string
+          image: string
+          target_date: string
+        }
+        Insert: {
+          active?: boolean
+          caption?: string
+          created_at?: string
+          id?: string
+          image?: string
+          target_date?: string
+        }
+        Update: {
+          active?: boolean
+          caption?: string
+          created_at?: string
+          id?: string
+          image?: string
+          target_date?: string
+        }
+        Relationships: []
+      }
       exam_premium_batches: {
         Row: {
           created_at: string
@@ -144,6 +171,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      notices: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          image: string | null
+          pinned: boolean
+          title: string
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          id?: string
+          image?: string | null
+          pinned?: boolean
+          title: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          image?: string | null
+          pinned?: boolean
+          title?: string
+        }
+        Relationships: []
       }
       premium_batch_members: {
         Row: {
@@ -301,6 +355,33 @@ export type Database = {
           },
         ]
       }
+      reminders: {
+        Row: {
+          color: string
+          created_at: string
+          description: string
+          id: string
+          target_date: string
+          title: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          description?: string
+          id?: string
+          target_date?: string
+          title: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          description?: string
+          id?: string
+          target_date?: string
+          title?: string
+        }
+        Relationships: []
+      }
       sections: {
         Row: {
           caption: string | null
@@ -328,6 +409,75 @@ export type Database = {
           image?: string | null
           name?: string
           order?: number
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          about_content: string
+          about_title: string
+          active_theme_id: string
+          brand_emoji: string
+          brand_name: string
+          contact_content: string
+          contact_title: string
+          created_at: string
+          custom_theme: Json | null
+          features_content: string
+          features_title: string
+          footer_description: string
+          footer_links: Json
+          hero_subtitle: string
+          hero_tagline: string
+          id: string
+          report_settings: Json | null
+          social_links: Json
+          ui_labels: Json | null
+          updated_at: string
+        }
+        Insert: {
+          about_content?: string
+          about_title?: string
+          active_theme_id?: string
+          brand_emoji?: string
+          brand_name?: string
+          contact_content?: string
+          contact_title?: string
+          created_at?: string
+          custom_theme?: Json | null
+          features_content?: string
+          features_title?: string
+          footer_description?: string
+          footer_links?: Json
+          hero_subtitle?: string
+          hero_tagline?: string
+          id?: string
+          report_settings?: Json | null
+          social_links?: Json
+          ui_labels?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          about_content?: string
+          about_title?: string
+          active_theme_id?: string
+          brand_emoji?: string
+          brand_name?: string
+          contact_content?: string
+          contact_title?: string
+          created_at?: string
+          custom_theme?: Json | null
+          features_content?: string
+          features_title?: string
+          footer_description?: string
+          footer_links?: Json
+          hero_subtitle?: string
+          hero_tagline?: string
+          id?: string
+          report_settings?: Json | null
+          social_links?: Json
+          ui_labels?: Json | null
+          updated_at?: string
         }
         Relationships: []
       }
