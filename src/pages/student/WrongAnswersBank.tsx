@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchWrongAnswers, deleteWrongAnswersByExam, WrongAnswerEntry } from "@/lib/api";
-import { CheckCircle2, XCircle, Trash2, ArrowLeft, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
+import { CheckCircle2, XCircle, Trash2, ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
 import { isAnswerMatch } from "@/lib/answerUtils";
-import { QuestionChatModal } from "@/components/QuestionChatModal";
 import MathText from "@/components/MathText";
 
 const WrongAnswersBank = () => {
   const [entries, setEntries] = useState<WrongAnswerEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [chatQuestion, setChatQuestion] = useState<WrongAnswerEntry | null>(null);
   const [expandedExam, setExpandedExam] = useState<string | null>(null);
   const [expandedSubject, setExpandedSubject] = useState<string | null>(null);
 
@@ -153,13 +151,6 @@ const WrongAnswersBank = () => {
                                         <MathText text={entry.questionText} />
                                       </p>
                                     </div>
-                                    <button
-                                      onClick={() => setChatQuestion(entry)}
-                                      className="ml-2 p-2.5 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center flex-shrink-0 group"
-                                      title="AI সহায়তা নিন"
-                                    >
-                                      <Sparkles size={14} className="group-hover:scale-110 transition-transform" />
-                                    </button>
                                   </div>
                                   {entry.questionImage && <img src={entry.questionImage} alt="প্রশ্নের ছবি" className="max-w-full max-h-48 rounded-xl border border-border/30 mb-3 object-contain shadow-sm" />}
                                   <div className="space-y-2 mb-3">
@@ -209,13 +200,6 @@ const WrongAnswersBank = () => {
         </div>
       )}
 
-      {chatQuestion && (
-        <QuestionChatModal
-          isOpen={!!chatQuestion}
-          onClose={() => setChatQuestion(null)}
-          questionContext={chatQuestion}
-        />
-      )}
     </div>
   );
 };

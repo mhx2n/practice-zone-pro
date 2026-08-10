@@ -20,6 +20,7 @@ function dbExamToApp(row: any, questions: Question[] = []): Exam {
     category: row.category || "",
     chapter: row.chapter || "",
     sectionId: row.section_id || undefined,
+    chapterId: row.chapter_id || undefined,
     difficulty: row.difficulty as "easy" | "medium" | "hard",
     questionCount: row.question_count,
     duration: row.duration,
