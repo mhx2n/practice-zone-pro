@@ -1,0 +1,1 @@
+ALTER TABLE public.batches ADD COLUMN next_number integer NOT NULL DEFAULT 1;
