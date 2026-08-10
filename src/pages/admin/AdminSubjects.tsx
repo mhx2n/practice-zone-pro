@@ -100,6 +100,7 @@ const AdminSubjects = () => {
             <div className="flex items-center gap-3">
               <label className="px-3 py-2 rounded-lg glass-strong text-sm inline-flex items-center gap-2 cursor-pointer">
                 <ImagePlus size={14} /> কভার ছবি
+                <span className="text-[10px] text-muted-foreground opacity-70">(সেরা সাইজ: 1280×720px — 16:9)</span>
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f, setSImage); }} />
               </label>
               {sImage && <img src={sImage} alt="প্রিভিউ" className="h-12 w-20 object-cover rounded-lg" />}
@@ -116,7 +117,7 @@ const AdminSubjects = () => {
               const pCount = papers.filter((p) => p.subject_id === s.id).length;
               return (
                 <div key={s.id} className="glass-card-static overflow-hidden">
-                  {s.image && <img src={s.image} alt={s.name} className="w-full h-28 object-cover" />}
+                  {s.image && <img src={s.image} alt={s.name} className="w-full aspect-[16/9] object-cover" />}
                   <div className="p-4">
                     <p className="font-bold text-sm">{s.name}</p>
                     {s.description && <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{s.description}</p>}
