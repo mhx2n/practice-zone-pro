@@ -374,6 +374,42 @@ export type Database = {
           },
         ]
       }
+      live_exam_premium_batches: {
+        Row: {
+          created_at: string
+          id: string
+          live_exam_id: string
+          premium_batch_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          live_exam_id: string
+          premium_batch_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          live_exam_id?: string
+          premium_batch_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_exam_premium_batches_live_exam_id_fkey"
+            columns: ["live_exam_id"]
+            isOneToOne: false
+            referencedRelation: "live_exams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "live_exam_premium_batches_premium_batch_id_fkey"
+            columns: ["premium_batch_id"]
+            isOneToOne: false
+            referencedRelation: "premium_batches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       live_exams: {
         Row: {
           access_mode: string
@@ -1062,6 +1098,7 @@ export type Database = {
         Returns: undefined
       }
       can_view_exam: { Args: { _exam_id: string }; Returns: boolean }
+      can_view_live_exam: { Args: { _live_exam_id: string }; Returns: boolean }
       can_view_section: { Args: { _section_id: string }; Returns: boolean }
       can_view_subject: { Args: { _subject_id: string }; Returns: boolean }
       has_role: {

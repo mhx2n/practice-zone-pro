@@ -180,8 +180,9 @@
   }
 
   .glass-nav {
-    @apply bg-card md:bg-card/95 md:backdrop-blur-xl border-b border-[hsl(var(--glass-border))] shadow-sm;
+    @apply bg-card md:backdrop-blur-xl border-b border-[hsl(var(--glass-border))] shadow-sm;
   }
+
 
   .glass-card {
     @apply bg-card md:bg-[hsl(var(--glass-bg))] md:backdrop-blur-md border border-[hsl(var(--glass-border))] shadow-lg rounded-2xl hover:shadow-xl hover:-translate-y-0.5;

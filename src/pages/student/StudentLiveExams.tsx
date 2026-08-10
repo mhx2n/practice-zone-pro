@@ -25,19 +25,6 @@ interface LiveExam {
 
 interface ExamMeta { id: string; question_count: number; negative_marking: number; }
 
-interface FinishedParticipant {
-  id: string;
-  user_id: string;
-  score: number;
-  max_score: number;
-  percentage: number;
-  status: string;
-  submitted_at: string | null;
-  time_taken_seconds: number;
-}
-
-interface ProfileLite { user_id: string; full_name: string | null; avatar_url: string | null; batch_name: string | null; }
-
 function useTick() {
   const [, set] = useState(0);
   useEffect(() => {
@@ -70,10 +57,6 @@ const StudentLiveExams = () => {
   const [finishedExams, setFinishedExams] = useState<LiveExam[]>([]);
   const [examMeta, setExamMeta] = useState<Record<string, ExamMeta>>({});
   const [mySubmittedIds, setMySubmittedIds] = useState<Set<string>>(new Set());
-  const [boardExam, setBoardExam] = useState<LiveExam | null>(null);
-  const [boardParts, setBoardParts] = useState<FinishedParticipant[]>([]);
-  const [boardProfiles, setBoardProfiles] = useState<Record<string, ProfileLite>>({});
-  const [boardLoading, setBoardLoading] = useState(false);
   const [joiningExamId, setJoiningExamId] = useState<string | null>(null);
   useTick();
 
@@ -132,29 +115,7 @@ const StudentLiveExams = () => {
     void load();
   }, [user]);
 
-  const openBoard = async (exam: LiveExam) => {
-    setBoardExam(exam);
-    setBoardLoading(true);
-    setBoardParts([]);
-    setBoardProfiles({});
-    const { data } = await supabase
-      .from("live_exam_participants")
-      .select("id,user_id,score,max_score,percentage,status,submitted_at,time_taken_seconds")
-      .eq("live_exam_id", exam.id)
-      .order("score", { ascending: false });
-    const list = (data || []) as FinishedParticipant[];
-    list.sort((a, b) => b.score - a.score || a.time_taken_seconds - b.time_taken_seconds);
-    setBoardParts(list);
-    const ids = Array.from(new Set(list.map((p) => p.user_id)));
-    if (ids.length) {
-      const { data: pr } = await supabase.from("profiles")
-        .select("user_id,full_name,avatar_url,batch_name").in("user_id", ids);
-      const map: Record<string, ProfileLite> = {};
-      (pr || []).forEach((x: any) => { map[x.user_id] = x; });
-      setBoardProfiles(map);
-    }
-    setBoardLoading(false);
-  };
+  const openBoard = (exam: LiveExam) => navigate(`/live-exam/${exam.id}/leaderboard`);
 
   const accessibleExams = accessLoading ? [] : exams.filter((exam) => canAccess(exam.exam_id));
   const liveNow = accessibleExams.filter((exam) => exam.status === "live");
@@ -281,11 +242,11 @@ const StudentLiveExams = () => {
                     </p>
                     <div className="flex flex-wrap gap-1.5 mt-2">
                       <button onClick={() => openBoard(exam)} className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary">
-                        🏆 র‍্যাঙ্কিং
+                        <Trophy size={12} className="inline -mt-0.5 mr-1" />র‍্যাঙ্কিং
                       </button>
                       {submitted && exam.status === "ended" && (
                         <button onClick={() => navigate(`/live-exam/${exam.id}/review`)} className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-success/10 text-success">
-                          📖 উত্তর পর্যালোচনা
+                          <FileText size={12} className="inline -mt-0.5 mr-1" />উত্তর পর্যালোচনা
                         </button>
                       )}
                     </div>
@@ -297,19 +258,6 @@ const StudentLiveExams = () => {
         </div>
       )}
 
-      {boardExam && (
-        <LeaderboardModal
-          exam={boardExam}
-          parts={boardParts}
-          profiles={boardProfiles}
-          loading={boardLoading}
-          currentUserId={user?.id}
-          podium={reportCfg.podiumColors || { gold: "#eab308", silver: "#94a3b8", bronze: "#ca8a04" }}
-          logo={reportCfg.liveExamLogo}
-          showFullList={reportCfg.showFullLeaderboardToStudents !== false}
-          onClose={() => setBoardExam(null)}
-        />
-      )}
     </div>
   );
 };
@@ -392,163 +340,3 @@ function ExamCardLive({
 }
 
 export default StudentLiveExams;
-
-function Avatar({ url, name, size = 40 }: { url?: string | null; name?: string | null; size?: number }) {
-  if (url) return <img src={url} alt="" className="rounded-full object-cover shrink-0" style={{ width: size, height: size }} />;
-  return (
-    <div className="rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold shrink-0"
-      style={{ width: size, height: size, fontSize: size * 0.42 }}>
-      {(name || "U")[0].toUpperCase()}
-    </div>
-  );
-}
-
-function LeaderboardModal({
-  exam, parts, profiles, loading, currentUserId, podium, logo, showFullList, onClose,
-}: {
-  exam: LiveExam;
-  parts: FinishedParticipant[];
-  profiles: Record<string, ProfileLite>;
-  loading: boolean;
-  currentUserId?: string;
-  podium: { gold: string; silver: string; bronze: string };
-  logo?: string;
-  showFullList: boolean;
-  onClose: () => void;
-}) {
-  const top3 = parts.slice(0, 3);
-  const rest = showFullList ? parts.slice(3) : [];
-  // Visual order for podium: 2nd, 1st, 3rd
-  const podiumOrder = [top3[1], top3[0], top3[2]];
-  const podiumMeta = [
-    { label: "2nd", color: podium.silver, h: 80 },
-    { label: "1st", color: podium.gold, h: 110 },
-    { label: "3rd", color: podium.bronze, h: 64 },
-  ];
-
-  return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-end md:items-center justify-center p-0 md:p-4 animate-fade-in"
-      onClick={onClose}>
-      <div className="bg-background w-full md:max-w-2xl max-h-[92vh] rounded-t-3xl md:rounded-3xl overflow-hidden flex flex-col shadow-2xl border border-border"
-        onClick={(e) => e.stopPropagation()}>
-        {/* Header */}
-        <div className="relative px-5 py-5 border-b border-border overflow-hidden"
-          style={{ background: `linear-gradient(135deg, ${podium.gold}22, ${podium.silver}11, transparent)` }}>
-          <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full opacity-20 blur-2xl"
-            style={{ background: podium.gold }} />
-          <div className="relative flex items-start gap-3">
-            <div className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 shadow-lg"
-              style={{ background: `linear-gradient(135deg, ${podium.gold}, ${podium.bronze})` }}>
-              {logo ? <img src={logo} alt="" className="w-full h-full object-cover rounded-2xl" /> : <Trophy size={22} className="text-white drop-shadow" />}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground">Leaderboard</p>
-              <h3 className="text-base font-extrabold truncate">{exam.title}</h3>
-              <p className="text-[11px] text-muted-foreground mt-0.5">{parts.length} জন অংশগ্রহণকারী</p>
-            </div>
-            <button onClick={onClose} className="p-2 rounded-lg hover:bg-muted shrink-0"><X size={18} /></button>
-          </div>
-        </div>
-
-        <div className="flex-1 overflow-y-auto">
-          {loading ? (
-            <div className="p-12 text-center text-sm text-muted-foreground">লোড হচ্ছে...</div>
-          ) : parts.length === 0 ? (
-            <div className="p-12 text-center">
-              <Trophy className="mx-auto text-muted-foreground/40 mb-3" size={36} />
-              <p className="text-sm text-muted-foreground">এখনো কেউ পরীক্ষা জমা দেয়নি</p>
-            </div>
-          ) : (
-            <>
-              {/* Podium */}
-              {top3.length > 0 && (
-                <div className="px-4 pt-8 pb-5">
-                  <div className="flex items-end justify-center gap-3 md:gap-5">
-                    {podiumOrder.map((p, i) => {
-                      if (!p) return <div key={i} className="flex-1" />;
-                      const meta = podiumMeta[i];
-                      const pr = profiles[p.user_id];
-                      const isMe = p.user_id === currentUserId;
-                      const isFirst = i === 1;
-                      const avSize = isFirst ? 80 : 60;
-                      return (
-                        <div key={p.id} className="flex-1 flex flex-col items-center text-center">
-                          {isFirst && (
-                            <div className="text-2xl mb-1 animate-pulse" aria-hidden>👑</div>
-                          )}
-                          <div className="relative mb-2">
-                            <div className="rounded-full p-1 shadow-lg"
-                              style={{ background: `linear-gradient(135deg, ${meta.color}, ${meta.color}aa)` }}>
-                              <div className="rounded-full bg-background p-0.5">
-                                <Avatar url={pr?.avatar_url} name={pr?.full_name} size={avSize} />
-                              </div>
-                            </div>
-                            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold text-white shadow-md whitespace-nowrap"
-                              style={{ background: meta.color }}>
-                              {Number(p.score).toFixed(2)}/{p.max_score}
-                            </div>
-                          </div>
-                          <p className={`text-xs font-bold leading-tight truncate w-full mt-1.5 ${isMe ? "text-primary" : ""}`}>
-                            {pr?.full_name || "Unknown"}
-                          </p>
-                          {pr?.batch_name && <p className="text-[10px] text-muted-foreground truncate w-full">{pr.batch_name}</p>}
-                          <div className="mt-2 w-full rounded-t-xl flex items-center justify-center shadow-inner relative overflow-hidden"
-                            style={{
-                              height: meta.h,
-                              background: `linear-gradient(to bottom, ${meta.color}, ${meta.color}cc)`,
-                            }}>
-                            <div className="absolute inset-0 opacity-20"
-                              style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 50%, rgba(0,0,0,0.2) 100%)" }} />
-                            <span className="relative text-2xl md:text-3xl font-extrabold text-white drop-shadow-lg">{meta.label}</span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Rest list — only when admin enabled */}
-              {showFullList ? (
-                rest.length > 0 && (
-                  <div className="px-4 pb-4 space-y-1.5 border-t border-border pt-4">
-                    <p className="text-[11px] font-semibold text-muted-foreground mb-2 px-1">বাকি র‍্যাঙ্কিং</p>
-                    {rest.map((p, i) => {
-                  const pr = profiles[p.user_id];
-                  const isMe = p.user_id === currentUserId;
-                  return (
-                    <div key={p.id}
-                      className={`flex items-center gap-3 p-2.5 rounded-xl transition ${isMe ? "bg-primary/15 border border-primary/30 ring-1 ring-primary/20" : "bg-muted/30 hover:bg-muted/50"}`}>
-                      <div className="w-8 h-8 rounded-lg bg-background flex items-center justify-center font-bold text-sm text-muted-foreground shrink-0">{i + 4}</div>
-                      <Avatar url={pr?.avatar_url} name={pr?.full_name} size={36} />
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold truncate">
-                          {pr?.full_name || "—"} {isMe && <span className="text-primary text-[10px]">(আপনি)</span>}
-                        </p>
-                        {pr?.batch_name && <p className="text-[10px] text-muted-foreground truncate">{pr.batch_name}</p>}
-                      </div>
-                      <div className="text-right shrink-0">
-                        <p className="text-sm font-bold">{Number(p.score).toFixed(2)}/{p.max_score}</p>
-                        <p className="text-[10px] text-muted-foreground">{Math.round(p.percentage)}%</p>
-                      </div>
-                    </div>
-                  );
-                    })}
-                  </div>
-                )
-              ) : (
-                parts.length > 3 && (
-                  <div className="px-4 pb-4 pt-2 text-center">
-                    <p className="text-[11px] text-muted-foreground italic">
-                      পূর্ণ র‍্যাঙ্কিং এখনো প্রকাশিত হয়নি
-                    </p>
-                  </div>
-                )
-              )}
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}

@@ -51,6 +51,7 @@ import AdminPhotocardBuilder from "./pages/admin/AdminPhotocardBuilder";
 import StudentLiveExams from "./pages/student/StudentLiveExams";
 import LiveExamAttempt from "./pages/student/LiveExamAttempt";
 import LiveExamReview from "./pages/student/LiveExamReview";
+import LiveExamLeaderboard from "./pages/student/LiveExamLeaderboard";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -98,6 +99,7 @@ const App = () => (
                   <Route path="/live-exams" element={<StudentLiveExams />} />
                   <Route path="/live-exam/:id" element={<LiveExamAttempt />} />
                   <Route path="/live-exam/:id/review" element={<LiveExamReview />} />
+                  <Route path="/live-exam/:id/leaderboard" element={<LiveExamLeaderboard />} />
                 </Route>
 
                 {/* Admin routes */}
