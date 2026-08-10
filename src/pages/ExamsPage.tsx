@@ -72,7 +72,7 @@ const ExamsPage = () => {
 
   return (
     <div className="pt-24 pb-8 container min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">{getLabel("examsPageTitle")}</h1>
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-2"><Library size={22} className="text-primary" /> {getLabel("examsPageTitle")}</h1>
 
       <div className="flex gap-2 mb-5">
         <button

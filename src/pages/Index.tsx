@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Search, ArrowRight, BookOpen, FolderOpen, Bell, BarChart3, Clock, X as XIcon, BookX, Radio } from "lucide-react";
+import { Search, ArrowRight, BookOpen, FolderOpen, Bell, BarChart3, Clock, X as XIcon, BookX, Radio, Star, Pin } from "lucide-react";
 import { useExams, useNotices, useResults, useSections } from "@/hooks/useSupabaseData";
 import { usePremiumAccess } from "@/hooks/usePremiumAccess";
 import { useSiteSettingsContext } from "@/contexts/SiteSettingsContext";
@@ -152,7 +152,7 @@ const Index = () => {
         {recentResults.length > 0 && (
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold flex items-center gap-2">{getLabel("recentResults")}</h2>
+              <h2 className="text-lg font-bold flex items-center gap-2"><BarChart3 size={18} className="text-primary" /> {getLabel("recentResults")}</h2>
               <Link to="/results"className="text-xs text-primary font-medium flex items-center gap-1">{getLabel("viewAll")} <ArrowRight size={14} /></Link>
             </div>
             <div className="space-y-2">
@@ -182,7 +182,7 @@ const Index = () => {
             <div className="space-y-2">
               {notices.slice(0, 3).map((n) => (
                 <Link key={n.id} to={`/notices/${n.id}`} className="glass-card p-4 flex items-center gap-3 group">
-                  {n.pinned && <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">{getLabel("pinned")}</span>}
+                  {n.pinned && <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full inline-flex items-center gap-1"><Pin size={11} /> {getLabel("pinned")}</span>}
                   <span className="text-sm font-medium group-hover:text-primary transition-colors flex-1">{n.title}</span>
                   <span className="text-xs text-muted-foreground">{n.createdAt}</span>
                 </Link>
@@ -194,7 +194,7 @@ const Index = () => {
         {featured.length > 0 && (
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold">{getLabel("featuredExams")}</h2>
+              <h2 className="text-lg font-bold flex items-center gap-2"><Star size={18} className="text-primary" /> {getLabel("featuredExams")}</h2>
               <Link to="/exams"className="text-xs text-primary font-medium flex items-center gap-1">{getLabel("viewAll")} <ArrowRight size={14} /></Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -205,7 +205,7 @@ const Index = () => {
 
         <section>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold">{getLabel("allExams")}</h2>
+            <h2 className="text-lg font-bold flex items-center gap-2"><BookOpen size={18} className="text-primary" /> {getLabel("allExams")}</h2>
             <Link to="/exams"className="text-xs text-primary font-medium flex items-center gap-1">{getLabel("viewMore")} <ArrowRight size={14} /></Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
