@@ -50,6 +50,101 @@ export type Database = {
         }
         Relationships: []
       }
+      exam_premium_batches: {
+        Row: {
+          created_at: string
+          exam_id: string
+          id: string
+          premium_batch_id: string
+        }
+        Insert: {
+          created_at?: string
+          exam_id: string
+          id?: string
+          premium_batch_id: string
+        }
+        Update: {
+          created_at?: string
+          exam_id?: string
+          id?: string
+          premium_batch_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_premium_batches_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exam_premium_batches_premium_batch_id_fkey"
+            columns: ["premium_batch_id"]
+            isOneToOne: false
+            referencedRelation: "premium_batches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exams: {
+        Row: {
+          category: string
+          chapter: string
+          created_at: string
+          difficulty: string
+          duration: number
+          featured: boolean
+          id: string
+          mandatory_subjects: Json
+          negative_marking: number
+          published: boolean
+          question_count: number
+          section_id: string | null
+          subject: string
+          title: string
+        }
+        Insert: {
+          category?: string
+          chapter?: string
+          created_at?: string
+          difficulty?: string
+          duration?: number
+          featured?: boolean
+          id?: string
+          mandatory_subjects?: Json
+          negative_marking?: number
+          published?: boolean
+          question_count?: number
+          section_id?: string | null
+          subject?: string
+          title: string
+        }
+        Update: {
+          category?: string
+          chapter?: string
+          created_at?: string
+          difficulty?: string
+          duration?: number
+          featured?: boolean
+          id?: string
+          mandatory_subjects?: Json
+          negative_marking?: number
+          published?: boolean
+          question_count?: number
+          section_id?: string | null
+          subject?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exams_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       premium_batch_members: {
         Row: {
           created_at: string
@@ -149,6 +244,59 @@ export type Database = {
             columns: ["batch_id"]
             isOneToOne: false
             referencedRelation: "batches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      questions: {
+        Row: {
+          answer: string
+          created_at: string
+          exam_id: string
+          explanation: string
+          id: string
+          option_images: Json | null
+          options: Json
+          question: string
+          question_image: string | null
+          section: string
+          sort_order: number
+          type: string
+        }
+        Insert: {
+          answer?: string
+          created_at?: string
+          exam_id: string
+          explanation?: string
+          id?: string
+          option_images?: Json | null
+          options?: Json
+          question: string
+          question_image?: string | null
+          section?: string
+          sort_order?: number
+          type?: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          exam_id?: string
+          explanation?: string
+          id?: string
+          option_images?: Json | null
+          options?: Json
+          question?: string
+          question_image?: string | null
+          section?: string
+          sort_order?: number
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questions_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
             referencedColumns: ["id"]
           },
         ]
