@@ -73,9 +73,20 @@ const Navbar = () => {
           )}
         </div>
 
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-1.5 md:hidden">
           <ThemeToggle />
-          <button className="p-2" onClick={() => setOpen(!open)}>
+          {user && (
+            <Link to="/profile" onClick={() => setOpen(false)} className="flex items-center justify-center" aria-label="প্রোফাইল">
+              {profile?.avatar_url ? (
+                <img src={profile.avatar_url} alt={displayName} className="w-8 h-8 rounded-full object-cover ring-1 ring-border" />
+              ) : (
+                <span className="w-8 h-8 rounded-full bg-primary/15 text-primary flex items-center justify-center text-xs font-bold">
+                  {avatarInitial}
+                </span>
+              )}
+            </Link>
+          )}
+          <button className="p-2" onClick={() => setOpen(!open)} aria-label="মেনু">
             {open ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
