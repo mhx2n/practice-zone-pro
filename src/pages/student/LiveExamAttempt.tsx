@@ -3,7 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { Clock, CheckCircle2, Send, Trophy, Home } from "lucide-react";
+import { CheckCircle2, Send, Trophy, Home } from "lucide-react";
+import ExamTimerBar from "@/components/ExamTimerBar";
 import MathText from "@/components/MathText";
 import { resolveCorrectOptionText } from "@/lib/answerUtils";
 import { usePremiumAccess } from "@/hooks/usePremiumAccess";
@@ -308,17 +309,8 @@ const LiveExamAttempt = () => {
   return (
     <div className="min-h-screen pt-20 pb-20 px-4 max-w-3xl mx-auto">
       {/* Sticky compact bar */}
-      <div className="sticky top-16 z-10 -mx-4 px-4 py-2 bg-background/95 backdrop-blur border-b border-border">
-        <div className="flex items-center justify-between gap-3 max-w-3xl mx-auto">
-          <div className="min-w-0">
-            <p className="text-xs font-bold truncate">{liveExam.title}</p>
-            <p className="text-[10px] text-muted-foreground">উত্তর {answered}/{total}</p>
-          </div>
-          <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono font-bold text-sm ${timeLeft < 60 ? "bg-destructive/15 text-destructive": "bg-primary/10 text-primary"}`}>
-            <Clock size={14} /> {String(mins).padStart(2, "0")}:{String(secs).padStart(2, "0")}
-          </div>
-        </div>
-      </div>
+      <ExamTimerBar title={liveExam.title} timeLeft={timeLeft} answered={answered} total={total} />
+
 
       {/* All questions in scroll view */}
       <div className="mt-4 space-y-4">
