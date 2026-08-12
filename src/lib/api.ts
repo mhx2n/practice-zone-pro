@@ -180,6 +180,7 @@ export async function upsertExam(exam: Exam): Promise<void> {
         category: rest.category,
         chapter: rest.chapter,
         section_id: rest.sectionId || null,
+        chapter_id: rest.chapterId || null,
         difficulty: rest.difficulty,
         question_count: rest.questionCount,
         duration: rest.duration,

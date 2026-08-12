@@ -1,15 +1,40 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useExams, useUpsertExam } from "@/hooks/useSupabaseData";
+import { useSubjectRows, usePapers, useChapters } from "@/hooks/useCurriculum";
 import { Exam, Question } from "@/lib/types";
-import { Upload, Plus, BookOpen } from "lucide-react";
+import { Upload, Plus, BookOpen, Layers } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+
+type SetNaming = "latin" | "bangla" | "number";
+
+const BANGLA_LETTERS = "ক খ গ ঘ ঙ চ ছ জ ঝ ঞ ট ঠ ড ঢ ণ ত থ দ ধ ন প ফ ব ভ ম য র ল শ ষ স হ ড় ঢ় য় ৎ ং ঃ ঁ".split(" ");
+
+const setLabel = (index: number, naming: SetNaming): string => {
+  if (naming === "number") return String(index + 1);
+  if (naming === "bangla") {
+    if (index < BANGLA_LETTERS.length) return BANGLA_LETTERS[index];
+    return `${BANGLA_LETTERS[index % BANGLA_LETTERS.length]}${Math.floor(index / BANGLA_LETTERS.length) + 1}`;
+  }
+  const A = 65;
+  if (index < 26) return String.fromCharCode(A + index);
+  return `${String.fromCharCode(A + Math.floor(index / 26) - 1)}${String.fromCharCode(A + (index % 26))}`;
+};
+
+const chunk = <T,>(arr: T[], size: number): T[][] => {
+  const out: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+};
 
 const AdminCSVUpload = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { data: existingExams = [] } = useExams();
   const upsertExam = useUpsertExam();
+  const { data: subjectRows = [] } = useSubjectRows();
+  const { data: papers = [] } = usePapers();
+  const { data: chapters = [] } = useChapters();
 
   const [csvQuestions, setCsvQuestions] = useState<Question[]>([]);
   const [csvPreview, setCsvPreview] = useState(false);
@@ -20,11 +45,20 @@ const AdminCSVUpload = () => {
   const [newExamNegativeMarking, setNewExamNegativeMarking] = useState(0.25);
   const [dragOver, setDragOver] = useState(false);
   const [importSummary, setImportSummary] = useState<{ total: number; imported: number; skipped: number; errors: string[] } | null>(null);
-  
+
+  // Advanced set-splitting mode
+  const [splitEnabled, setSplitEnabled] = useState(false);
+  const [setSize, setSetSize] = useState(25);
+  const [customSetSize, setCustomSetSize] = useState("");
+  const [setNaming, setSetNaming] = useState<SetNaming>("latin");
+  const [targetChapterId, setTargetChapterId] = useState("");
+  const [creating, setCreating] = useState(false);
+
   // Multi-CSV / Add to existing exam
   const [mode, setMode] = useState<"new"| "existing">("new");
   const [targetExamId, setTargetExamId] = useState("");
   const [subjectName, setSubjectName] = useState(""); // subject name for questions being added
+
 
   const parseCSVLine = (line: string): string[] => {
     const result: string[] = [];
@@ -154,37 +188,84 @@ const AdminCSVUpload = () => {
     if (file && file.name.endsWith(".csv")) handleFile(file);
   };
 
-  const createExamFromCSV = () => {
+  const effectiveSetSize = Math.max(1, Number(customSetSize) > 0 ? Number(customSetSize) : setSize);
+
+  const chapterMeta = useMemo(() => {
+    const ch = chapters.find((c) => c.id === targetChapterId);
+    if (!ch) return null;
+    const paper = papers.find((p) => p.id === ch.paper_id);
+    const subject = subjectRows.find((s) => s.id === paper?.subject_id);
+    return { chapter: ch, paper, subject };
+  }, [targetChapterId, chapters, papers, subjectRows]);
+
+  // Auto-continue: how many sets with the same base title already exist here
+  const existingSetOffset = useMemo(() => {
+    const base = newExamTitle.trim();
+    if (!base) return 0;
+    const prefix = `${base} - সেট `;
+    return existingExams.filter(
+      (e) => e.title.startsWith(prefix) && (targetChapterId ? e.chapterId === targetChapterId : !e.chapterId),
+    ).length;
+  }, [existingExams, newExamTitle, targetChapterId]);
+
+  const plannedChunks = splitEnabled ? chunk(csvQuestions, effectiveSetSize) : [];
+
+  const buildExam = (title: string, questions: Question[]): Exam => ({
+    id: crypto.randomUUID(),
+    title,
+    subject: chapterMeta?.subject?.name || newExamSubject || "সাধারণ",
+    category: "আমদানি",
+    chapter: chapterMeta?.chapter.name || "",
+    chapterId: targetChapterId || undefined,
+    difficulty: newExamDifficulty,
+    questionCount: questions.length,
+    duration: newExamDuration,
+    negativeMarking: newExamNegativeMarking,
+    questions,
+    published: true,
+    featured: false,
+    createdAt: new Date().toISOString().split("T")[0],
+    mandatorySubjects: [],
+  });
+
+  const createExamFromCSV = async () => {
     if (!newExamTitle || csvQuestions.length === 0) {
       toast({ title: "ত্রুটি", description: "শিরোনাম ও প্রশ্ন প্রয়োজন", variant: "destructive" });
       return;
     }
 
-    const newExam: Exam = {
-      id: crypto.randomUUID(),
-      title: newExamTitle,
-      subject: newExamSubject || "সাধারণ",
-      category: "আমদানি",
-      chapter: "",
-      difficulty: newExamDifficulty,
-      questionCount: csvQuestions.length,
-      duration: newExamDuration,
-      negativeMarking: newExamNegativeMarking,
-      questions: csvQuestions,
-      published: true,
-      featured: false,
-      createdAt: new Date().toISOString().split("T")[0],
-      mandatorySubjects: [],
+    const reset = () => {
+      setCsvQuestions([]); setCsvPreview(false); setNewExamTitle(""); setNewExamSubject(""); setImportSummary(null);
     };
 
-    upsertExam.mutate(newExam, {
-      onSuccess: () => {
-        setCsvQuestions([]); setCsvPreview(false); setNewExamTitle(""); setNewExamSubject(""); setImportSummary(null);
-        toast({ title: "পরীক্ষা তৈরি হয়েছে!", description: newExam.title });
-        navigate("/admin/exams");
-      },
-    });
+    if (!splitEnabled) {
+      upsertExam.mutate(buildExam(newExamTitle, csvQuestions), {
+        onSuccess: () => {
+          reset();
+          toast({ title: "পরীক্ষা তৈরি হয়েছে!", description: newExamTitle });
+          navigate("/admin/exams");
+        },
+      });
+      return;
+    }
+
+    setCreating(true);
+    try {
+      const groups = chunk(csvQuestions, effectiveSetSize);
+      for (let i = 0; i < groups.length; i++) {
+        const label = setLabel(existingSetOffset + i, setNaming);
+        await upsertExam.mutateAsync(buildExam(`${newExamTitle.trim()} - সেট ${label}`, groups[i]));
+      }
+      reset();
+      toast({ title: `${groups.length}টি সেট তৈরি হয়েছে!`, description: newExamTitle });
+      navigate("/admin/exams");
+    } catch (err) {
+      toast({ title: "ত্রুটি", description: err instanceof Error ? err.message : "সেট তৈরি ব্যর্থ", variant: "destructive" });
+    } finally {
+      setCreating(false);
+    }
   };
+
 
   const addToExistingExam = () => {
     if (!targetExamId || csvQuestions.length === 0) {
@@ -347,10 +428,74 @@ const AdminCSVUpload = () => {
                   <option value={0}>নেগেটিভ মার্ক: ০</option><option value={0.25}>নেগেটিভ মার্ক: ০.২৫</option><option value={0.5}>নেগেটিভ মার্ক: ০.৫</option><option value={1}>নেগেটিভ মার্ক: ১</option>
                 </select>
               </div>
-              <button onClick={createExamFromCSV} disabled={upsertExam.isPending}
+
+              {/* Advanced: split into sets */}
+              <div className="glass-strong rounded-xl p-4 mb-4 space-y-3">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={splitEnabled} onChange={(e) => setSplitEnabled(e.target.checked)} className="accent-primary w-4 h-4" />
+                  <span className="text-sm font-semibold inline-flex items-center gap-1.5"><Layers size={15} className="text-primary" /> সেট আকারে ভাগ করুন (অ্যাডভান্স)</span>
+                </label>
+                <p className="text-xs text-muted-foreground">বন্ধ রাখলে আগের মতোই একটি পরীক্ষা তৈরি হবে।</p>
+
+                {splitEnabled && (
+                  <div className="space-y-3 pt-1">
+                    <div>
+                      <p className="text-xs font-medium mb-1.5">প্রতি সেটে প্রশ্ন সংখ্যা</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {[20, 25, 30, 33, 39, 40, 45, 50].map((n) => (
+                          <button key={n} type="button"
+                            onClick={() => { setSetSize(n); setCustomSetSize(""); }}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${!customSetSize && setSize === n ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"}`}>
+                            {n}
+                          </button>
+                        ))}
+                        <input type="number" min={1} placeholder="কাস্টম" value={customSetSize}
+                          onChange={(e) => setCustomSetSize(e.target.value)}
+                          className="w-24 glass-strong rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/30" />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <p className="text-xs font-medium mb-1.5">সেটের নামকরণ</p>
+                        <select value={setNaming} onChange={(e) => setSetNaming(e.target.value as SetNaming)}
+                          className="w-full glass-strong rounded-xl px-3 py-2 text-sm focus:outline-none">
+                          <option value="latin">সেট A – Z</option>
+                          <option value="bangla">সেট ক – ঁ</option>
+                          <option value="number">সেট 1 – 100</option>
+                        </select>
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium mb-1.5">অধ্যায় (ফোল্ডার)</p>
+                        <select value={targetChapterId} onChange={(e) => setTargetChapterId(e.target.value)}
+                          className="w-full glass-strong rounded-xl px-3 py-2 text-sm focus:outline-none">
+                          <option value="">অধ্যায় ছাড়া</option>
+                          {chapters.map((c) => {
+                            const p = papers.find((pp) => pp.id === c.paper_id);
+                            const s = subjectRows.find((ss) => ss.id === p?.subject_id);
+                            return <option key={c.id} value={c.id}>{[s?.name, p?.name, c.name].filter(Boolean).join(" › ")}</option>;
+                          })}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-accent/10 text-xs space-y-1">
+                      <p><strong>{csvQuestions.length}</strong>টি প্রশ্ন → <strong>{plannedChunks.length}</strong>টি সেট (শেষ সেটে {plannedChunks.length ? plannedChunks[plannedChunks.length - 1].length : 0}টি প্রশ্ন)</p>
+                      {existingSetOffset > 0 && <p className="text-muted-foreground">এই ফোল্ডারে আগে থেকেই {existingSetOffset}টি সেট আছে — পরের সেট থেকে অটো নাম বসবে।</p>}
+                      <p className="text-muted-foreground">
+                        নাম: {plannedChunks.slice(0, 4).map((_, i) => `${newExamTitle.trim() || "পরীক্ষা"} - সেট ${setLabel(existingSetOffset + i, setNaming)}`).join(", ")}
+                        {plannedChunks.length > 4 ? " ..." : ""}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <button onClick={createExamFromCSV} disabled={upsertExam.isPending || creating}
                 className="w-full py-3 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-all">
-                {upsertExam.isPending ? "সেভ হচ্ছে...": "পরীক্ষা তৈরি করুন "}
+                {upsertExam.isPending || creating ? "সেভ হচ্ছে..." : splitEnabled ? `${plannedChunks.length}টি সেট তৈরি করুন` : "পরীক্ষা তৈরি করুন "}
               </button>
+
             </>
           ) : (
             <button onClick={addToExistingExam} disabled={upsertExam.isPending || !targetExamId}
