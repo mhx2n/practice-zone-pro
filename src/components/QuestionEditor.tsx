@@ -56,7 +56,7 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
 
   const handleOptionImage = async (qId: string, optIndex: number, file: File) => {
     try {
-      const compressed = await compressImage(file, 400, 300, 0.5);
+      const compressed = await compressImage(file, 900, 700, 0.7);
       setQuestions((prev) =>
         prev.map((q) => {
           if (q.id !== qId) return q;

@@ -17,7 +17,7 @@ const AdminEventBanners = () => {
   const handleImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const compressed = await compressImage(file, 200, 200, 0.7);
+    const compressed = await compressImage(file, 640, 640, 0.75, 60 * 1024);
     setImage(compressed);
   };
 

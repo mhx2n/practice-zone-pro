@@ -145,7 +145,7 @@ const StudentProfile = () => {
       }
       // Store the avatar as a compressed inline image on the profile row —
       // keeps it visible everywhere (leaderboards, PDFs) with no CORS issues.
-      const publicUrl = await compressImage(file, 256, 256, 0.75);
+      const publicUrl = await compressImage(file, 512, 512, 0.78, 40 * 1024);
       const { data: updated, error: updateError } = await supabase
         .from("profiles")
         .upsert(

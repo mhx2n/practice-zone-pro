@@ -54,7 +54,7 @@ const AdminNotices = () => {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      const compressed = await compressImage(file, 800, 450, 0.7);
+      const compressed = await compressImage(file, 1280, 720, 0.72);
       setImage(compressed);
     } catch {
       toast({ title: "ছবি লোড করতে সমস্যা হয়েছে", variant: "destructive" });
