@@ -188,37 +188,84 @@ const AdminCSVUpload = () => {
     if (file && file.name.endsWith(".csv")) handleFile(file);
   };
 
-  const createExamFromCSV = () => {
+  const effectiveSetSize = Math.max(1, Number(customSetSize) > 0 ? Number(customSetSize) : setSize);
+
+  const chapterMeta = useMemo(() => {
+    const ch = chapters.find((c) => c.id === targetChapterId);
+    if (!ch) return null;
+    const paper = papers.find((p) => p.id === ch.paper_id);
+    const subject = subjectRows.find((s) => s.id === paper?.subject_id);
+    return { chapter: ch, paper, subject };
+  }, [targetChapterId, chapters, papers, subjectRows]);
+
+  // Auto-continue: how many sets with the same base title already exist here
+  const existingSetOffset = useMemo(() => {
+    const base = newExamTitle.trim();
+    if (!base) return 0;
+    const prefix = `${base} - সেট `;
+    return existingExams.filter(
+      (e) => e.title.startsWith(prefix) && (targetChapterId ? e.chapterId === targetChapterId : !e.chapterId),
+    ).length;
+  }, [existingExams, newExamTitle, targetChapterId]);
+
+  const plannedChunks = splitEnabled ? chunk(csvQuestions, effectiveSetSize) : [];
+
+  const buildExam = (title: string, questions: Question[]): Exam => ({
+    id: crypto.randomUUID(),
+    title,
+    subject: chapterMeta?.subject?.name || newExamSubject || "সাধারণ",
+    category: "আমদানি",
+    chapter: chapterMeta?.chapter.name || "",
+    chapterId: targetChapterId || undefined,
+    difficulty: newExamDifficulty,
+    questionCount: questions.length,
+    duration: newExamDuration,
+    negativeMarking: newExamNegativeMarking,
+    questions,
+    published: true,
+    featured: false,
+    createdAt: new Date().toISOString().split("T")[0],
+    mandatorySubjects: [],
+  });
+
+  const createExamFromCSV = async () => {
     if (!newExamTitle || csvQuestions.length === 0) {
       toast({ title: "ত্রুটি", description: "শিরোনাম ও প্রশ্ন প্রয়োজন", variant: "destructive" });
       return;
     }
 
-    const newExam: Exam = {
-      id: crypto.randomUUID(),
-      title: newExamTitle,
-      subject: newExamSubject || "সাধারণ",
-      category: "আমদানি",
-      chapter: "",
-      difficulty: newExamDifficulty,
-      questionCount: csvQuestions.length,
-      duration: newExamDuration,
-      negativeMarking: newExamNegativeMarking,
-      questions: csvQuestions,
-      published: true,
-      featured: false,
-      createdAt: new Date().toISOString().split("T")[0],
-      mandatorySubjects: [],
+    const reset = () => {
+      setCsvQuestions([]); setCsvPreview(false); setNewExamTitle(""); setNewExamSubject(""); setImportSummary(null);
     };
 
-    upsertExam.mutate(newExam, {
-      onSuccess: () => {
-        setCsvQuestions([]); setCsvPreview(false); setNewExamTitle(""); setNewExamSubject(""); setImportSummary(null);
-        toast({ title: "পরীক্ষা তৈরি হয়েছে!", description: newExam.title });
-        navigate("/admin/exams");
-      },
-    });
+    if (!splitEnabled) {
+      upsertExam.mutate(buildExam(newExamTitle, csvQuestions), {
+        onSuccess: () => {
+          reset();
+          toast({ title: "পরীক্ষা তৈরি হয়েছে!", description: newExamTitle });
+          navigate("/admin/exams");
+        },
+      });
+      return;
+    }
+
+    setCreating(true);
+    try {
+      const groups = chunk(csvQuestions, effectiveSetSize);
+      for (let i = 0; i < groups.length; i++) {
+        const label = setLabel(existingSetOffset + i, setNaming);
+        await upsertExam.mutateAsync(buildExam(`${newExamTitle.trim()} - সেট ${label}`, groups[i]));
+      }
+      reset();
+      toast({ title: `${groups.length}টি সেট তৈরি হয়েছে!`, description: newExamTitle });
+      navigate("/admin/exams");
+    } catch (err) {
+      toast({ title: "ত্রুটি", description: err instanceof Error ? err.message : "সেট তৈরি ব্যর্থ", variant: "destructive" });
+    } finally {
+      setCreating(false);
+    }
   };
+
 
   const addToExistingExam = () => {
     if (!targetExamId || csvQuestions.length === 0) {
