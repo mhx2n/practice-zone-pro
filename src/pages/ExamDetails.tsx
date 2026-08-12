@@ -159,7 +159,7 @@ const ExamDetails = () => {
             to={`/exams/${exam.id}/revise`}
             className="w-full inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-4 py-3 bg-accent/10 text-foreground border border-accent/30 hover:bg-accent/20 transition-all active:scale-[0.98]"
           >
-            <BookOpen size={16} /> রিভিশন মোড (প্রশ্ন + উত্তর + ব্যাখ্যা)
+            <BookOpen size={16} /> রিভিশন দিন
           </Link>
         )}
       </div>

@@ -44,9 +44,9 @@ const ExamRevision = () => {
       <div className="pt-24 pb-8 container max-w-xl min-h-screen text-center">
         <div className="glass-card-static p-8">
           <Lock className="mx-auto mb-3 text-muted-foreground" size={32} />
-          <h2 className="text-lg font-bold mb-2">রিভিশন মোড লক</h2>
+          <h2 className="text-lg font-bold mb-2">রিভিশন লক</h2>
           <p className="text-sm text-muted-foreground mb-4">
-            এই পরীক্ষাটি অন্তত একবার দেওয়ার পর রিভিশন মোড আনলক হবে। প্রশ্ন, সঠিক উত্তর ও ব্যাখ্যা দেখতে পারবেন।
+            এই পরীক্ষাটি অন্তত একবার দেওয়ার পর রিভিশন আনলক হবে। প্রশ্ন, সঠিক উত্তর ও ব্যাখ্যা দেখতে পারবেন।
           </p>
           <Link to={`/exams/${exam.id}`} className="inline-flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-4 py-2.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
             পরীক্ষা দিন 
@@ -67,7 +67,7 @@ const ExamRevision = () => {
       <div className="glass-card-static p-5 mb-5">
         <div className="flex items-center gap-2 mb-2">
           <BookOpen size={18} className="text-primary" />
-          <span className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full"> রিভিশন মোড</span>
+          <span className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full">রিভিশন</span>
         </div>
         <h1 className="text-xl font-bold">{exam.title}</h1>
         <p className="text-xs text-muted-foreground mt-1">

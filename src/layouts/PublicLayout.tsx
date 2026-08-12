@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import ReminderWidget from "@/components/ReminderWidget";
 import EventBannerDisplay from "@/components/EventBannerDisplay";
 import TelegramFloatingButton from "@/components/TelegramFloatingButton";
+import VisitorCounter from "@/components/VisitorCounter";
 import { trackPageVisit } from "@/lib/api";
 import { useSiteSettingsContext } from "@/contexts/SiteSettingsContext";
 import { getLabel } from "@/lib/labels";
@@ -20,12 +21,15 @@ const PublicLayout = () => {
   const isHome = location.pathname === "/";
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       <EventBannerDisplay />
-      <Outlet />
+      <main className="flex-1">
+        <Outlet />
+      </main>
       <ReminderWidget />
       <TelegramFloatingButton />
+      {isHome && <VisitorCounter />}
       {isHome ? (
         <Footer />
       ) : (
@@ -35,7 +39,7 @@ const PublicLayout = () => {
           </div>
         </footer>
       )}
-    </>
+    </div>
   );
 };
 

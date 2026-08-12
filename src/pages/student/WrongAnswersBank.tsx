@@ -69,7 +69,7 @@ const WrongAnswersBank = () => {
         <div className="glass-card-static p-12 text-center text-muted-foreground">
           কোনো ভুল উত্তর সংরক্ষিত নেই
           <br />
-          <Link to="/exams" className="text-primary text-sm mt-2 inline-block">পরীক্ষা দিন →</Link>
+          <Link to="/exams" className="text-primary text-sm mt-2 inline-block">পরীক্ষা দিন</Link>
         </div>
       ) : (
         <div className="space-y-5">

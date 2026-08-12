@@ -23,7 +23,7 @@ const AdminSections = () => {
 
   const handleImageUpload = async (file: File, setter: (v: string | undefined) => void) => {
     try {
-      const compressed = await compressImage(file, 800, 400, 0.7);
+      const compressed = await compressImage(file, 1280, 720, 0.72);
       setter(compressed);
     } catch {
       toast({ title: "ছবি আপলোড ব্যর্থ", variant: "destructive" });

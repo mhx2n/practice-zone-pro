@@ -47,8 +47,8 @@ const StudentDashboard = () => {
         <section>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-bold"> সাম্প্রতিক ফলাফল</h2>
-            <Link to="/student/results" className="text-xs text-primary font-medium flex items-center gap-1">
-              সব দেখুন <ArrowRight size={12} />
+            <Link to="/student/results" className="text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 border border-primary/20 rounded-full px-3.5 py-1.5 transition-colors">
+              সব দেখুন
             </Link>
           </div>
           <div className="space-y-2">
@@ -73,8 +73,8 @@ const StudentDashboard = () => {
       <section>
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-bold"> পরীক্ষা সমূহ</h2>
-          <Link to="/student/exams" className="text-xs text-primary font-medium flex items-center gap-1">
-            সব দেখুন <ArrowRight size={12} />
+          <Link to="/student/exams" className="text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 border border-primary/20 rounded-full px-3.5 py-1.5 transition-colors">
+            সব দেখুন
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
