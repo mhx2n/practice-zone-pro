@@ -1,15 +1,40 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useExams, useUpsertExam } from "@/hooks/useSupabaseData";
+import { useSubjectRows, usePapers, useChapters } from "@/hooks/useCurriculum";
 import { Exam, Question } from "@/lib/types";
-import { Upload, Plus, BookOpen } from "lucide-react";
+import { Upload, Plus, BookOpen, Layers } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+
+type SetNaming = "latin" | "bangla" | "number";
+
+const BANGLA_LETTERS = "ক খ গ ঘ ঙ চ ছ জ ঝ ঞ ট ঠ ড ঢ ণ ত থ দ ধ ন প ফ ব ভ ম য র ল শ ষ স হ ড় ঢ় য় ৎ ং ঃ ঁ".split(" ");
+
+const setLabel = (index: number, naming: SetNaming): string => {
+  if (naming === "number") return String(index + 1);
+  if (naming === "bangla") {
+    if (index < BANGLA_LETTERS.length) return BANGLA_LETTERS[index];
+    return `${BANGLA_LETTERS[index % BANGLA_LETTERS.length]}${Math.floor(index / BANGLA_LETTERS.length) + 1}`;
+  }
+  const A = 65;
+  if (index < 26) return String.fromCharCode(A + index);
+  return `${String.fromCharCode(A + Math.floor(index / 26) - 1)}${String.fromCharCode(A + (index % 26))}`;
+};
+
+const chunk = <T,>(arr: T[], size: number): T[][] => {
+  const out: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+};
 
 const AdminCSVUpload = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { data: existingExams = [] } = useExams();
   const upsertExam = useUpsertExam();
+  const { data: subjectRows = [] } = useSubjectRows();
+  const { data: papers = [] } = usePapers();
+  const { data: chapters = [] } = useChapters();
 
   const [csvQuestions, setCsvQuestions] = useState<Question[]>([]);
   const [csvPreview, setCsvPreview] = useState(false);
@@ -20,11 +45,20 @@ const AdminCSVUpload = () => {
   const [newExamNegativeMarking, setNewExamNegativeMarking] = useState(0.25);
   const [dragOver, setDragOver] = useState(false);
   const [importSummary, setImportSummary] = useState<{ total: number; imported: number; skipped: number; errors: string[] } | null>(null);
-  
+
+  // Advanced set-splitting mode
+  const [splitEnabled, setSplitEnabled] = useState(false);
+  const [setSize, setSetSize] = useState(25);
+  const [customSetSize, setCustomSetSize] = useState("");
+  const [setNaming, setSetNaming] = useState<SetNaming>("latin");
+  const [targetChapterId, setTargetChapterId] = useState("");
+  const [creating, setCreating] = useState(false);
+
   // Multi-CSV / Add to existing exam
   const [mode, setMode] = useState<"new"| "existing">("new");
   const [targetExamId, setTargetExamId] = useState("");
   const [subjectName, setSubjectName] = useState(""); // subject name for questions being added
+
 
   const parseCSVLine = (line: string): string[] => {
     const result: string[] = [];
