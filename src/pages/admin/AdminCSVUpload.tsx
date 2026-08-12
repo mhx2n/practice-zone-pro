@@ -428,10 +428,74 @@ const AdminCSVUpload = () => {
                   <option value={0}>নেগেটিভ মার্ক: ০</option><option value={0.25}>নেগেটিভ মার্ক: ০.২৫</option><option value={0.5}>নেগেটিভ মার্ক: ০.৫</option><option value={1}>নেগেটিভ মার্ক: ১</option>
                 </select>
               </div>
-              <button onClick={createExamFromCSV} disabled={upsertExam.isPending}
+
+              {/* Advanced: split into sets */}
+              <div className="glass-strong rounded-xl p-4 mb-4 space-y-3">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={splitEnabled} onChange={(e) => setSplitEnabled(e.target.checked)} className="accent-primary w-4 h-4" />
+                  <span className="text-sm font-semibold inline-flex items-center gap-1.5"><Layers size={15} className="text-primary" /> সেট আকারে ভাগ করুন (অ্যাডভান্স)</span>
+                </label>
+                <p className="text-xs text-muted-foreground">বন্ধ রাখলে আগের মতোই একটি পরীক্ষা তৈরি হবে।</p>
+
+                {splitEnabled && (
+                  <div className="space-y-3 pt-1">
+                    <div>
+                      <p className="text-xs font-medium mb-1.5">প্রতি সেটে প্রশ্ন সংখ্যা</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {[20, 25, 30, 33, 39, 40, 45, 50].map((n) => (
+                          <button key={n} type="button"
+                            onClick={() => { setSetSize(n); setCustomSetSize(""); }}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${!customSetSize && setSize === n ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"}`}>
+                            {n}
+                          </button>
+                        ))}
+                        <input type="number" min={1} placeholder="কাস্টম" value={customSetSize}
+                          onChange={(e) => setCustomSetSize(e.target.value)}
+                          className="w-24 glass-strong rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/30" />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <p className="text-xs font-medium mb-1.5">সেটের নামকরণ</p>
+                        <select value={setNaming} onChange={(e) => setSetNaming(e.target.value as SetNaming)}
+                          className="w-full glass-strong rounded-xl px-3 py-2 text-sm focus:outline-none">
+                          <option value="latin">সেট A – Z</option>
+                          <option value="bangla">সেট ক – ঁ</option>
+                          <option value="number">সেট 1 – 100</option>
+                        </select>
+                      </div>
+                      <div>
+                        <p className="text-xs font-medium mb-1.5">অধ্যায় (ফোল্ডার)</p>
+                        <select value={targetChapterId} onChange={(e) => setTargetChapterId(e.target.value)}
+                          className="w-full glass-strong rounded-xl px-3 py-2 text-sm focus:outline-none">
+                          <option value="">অধ্যায় ছাড়া</option>
+                          {chapters.map((c) => {
+                            const p = papers.find((pp) => pp.id === c.paper_id);
+                            const s = subjectRows.find((ss) => ss.id === p?.subject_id);
+                            return <option key={c.id} value={c.id}>{[s?.name, p?.name, c.name].filter(Boolean).join(" › ")}</option>;
+                          })}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-accent/10 text-xs space-y-1">
+                      <p><strong>{csvQuestions.length}</strong>টি প্রশ্ন → <strong>{plannedChunks.length}</strong>টি সেট (শেষ সেটে {plannedChunks.length ? plannedChunks[plannedChunks.length - 1].length : 0}টি প্রশ্ন)</p>
+                      {existingSetOffset > 0 && <p className="text-muted-foreground">এই ফোল্ডারে আগে থেকেই {existingSetOffset}টি সেট আছে — পরের সেট থেকে অটো নাম বসবে।</p>}
+                      <p className="text-muted-foreground">
+                        নাম: {plannedChunks.slice(0, 4).map((_, i) => `${newExamTitle.trim() || "পরীক্ষা"} - সেট ${setLabel(existingSetOffset + i, setNaming)}`).join(", ")}
+                        {plannedChunks.length > 4 ? " ..." : ""}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <button onClick={createExamFromCSV} disabled={upsertExam.isPending || creating}
                 className="w-full py-3 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-all">
-                {upsertExam.isPending ? "সেভ হচ্ছে...": "পরীক্ষা তৈরি করুন "}
+                {upsertExam.isPending || creating ? "সেভ হচ্ছে..." : splitEnabled ? `${plannedChunks.length}টি সেট তৈরি করুন` : "পরীক্ষা তৈরি করুন "}
               </button>
+
             </>
           ) : (
             <button onClick={addToExistingExam} disabled={upsertExam.isPending || !targetExamId}
