@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { Search, FolderOpen, BookOpen, ChevronRight, Layers, FileText, ArrowLeft, Library } from "lucide-react";
 import { getLabel } from "@/lib/labels";
 import { useSearchParams } from "react-router-dom";
+import { sortExamsBySet } from "@/lib/examSort";
 
 const ExamsPage = () => {
   const { data: allExamsRaw = [] } = useExams();
@@ -33,12 +34,12 @@ const ExamsPage = () => {
   const sectionGroups = sections
     .map((s) => ({
       section: s,
-      exams: allExams
-        .filter((e) => e.sectionId === s.id && matches(e.title) && passesDifficulty(e.difficulty))
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
+      exams: sortExamsBySet(
+        allExams.filter((e) => e.sectionId === s.id && matches(e.title) && passesDifficulty(e.difficulty)),
+      ),
     }))
     .filter((g) => g.exams.length > 0)
-    .sort((a, b) => new Date(b.exams[0]?.createdAt || 0).getTime() - new Date(a.exams[0]?.createdAt || 0).getTime());
+    .sort((a, b) => a.section.name.localeCompare(b.section.name, "bn", { numeric: true }));
 
   const openSection = sectionGroups.find((g) => g.section.id === openSectionId);
 
@@ -50,7 +51,7 @@ const ExamsPage = () => {
   const paperChapters = useMemo(() => chapters.filter((c) => c.paper_id === paperId), [chapters, paperId]);
 
   const examsByChapter = (id: string) =>
-    allExams.filter((e) => e.chapterId === id && matches(e.title) && passesDifficulty(e.difficulty));
+    sortExamsBySet(allExams.filter((e) => e.chapterId === id && matches(e.title) && passesDifficulty(e.difficulty)));
 
   const chapterIdsOfPaper = (pid: string) => chapters.filter((c) => c.paper_id === pid).map((c) => c.id);
   const examCountOfPaper = (pid: string) => chapterIdsOfPaper(pid).reduce((n, cid) => n + examsByChapter(cid).length, 0);
@@ -59,7 +60,7 @@ const ExamsPage = () => {
 
   // Exams attached to a subject only by name (no chapter) — shown as "other exams"
   const looseExamsOfSubject = (name: string) =>
-    allExams.filter((e) => !e.chapterId && e.subject === name && matches(e.title) && passesDifficulty(e.difficulty));
+    sortExamsBySet(allExams.filter((e) => !e.chapterId && e.subject === name && matches(e.title) && passesDifficulty(e.difficulty)));
 
   const resetCurriculum = () => { setSubjectId(null); setPaperId(null); setChapterId(null); };
 
@@ -145,7 +146,7 @@ const ExamsPage = () => {
                 {openSection.section.description && <p className="text-xs text-muted-foreground mt-0.5">{openSection.section.description}</p>}
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
               {openSection.exams.map((e) => <ExamCard key={e.id} exam={e} />)}
             </div>
           </div>
@@ -224,7 +225,7 @@ const ExamsPage = () => {
                   {looseExamsOfSubject(subject.name).length > 0 && (
                     <div>
                       <h3 className="text-sm font-bold mb-3">অন্যান্য পরীক্ষা</h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                         {looseExamsOfSubject(subject.name).map((e) => <ExamCard key={e.id} exam={e} />)}
                       </div>
                     </div>
@@ -265,7 +266,7 @@ const ExamsPage = () => {
               {examsByChapter(chapter.id).length === 0 ? (
                 <div className="glass-card-static p-12 text-center text-muted-foreground">এই অধ্যায়ে কোনো পরীক্ষা নেই</div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                   {examsByChapter(chapter.id).map((e) => <ExamCard key={e.id} exam={e} />)}
                 </div>
               )}

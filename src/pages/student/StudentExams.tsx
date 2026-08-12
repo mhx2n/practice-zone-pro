@@ -2,6 +2,7 @@ import { useExams, useSections } from "@/hooks/useSupabaseData";
 import { useState } from "react";
 import { Search, ChevronDown, ChevronRight } from "lucide-react";
 import ExamCard from "@/components/ExamCard";
+import { sortExamsBySet } from "@/lib/examSort";
 
 const StudentExams = () => {
   const { data: allExamsRaw = [] } = useExams();
@@ -15,25 +16,21 @@ const StudentExams = () => {
   const subjects = ["all", ...new Set(allExams.map((e) => e.subject))];
   const diffLabels: Record<string, string> = { all: "সকল", easy: "সহজ", medium: "মাঝারি", hard: "কঠিন"};
 
-  const filtered = allExams
-    .filter((e) => {
+  const filtered = sortExamsBySet(
+    allExams.filter((e) => {
       if (subject !== "all"&& e.subject !== subject) return false;
       if (difficulty !== "all"&& e.difficulty !== difficulty) return false;
       if (search && !e.title.toLowerCase().includes(search.toLowerCase())) return false;
       return true;
-    })
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    }),
+  );
 
   const toggleSection = (id: string) => setCollapsedSections((prev) => ({ ...prev, [id]: !prev[id] }));
 
   const sectionedExams = sections
     .map((s) => ({ section: s, exams: filtered.filter((e) => e.sectionId === s.id) }))
     .filter((g) => g.exams.length > 0)
-    .sort(
-      (a, b) =>
-        new Date(b.exams[0]?.createdAt || 0).getTime() -
-        new Date(a.exams[0]?.createdAt || 0).getTime(),
-    );
+    .sort((a, b) => a.section.name.localeCompare(b.section.name, "bn", { numeric: true }));
 
   const unsectionedExams = filtered.filter((e) => !e.sectionId || !sections.find((s) => s.id === e.sectionId));
 
@@ -68,7 +65,7 @@ const StudentExams = () => {
                 <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">{exams.length} পরীক্ষা</span>
               </button>
               {!collapsedSections[section.id] && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pl-2">
+                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                   {exams.map((e) => <ExamCard key={e.id} exam={e} />)}
                 </div>
               )}
@@ -77,7 +74,7 @@ const StudentExams = () => {
           {unsectionedExams.length > 0 && (
             <div>
               {sectionedExams.length > 0 && <h2 className="text-base font-bold mb-3"> অন্যান্য পরীক্ষা</h2>}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                 {unsectionedExams.map((e) => <ExamCard key={e.id} exam={e} />)}
               </div>
             </div>
