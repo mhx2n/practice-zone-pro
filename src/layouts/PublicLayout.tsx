@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import ReminderWidget from "@/components/ReminderWidget";
 import EventBannerDisplay from "@/components/EventBannerDisplay";
 import TelegramFloatingButton from "@/components/TelegramFloatingButton";
+import VisitorCounter from "@/components/VisitorCounter";
 import { trackPageVisit } from "@/lib/api";
 import { useSiteSettingsContext } from "@/contexts/SiteSettingsContext";
 import { getLabel } from "@/lib/labels";
