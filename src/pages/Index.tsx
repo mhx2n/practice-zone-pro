@@ -8,7 +8,7 @@ import heroBg from "@/assets/hero-bg.jpg";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { getLabel } from "@/lib/labels";
-import VisitorStats from "@/components/VisitorStats";
+
 
 const Index = () => {
   const settings = useSiteSettingsContext();
@@ -145,15 +145,11 @@ const Index = () => {
           ))}
         </div>
 
-        <section>
-          <VisitorStats />
-        </section>
-
         {recentResults.length > 0 && (
           <section>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold flex items-center gap-2"><BarChart3 size={18} className="text-primary" /> {getLabel("recentResults")}</h2>
-              <Link to="/results" className="text-xs text-primary font-medium flex items-center gap-1">{getLabel("viewAll")} <ArrowRight size={14} /></Link>
+              <Link to="/results" className="text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 border border-primary/20 rounded-full px-3.5 py-1.5 transition-colors">{getLabel("viewAll")}</Link>
             </div>
             <div className="space-y-2">
               {recentResults.map((r, i) => (
@@ -177,7 +173,7 @@ const Index = () => {
           <section>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold flex items-center gap-2"><Bell size={18} className="text-primary" /> {getLabel("noticeBoard")}</h2>
-              <Link to="/notices" className="text-xs text-primary font-medium flex items-center gap-1">{getLabel("viewAll")} <ArrowRight size={14} /></Link>
+              <Link to="/notices" className="text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 border border-primary/20 rounded-full px-3.5 py-1.5 transition-colors">{getLabel("viewAll")}</Link>
             </div>
             <div className="space-y-2">
               {notices.slice(0, 3).map((n) => (
@@ -195,7 +191,7 @@ const Index = () => {
           <section>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold flex items-center gap-2"><Star size={18} className="text-primary" /> {getLabel("featuredExams")}</h2>
-              <Link to="/exams" className="text-xs text-primary font-medium flex items-center gap-1">{getLabel("viewAll")} <ArrowRight size={14} /></Link>
+              <Link to="/exams" className="text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 border border-primary/20 rounded-full px-3.5 py-1.5 transition-colors">{getLabel("viewAll")}</Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {featured.slice(0, 3).map((e) => <ExamCard key={e.id} exam={e} />)}
@@ -206,7 +202,7 @@ const Index = () => {
         <section>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold flex items-center gap-2"><BookOpen size={18} className="text-primary" /> {getLabel("allExams")}</h2>
-            <Link to="/exams" className="text-xs text-primary font-medium flex items-center gap-1">{getLabel("viewMore")} <ArrowRight size={14} /></Link>
+            <Link to="/exams" className="text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 border border-primary/20 rounded-full px-3.5 py-1.5 transition-colors">{getLabel("viewMore")}</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {exams.slice(0, 3).map((e) => <ExamCard key={e.id} exam={e} />)}

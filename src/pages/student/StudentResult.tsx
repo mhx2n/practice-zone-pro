@@ -71,7 +71,7 @@ const StudentResult = () => {
           <div className="glass-card-static p-12 text-center text-muted-foreground">
             এখনও কোনো পরীক্ষা দেওয়া হয়নি
             <br />
-            <Link to="/exams" className="text-primary text-sm mt-2 inline-block">পরীক্ষা দিন →</Link>
+            <Link to="/exams" className="text-primary text-sm mt-2 inline-block">পরীক্ষা দিন</Link>
           </div>
         ) : (
           <div className="space-y-3">
@@ -87,7 +87,7 @@ const StudentResult = () => {
                 </div>
                 <div className="text-right">
                   <span className={`text-lg font-bold ${r.percentage >= 60 ? "text-success": "text-destructive"}`}>{r.percentage}%</span>
-                  <Link to={`/exams/${r.examId}`} className="block text-xs text-primary mt-1">আবার দিন →</Link>
+                  <Link to={`/exams/${r.examId}`} className="block text-xs text-primary mt-1">আবার দিন</Link>
                 </div>
               </div>
             ))}
