@@ -296,32 +296,17 @@ const StudentExamAttempt = () => {
       : null;
 
   return (
-    <div className="pt-24 pb-24 container max-w-3xl mx-auto animate-fade-in relative">
-      {createPortal(
-        <div
-          style={{ position: "fixed", top: 16, right: 16, zIndex: 9999 }}
-          className={`flex items-center gap-2 px-4 py-2 rounded-2xl shadow-lg font-mono text-sm font-bold transition-all ${
-            timeLeft < 60
-              ? "bg-destructive text-destructive-foreground animate-pulse"
-              : timeLeft < 300
-              ? "bg-warning text-warning-foreground"
-              : "bg-card border border-border"
-          }`}
-        >
-          <Clock size={16} />
-          {mins.toString().padStart(2, "0")}:{secs.toString().padStart(2, "0")}
-        </div>,
-        document.body
-      )}
+    <div className="pt-20 pb-24 container max-w-3xl mx-auto animate-fade-in relative">
+      <ExamTimerBar
+        title={exam.title}
+        timeLeft={timeLeft}
+        answered={answeredCount}
+        total={questions.length}
+        subtitle={`নেগেটিভ ${negativeMarking}${currentSubjects.length > 1 ? ` • ${currentSubjects.length}টি বিষয়` : ""}`}
+      />
 
-      <div className="glass-card-static p-4 mb-4">
-        <h2 className="font-semibold text-sm truncate">{exam.title}</h2>
-        <p className="text-xs text-muted-foreground mt-1">
-          মোট: {questions.length} প্রশ্ন • উত্তর দেওয়া: {answeredCount} • নেগেটিভ মার্ক:{" "}
-          {negativeMarking}
-          {currentSubjects.length > 1 && ` • ${currentSubjects.length}টি বিষয়`}
-        </p>
-      </div>
+      <div className="h-4" />
+
 
       {currentSubjects.length > 1 ? (
         <div className="space-y-6">
