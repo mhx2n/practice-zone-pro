@@ -20,12 +20,15 @@ const PublicLayout = () => {
   const isHome = location.pathname === "/";
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       <EventBannerDisplay />
-      <Outlet />
+      <main className="flex-1">
+        <Outlet />
+      </main>
       <ReminderWidget />
       <TelegramFloatingButton />
+      {isHome && <VisitorCounter />}
       {isHome ? (
         <Footer />
       ) : (
@@ -35,7 +38,7 @@ const PublicLayout = () => {
           </div>
         </footer>
       )}
-    </>
+    </div>
   );
 };
 
