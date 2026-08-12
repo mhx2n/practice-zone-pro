@@ -3,6 +3,7 @@ import { useExamById, useAddResult } from "@/hooks/useSupabaseData";
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { ExamResult, SubjectBreakdown } from "@/lib/types";
+import ExamTimerBar from "@/components/ExamTimerBar";
 import { List, X, Clock, AlertTriangle } from "lucide-react";
 import { isAnswerMatch, resolveCorrectOptionText } from "@/lib/answerUtils";
 import MathText from "@/components/MathText";
