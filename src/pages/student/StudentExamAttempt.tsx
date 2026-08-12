@@ -276,8 +276,6 @@ const StudentExamAttempt = () => {
   if (isLoading) return <div className="text-center py-20 text-muted-foreground">লোড হচ্ছে...</div>;
   if (!exam) return <div className="text-center py-20 text-muted-foreground">পরীক্ষা পাওয়া যায়নি</div>;
 
-  const mins = Math.floor(timeLeft / 60);
-  const secs = timeLeft % 60;
   const answeredCount = Object.keys(answers).length;
   const unansweredCount = questions.length - answeredCount;
 
