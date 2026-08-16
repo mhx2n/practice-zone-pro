@@ -13,6 +13,7 @@ import {
 // ============ HELPERS ============
 
 function dbExamToApp(row: any, questions: Question[] = []): Exam {
+  const actualQuestionCount = questions.length > 0 ? questions.length : (row.question_count || 0);
   return {
     id: row.id,
     title: row.title,
@@ -22,7 +23,7 @@ function dbExamToApp(row: any, questions: Question[] = []): Exam {
     sectionId: row.section_id || undefined,
     chapterId: row.chapter_id || undefined,
     difficulty: row.difficulty as "easy"| "medium"| "hard",
-    questionCount: row.question_count,
+    questionCount: actualQuestionCount,
     duration: row.duration,
     negativeMarking: Number(row.negative_marking),
     published: row.published,
