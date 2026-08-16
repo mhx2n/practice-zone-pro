@@ -23,6 +23,7 @@ const AdminExams = () => {
   const [premiumExam, setPremiumExam] = useState<Exam | null>(null);
   const [premiumBatches, setPremiumBatches] = useState<{ id: string; name: string }[]>([]);
   const [examPremiumMap, setExamPremiumMap] = useState<Record<string, string[]>>({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -50,7 +51,12 @@ const AdminExams = () => {
     }
   };
 
-  const sorted = [...exams].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  const filteredExams = exams.filter((e) =>
+    e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    e.subject?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const sorted = [...filteredExams].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   const togglePublish = (examId: string, current: boolean) => {
     updateFieldMut.mutate({ id: examId, field: "published", value: !current }, {
@@ -173,7 +179,18 @@ const AdminExams = () => {
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-xl font-bold mb-5"> পরীক্ষা ব্যবস্থাপনা</h1>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+        <h1 className="text-xl font-bold"> পরীক্ষা ব্যবস্থাপনা</h1>
+        <div className="relative w-full md:w-72">
+          <input
+            type="text"
+            placeholder="পরীক্ষার নাম দিয়ে খুঁজুন..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full glass-strong rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+          />
+        </div>
+      </div>
 
       {sorted.length === 0 ? (
         <div className="glass-card-static p-12 text-center text-muted-foreground">কোনো পরীক্ষা নেই</div>
