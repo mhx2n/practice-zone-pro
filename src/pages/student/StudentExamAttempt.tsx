@@ -7,6 +7,7 @@ import ExamTimerBar from "@/components/ExamTimerBar";
 import { List, X, AlertTriangle } from "lucide-react";
 import { isAnswerMatch, resolveCorrectOptionText } from "@/lib/answerUtils";
 import MathText from "@/components/MathText";
+import QuestionReportButton from "@/components/QuestionReportButton";
 import { supabase } from "@/integrations/supabase/client";
 
 function shuffle<T>(arr: T[]): T[] {
@@ -332,9 +333,21 @@ const StudentExamAttempt = () => {
                         }}
                         className="glass-card-static p-5"
                       >
-                        <p className="text-xs text-muted-foreground mb-2">
-                          প্রশ্ন {globalIdx + 1} / {questions.length}
-                        </p>
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <p className="text-xs text-muted-foreground">
+                            প্রশ্ন {globalIdx + 1} / {questions.length}
+                          </p>
+                          <QuestionReportButton
+                            questionId={q.id}
+                            examId={exam.id}
+                            examTitle={exam.title}
+                            examKind="practice"
+                            questionNumber={globalIdx + 1}
+                            totalQuestions={questions.length}
+                            questionText={q.question}
+                            section={q.section}
+                          />
+                        </div>
                         <h3 className="text-base font-semibold mb-2">
                           <MathText text={q.question} />
                         </h3>

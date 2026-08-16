@@ -2,8 +2,9 @@ import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth, signOut } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
+import { usePendingReportCount } from "@/hooks/useQuestionReports";
 import {
-  LayoutDashboard, FileText, Bell, Upload, BookOpen, Settings, LogOut, Menu, X, HelpCircle, FolderOpen, Globe, Palette, Clock, PartyPopper, Users, Radio, Crown, Image as ImageIcon, ClipboardPaste,
+  LayoutDashboard, FileText, Bell, Upload, BookOpen, Settings, LogOut, Menu, X, HelpCircle, FolderOpen, Globe, Palette, Clock, PartyPopper, Users, Radio, Crown, Image as ImageIcon, ClipboardPaste, Flag,
 } from "lucide-react";
 
 const navItems = [
@@ -16,6 +17,7 @@ const navItems = [
   { to: "/admin/questions", label: "প্রশ্ন ভান্ডার", icon: HelpCircle },
   { to: "/admin/upload-csv", label: "CSV আপলোড", icon: Upload },
   { to: "/admin/bulk-paste", label: "বাল্ক পেস্ট", icon: ClipboardPaste },
+  { to: "/admin/question-reports", label: "প্রশ্ন রিপোর্ট", icon: Flag, badge: "reports" as const },
   { to: "/admin/notices", label: "নোটিস", icon: Bell },
   { to: "/admin/subjects", label: "পাঠ্যক্রম", icon: BookOpen },
   { to: "/admin/theme", label: "থিম কাস্টমাইজ", icon: Palette },
@@ -31,6 +33,7 @@ const AdminLayout = () => {
   const navigate = useNavigate();
   const { user, isAdmin, loading } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { data: pendingReports = 0 } = usePendingReportCount();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -104,7 +107,13 @@ const AdminLayout = () => {
               className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 isActive(item.to) ? "bg-primary text-primary-foreground": "text-muted-foreground hover:text-foreground hover:bg-muted"
               }`}>
-              <item.icon size={16} />{item.label}
+              <item.icon size={16} />
+              <span className="flex-1">{item.label}</span>
+              {item.badge === "reports" && pendingReports > 0 && (
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-destructive text-destructive-foreground min-w-[18px] text-center">
+                  {pendingReports}
+                </span>
+              )}
             </Link>
           ))}
         </aside>
@@ -117,7 +126,13 @@ const AdminLayout = () => {
                   className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     isActive(item.to) ? "bg-primary text-primary-foreground": "text-muted-foreground hover:text-foreground hover:bg-muted"
                   }`}>
-                  <item.icon size={16} />{item.label}
+                  <item.icon size={16} />
+                  <span className="flex-1">{item.label}</span>
+                  {item.badge === "reports" && pendingReports > 0 && (
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-destructive text-destructive-foreground min-w-[18px] text-center">
+                      {pendingReports}
+                    </span>
+                  )}
                 </Link>
               ))}
             </aside>

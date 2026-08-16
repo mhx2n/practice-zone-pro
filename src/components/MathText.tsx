@@ -22,11 +22,43 @@ const escapeHtml = (value: string) =>
     .replace(/>/g, "&gt;")
     .replace(/\n/g, "<br />");
 
+/**
+ * Unicode combining marks that authors often paste directly (e.g. "A⃗", "â").
+ * Browsers rarely have a Bengali/Latin font that can compose them, so they show
+ * up as tofu boxes. We convert them into proper LaTeX accents instead.
+ */
+const COMBINING_ACCENTS: Record<string, string> = {
+  "\u20d7": "vec",
+  "\u20d6": "overleftarrow",
+  "\u0302": "hat",
+  "\u0303": "tilde",
+  "\u0304": "bar",
+  "\u0305": "bar",
+  "\u0306": "breve",
+  "\u0307": "dot",
+  "\u0308": "ddot",
+  "\u030a": "mathring",
+  "\u030c": "check",
+  "\u0301": "acute",
+  "\u0300": "grave",
+};
+
+const COMBINING_CHARS = Object.keys(COMBINING_ACCENTS).join("");
+const COMBINING_RE = new RegExp(`([A-Za-z0-9])([${COMBINING_CHARS}]+)`, "g");
+
+const combiningToLatex = (base: string, marks: string) =>
+  marks.split("").reduce((acc, mark) => `\\${COMBINING_ACCENTS[mark]}{${acc}}`, base);
+
+const expandCombiningInMath = (value: string) =>
+  value.replace(COMBINING_RE, (_m, base: string, marks: string) => combiningToLatex(base, marks));
+
 const normalizeMath = (value: string) =>
-  value
-    .replace(/\\text\s*\{/g, "\\text{")
-    .replace(/\u00a0/g, " ")
-    .trim();
+  expandCombiningInMath(
+    value
+      .replace(/\\text\s*\{/g, "\\text{")
+      .replace(/\u00a0/g, " ")
+  ).trim();
+
 
 const renderMath = (math: string, displayMode = false) => {
   try {
@@ -55,25 +87,56 @@ const consumeEnvironment = (source: string, start: number) => {
   return { value: source.slice(start, end), end, display: true };
 };
 
-const consumeBracketExpression = (source: string, start: number) => {
-  const prefix = source.slice(start).match(/^\\[a-zA-Z]+\s*(?=\{|\[)/);
-  if (!prefix) return null;
-  const openAt = start + prefix[0].length;
-  const open = source[openAt];
-  const close = open === " {"? "}": "]";
+const consumeBalancedGroup = (source: string, start: number) => {
+  const open = source[start];
+  if (open !== "{" && open !== "[") return -1;
+  const close = open === "{" ? "}" : "]";
   let depth = 0;
-  for (let i = openAt; i < source.length; i++) {
+  for (let i = start; i < source.length; i++) {
     const ch = source[i];
     if (ch === "\\") {
       i++;
       continue;
     }
     if (ch === open) depth++;
-    if (ch === close) depth--;
-    if (depth === 0) return { value: source.slice(start, i + 1), end: i + 1, display: false };
+    else if (ch === close) {
+      depth--;
+      if (depth === 0) return i + 1;
+    }
   }
-  return null;
+  return -1;
 };
+
+const consumeBracketExpression = (source: string, start: number) => {
+  const prefix = source.slice(start).match(/^\\[a-zA-Z]+\s*(?=\{|\[)/);
+  if (!prefix) return null;
+  let i = start + prefix[0].length;
+  let consumedGroup = false;
+  // Consume every argument group that follows, e.g. \frac{a}{b}, \sqrt[3]{x}.
+  while (i < source.length) {
+    const next = consumeBalancedGroup(source, i);
+    if (next === -1) break;
+    consumedGroup = true;
+    i = next;
+    // Allow sub/superscripts or a chained command directly after a group.
+    const tail = source.slice(i).match(/^(?:[_^](?:\{|\[)?|\\[a-zA-Z]+\s*(?=\{|\[))/);
+    if (tail) {
+      if (tail[0].startsWith("_") || tail[0].startsWith("^")) {
+        const scriptStart = i + 1;
+        const scriptEnd = consumeBalancedGroup(source, scriptStart);
+        i = scriptEnd === -1 ? scriptStart + 1 : scriptEnd;
+      } else {
+        i += tail[0].length;
+      }
+      continue;
+    }
+    if (source[i] !== "{" && source[i] !== "[") break;
+  }
+
+  if (!consumedGroup) return null;
+  return { value: source.slice(start, i), end: i, display: false };
+};
+
 
 const consumeAssignmentEnvironment = (source: string, start: number) => {
   const prefix = source.slice(start).match(/^[A-Za-z0-9|_{}^\\]+\s*=\s*(?=\\begin\{)/);
@@ -162,6 +225,19 @@ export function renderMathTextToHtml(text: string): string {
       flush();
       tokens.push({ type: "math", value: bracketExpr.value, display: bracketExpr.display });
       i = bracketExpr.end;
+      continue;
+    }
+
+    // Bare unicode accents pasted as plain text, e.g. "A⃗" or "â".
+    const combining = source.slice(i).match(new RegExp(`^([A-Za-z0-9])([${COMBINING_CHARS}]+)('*)`));
+    if (combining) {
+      flush();
+      tokens.push({
+        type: "math",
+        value: combiningToLatex(combining[1], combining[2]) + combining[3],
+        display: false,
+      });
+      i += combining[0].length;
       continue;
     }
 
