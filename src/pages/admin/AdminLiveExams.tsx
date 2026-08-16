@@ -362,6 +362,10 @@ const AdminLiveExams = () => {
 
   const sortedParts = [...parts].sort((a, b) => b.score - a.score || a.time_taken_seconds - b.time_taken_seconds);
 
+  const filteredExams = exams.filter((e) =>
+    e.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const downloadAvatar = async (uid: string) => {
     const pr = profiles[uid];
     if (!pr?.avatar_url) {
@@ -466,11 +470,22 @@ const AdminLiveExams = () => {
       )}
 
       <div className="glass-card-static p-5">
-        <h2 className="text-sm font-bold mb-3">সব লাইভ পরীক্ষা ({liveExams.length})</h2>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
+          <h2 className="text-sm font-bold">সব লাইভ পরীক্ষা ({filteredLiveExams.length})</h2>
+          <div className="relative w-full md:w-64">
+            <input
+              type="text"
+              placeholder="লাইভ পরীক্ষার নাম দিয়ে খুঁজুন..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full glass-strong rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+          </div>
+        </div>
         {loading ? <p className="text-sm text-muted-foreground">লোড হচ্ছে...</p> :
-          liveExams.length === 0 ? <p className="text-sm text-muted-foreground py-4 text-center">কোনো লাইভ পরীক্ষা নেই</p> :
+          filteredLiveExams.length === 0 ? <p className="text-sm text-muted-foreground py-4 text-center">কোনো লাইভ পরীক্ষা নেই</p> :
           <div className="space-y-2">
-            {liveExams.map((le) => (
+            {filteredLiveExams.map((le) => (
               <div key={le.id} className="glass-strong rounded-lg p-3 flex flex-col md:flex-row md:items-center gap-3">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
