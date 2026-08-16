@@ -1,7 +1,12 @@
 import { useExams, useNotices } from "@/hooks/useSupabaseData";
-import { BookOpen, HelpCircle, Bell, Upload } from "lucide-react";
+import { BookOpen, HelpCircle, Bell, Upload, Flag, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import VisitorStats from "@/components/VisitorStats";
+import { useQuestionReports, usePendingReportCount } from "@/hooks/useQuestionReports";
+import { REPORT_REASONS } from "@/components/QuestionReportButton";
+
+const reasonLabel = (value: string) =>
+  REPORT_REASONS.find((r) => r.value === value)?.label ?? "অন্যান্য";
 
 const AdminDashboard = () => {
   const { data: exams = [], isLoading: examsLoading } = useExams();
