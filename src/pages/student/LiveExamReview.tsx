@@ -7,6 +7,7 @@ import { ArrowLeft, CheckCircle2, XCircle, MinusCircle, Trophy } from "lucide-re
 import MathText from "@/components/MathText";
 import { resolveCorrectOptionText, isAnswerMatch } from "@/lib/answerUtils";
 import { computeLiveStatus } from "@/lib/liveExamStatus";
+import QuestionReportButton from "@/components/QuestionReportButton";
 
 interface LiveExam {
   id: string; title: string; exam_id: string;
