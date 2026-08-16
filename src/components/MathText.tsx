@@ -227,6 +227,19 @@ export function renderMathTextToHtml(text: string): string {
       continue;
     }
 
+    // Bare unicode accents pasted as plain text, e.g. "A⃗" or "â".
+    const combining = source.slice(i).match(new RegExp(`^([A-Za-z0-9])([${COMBINING_CHARS}]+)('*)`));
+    if (combining) {
+      flush();
+      tokens.push({
+        type: "math",
+        value: combiningToLatex(combining[1], combining[2]) + combining[3],
+        display: false,
+      });
+      i += combining[0].length;
+      continue;
+    }
+
     const simpleRun = consumeSimpleLatexRun(source, i);
     if (simpleRun) {
       flush();
