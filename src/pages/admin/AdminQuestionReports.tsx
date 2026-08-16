@@ -45,7 +45,7 @@ const ReportCard = ({ report }: { report: QuestionReport }) => {
 
   const setStatus = async (status: ReportStatus) => {
     try {
-      await updateStatus.mutateAsync({ id: report.id, status, adminNote: note.trim() || null as unknown as string });
+      await updateStatus.mutateAsync({ id: report.id, status, adminNote: note.trim() || null });
       toast({ title: "হালনাগাদ হয়েছে", description: `অবস্থা: ${STATUS_LABEL[status]}` });
     } catch {
       toast({ title: "ত্রুটি", description: "অবস্থা পরিবর্তন করা যায়নি।", variant: "destructive" });

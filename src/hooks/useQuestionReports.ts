@@ -104,7 +104,7 @@ export function useSubmitQuestionReport() {
 export function useUpdateReportStatus() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, status, adminNote }: { id: string; status: ReportStatus; adminNote?: string }) => {
+    mutationFn: async ({ id, status, adminNote }: { id: string; status: ReportStatus; adminNote?: string | null }) => {
       const { error } = await supabase
         .from("question_reports")
         .update({ status, ...(adminNote !== undefined ? { admin_note: adminNote } : {}) })
