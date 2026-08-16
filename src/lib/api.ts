@@ -170,7 +170,9 @@ export async function upsertExam(exam: Exam): Promise<void> {
   };
   const { questions, ...rest } = nextExam;
 
+  // Optimistically update local store
   writeLocalExams(upsertById(store.getExams(), nextExam));
+
 
   await withBackendWrite(
     async () => {
