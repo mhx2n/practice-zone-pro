@@ -87,25 +87,55 @@ const consumeEnvironment = (source: string, start: number) => {
   return { value: source.slice(start, end), end, display: true };
 };
 
-const consumeBracketExpression = (source: string, start: number) => {
-  const prefix = source.slice(start).match(/^\\[a-zA-Z]+\s*(?=\{|\[)/);
-  if (!prefix) return null;
-  const openAt = start + prefix[0].length;
-  const open = source[openAt];
-  const close = open === " {"? "}": "]";
+const consumeBalancedGroup = (source: string, start: number) => {
+  const open = source[start];
+  if (open !== "{" && open !== "[") return -1;
+  const close = open === "{" ? "}" : "]";
   let depth = 0;
-  for (let i = openAt; i < source.length; i++) {
+  for (let i = start; i < source.length; i++) {
     const ch = source[i];
     if (ch === "\\") {
       i++;
       continue;
     }
     if (ch === open) depth++;
-    if (ch === close) depth--;
-    if (depth === 0) return { value: source.slice(start, i + 1), end: i + 1, display: false };
+    else if (ch === close) {
+      depth--;
+      if (depth === 0) return i + 1;
+    }
   }
-  return null;
+  return -1;
 };
+
+const consumeBracketExpression = (source: string, start: number) => {
+  const prefix = source.slice(start).match(/^\\[a-zA-Z]+\s*(?=\{|\[)/);
+  if (!prefix) return null;
+  let i = start + prefix[0].length;
+  let consumedGroup = false;
+  // Consume every argument group that follows, e.g. \frac{a}{b}, \sqrt[3]{x}.
+  while (i < source.length) {
+    const next = consumeBalancedGroup(source, i);
+    if (next === -1) break;
+    consumedGroup = true;
+    i = next;
+    // Allow sub/superscripts or a chained command directly after a group.
+    const tail = source.slice(i).match(/^(?:[_^](?:\{|\[)?|\\[a-zA-Z]+\s*(?=\{|\[))/);
+    if (tail) {
+      if (tail[0].startsWith("_") || tail[0].startsWith("^")) {
+        const scriptStart = i + 1;
+        const scriptEnd = consumeBalancedGroup(source, scriptStart);
+        i = scriptEnd === -1 ? scriptStart + 1 : scriptEnd;
+      } else {
+        i += tail[0].length;
+      }
+      continue;
+    }
+    break;
+  }
+  if (!consumedGroup) return null;
+  return { value: source.slice(start, i), end: i, display: false };
+};
+
 
 const consumeAssignmentEnvironment = (source: string, start: number) => {
   const prefix = source.slice(start).match(/^[A-Za-z0-9|_{}^\\]+\s*=\s*(?=\\begin\{)/);
