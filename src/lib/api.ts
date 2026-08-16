@@ -48,6 +48,30 @@ function dbQuestionToApp(row: any): Question {
   };
 }
 
+const QUESTION_PAGE_SIZE = 1000;
+
+async function fetchQuestionsForExamIds(examIds: string[]): Promise<any[]> {
+  if (examIds.length === 0) return [];
+
+  const allQuestions: any[] = [];
+  for (let from = 0; ; from += QUESTION_PAGE_SIZE) {
+    const { data, error } = await supabase
+      .from("questions")
+      .select("*")
+      .in("exam_id", examIds)
+      .order("exam_id", { ascending: true })
+      .order("sort_order", { ascending: true })
+      .range(from, from + QUESTION_PAGE_SIZE - 1);
+
+    if (error) throw error;
+    const page = data || [];
+    allQuestions.push(...page);
+    if (page.length < QUESTION_PAGE_SIZE) break;
+  }
+
+  return allQuestions;
+}
+
 function upsertCachedExam(exam: Exam) {
   const next = upsertById(store.getExams(), exam);
   writeLocalExams(next);
@@ -117,14 +141,12 @@ export async function fetchExams(): Promise<Exam[]> {
       if (error) throw error;
       if (!exams?.length) return [];
 
-      const { data: questions } = await supabase
-        .from("questions")
-        .select("*")
-        .in("exam_id", exams.map((e) => e.id))
-        .order("sort_order", { ascending: true });
+      // The backend returns at most 1,000 rows per request. Fetch every page so
+      // later exams are not left with only the final 4–5 questions.
+      const questions = await fetchQuestionsForExamIds(exams.map((e) => e.id));
 
       const qMap = new Map<string, Question[]>();
-      (questions || []).forEach((q) => {
+      questions.forEach((q) => {
         const arr = qMap.get(q.exam_id) || [];
         arr.push(dbQuestionToApp(q));
         qMap.set(q.exam_id, arr);
