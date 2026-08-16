@@ -173,6 +173,7 @@ export async function upsertExam(exam: Exam): Promise<void> {
 
   await withBackendWrite(
     async () => {
+      // First update the exam record including the recalculated count
       const { error } = await supabase.from("exams").upsert({
         id: rest.id,
         title: rest.title,
@@ -182,7 +183,7 @@ export async function upsertExam(exam: Exam): Promise<void> {
         section_id: rest.sectionId || null,
         chapter_id: rest.chapterId || null,
         difficulty: rest.difficulty,
-        question_count: rest.questionCount,
+        question_count: nextExam.questionCount, // Use the recalculated count
         duration: rest.duration,
         negative_marking: rest.negativeMarking,
         published: rest.published,
@@ -192,6 +193,7 @@ export async function upsertExam(exam: Exam): Promise<void> {
       } as any);
       if (error) throw error;
 
+      // Update questions: delete old and insert new to ensure sync
       await supabase.from("questions").delete().eq("exam_id", exam.id);
       if (questions.length > 0) {
         const { error: qErr } = await supabase.from("questions").insert(
