@@ -165,7 +165,7 @@ export async function fetchExamById(id: string): Promise<Exam | null> {
 export async function upsertExam(exam: Exam): Promise<void> {
   const nextExam = {
     ...exam,
-    questionCount: exam.questions.length,
+    questionCount: (exam.questions || []).length,
   };
   const { questions, ...rest } = nextExam;
 

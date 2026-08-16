@@ -218,7 +218,7 @@ const AdminCSVUpload = () => {
     chapter: chapterMeta?.chapter.name || "",
     chapterId: targetChapterId || undefined,
     difficulty: newExamDifficulty,
-    questionCount: questions.length,
+    questionCount: (questions || []).length,
     duration: newExamDuration,
     negativeMarking: newExamNegativeMarking,
     questions,
@@ -278,7 +278,7 @@ const AdminCSVUpload = () => {
     const updatedExam: Exam = {
       ...targetExam,
       questions: [...targetExam.questions, ...csvQuestions],
-      questionCount: targetExam.questions.length + csvQuestions.length,
+      questionCount: (targetExam.questions || []).length + (csvQuestions || []).length,
     };
 
     upsertExam.mutate(updatedExam, {
