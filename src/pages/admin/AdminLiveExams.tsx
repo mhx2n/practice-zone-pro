@@ -37,6 +37,7 @@ const AdminLiveExams = () => {
   const [premiumBatches, setPremiumBatches] = useState<{ id: string; name: string }[]>([]);
   const [batchLinks, setBatchLinks] = useState<{ id: string; live_exam_id: string; premium_batch_id: string }[]>([]);
   const [accessFor, setAccessFor] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [form, setForm] = useState({
     title: "", description: "", exam_id: "", start_time: "", end_time: "",
@@ -66,6 +67,11 @@ const AdminLiveExams = () => {
     }
     setLoading(false);
   };
+
+  const filteredLiveExams = liveExams.filter((e) =>
+    e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    e.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => { load(); }, []);
 
@@ -356,6 +362,10 @@ const AdminLiveExams = () => {
 
   const sortedParts = [...parts].sort((a, b) => b.score - a.score || a.time_taken_seconds - b.time_taken_seconds);
 
+  const filteredExams = exams.filter((e) =>
+    e.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const downloadAvatar = async (uid: string) => {
     const pr = profiles[uid];
     if (!pr?.avatar_url) {
@@ -399,11 +409,39 @@ const AdminLiveExams = () => {
             value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
           <textarea className="w-full glass-strong rounded-lg px-3 py-2 text-sm" placeholder="বিবরণ" rows={2}
             value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-          <select className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
-            value={form.exam_id} onChange={(e) => setForm({ ...form, exam_id: e.target.value })}>
-            <option value="">পরীক্ষা সিলেক্ট করুন</option>
-            {exams.map((x) => <option key={x.id} value={x.id}>{x.title} ({x.question_count}টি) {x.published ? "": "• অপ্রকাশিত"}</option>)}
-          </select>
+          <div className="space-y-2">
+            <label className="text-xs font-semibold">পরীক্ষা নির্বাচন করুন:</label>
+            <input
+              type="text"
+              placeholder="পরীক্ষার নাম দিয়ে খুঁজুন..."
+              className="w-full glass-strong rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/30"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 max-h-48 overflow-y-auto p-2 glass-strong rounded-lg">
+              {filteredExams.map((x) => {
+                const isSelected = form.exam_id === x.id;
+                return (
+                  <button
+                    key={x.id}
+                    type="button"
+                    onClick={() => setForm({ ...form, exam_id: x.id })}
+                    className={`text-left p-2 rounded-lg text-xs transition-colors border ${
+                      isSelected 
+                        ? "bg-primary/10 border-primary text-primary font-semibold" 
+                        : "border-transparent hover:bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    <p className="truncate">{x.title}</p>
+                    <p className="text-[10px] opacity-70">{x.question_count}টি প্রশ্ন {!x.published && "• অপ্রকাশিত"}</p>
+                  </button>
+                );
+              })}
+              {filteredExams.length === 0 && (
+                <p className="text-[10px] text-muted-foreground text-center py-2 col-span-full">কোনো পরীক্ষা পাওয়া যায়নি</p>
+              )}
+            </div>
+          </div>
           <div className="rounded-xl border border-border p-3 space-y-2">
             <p className="text-xs font-semibold flex items-center gap-1.5"><Crown size={13} className="text-warning" /> প্রিমিয়াম ব্যাচ অ্যাক্সেস (ঐচ্ছিক)</p>
             <p className="text-[11px] text-muted-foreground">কোনো ব্যাচ সিলেক্ট না করলে সবাই দেখতে পাবে। সিলেক্ট করলে শুধু ঐ ব্যাচের সদস্যরাই পরীক্ষাটি দেখতে ও দিতে পারবে — বাকিদের আইডিতে এটি একেবারেই দেখাবে না।</p>
@@ -460,11 +498,22 @@ const AdminLiveExams = () => {
       )}
 
       <div className="glass-card-static p-5">
-        <h2 className="text-sm font-bold mb-3">সব লাইভ পরীক্ষা ({liveExams.length})</h2>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
+          <h2 className="text-sm font-bold">সব লাইভ পরীক্ষা ({filteredLiveExams.length})</h2>
+          <div className="relative w-full md:w-64">
+            <input
+              type="text"
+              placeholder="লাইভ পরীক্ষার নাম দিয়ে খুঁজুন..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full glass-strong rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+          </div>
+        </div>
         {loading ? <p className="text-sm text-muted-foreground">লোড হচ্ছে...</p> :
-          liveExams.length === 0 ? <p className="text-sm text-muted-foreground py-4 text-center">কোনো লাইভ পরীক্ষা নেই</p> :
+          filteredLiveExams.length === 0 ? <p className="text-sm text-muted-foreground py-4 text-center">কোনো লাইভ পরীক্ষা নেই</p> :
           <div className="space-y-2">
-            {liveExams.map((le) => (
+            {filteredLiveExams.map((le) => (
               <div key={le.id} className="glass-strong rounded-lg p-3 flex flex-col md:flex-row md:items-center gap-3">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
