@@ -15,7 +15,18 @@ interface Props {
 const generateId = () => crypto.randomUUID?.() || Math.random().toString(36).slice(2);
 
 const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
-  const [questions, setQuestions] = useState<Question[]>(Array.isArray(exam.questions) ? JSON.parse(JSON.stringify(exam.questions)) : []);
+  const [questions, setQuestions] = useState<Question[]>(() => {
+    if (!exam.questions) return [];
+    try {
+      // If it's already an array, clone it. If it's a string, parse it.
+      return Array.isArray(exam.questions) 
+        ? JSON.parse(JSON.stringify(exam.questions)) 
+        : JSON.parse(exam.questions as any);
+    } catch (e) {
+      console.error("Failed to parse questions in editor:", e);
+      return [];
+    }
+  });
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const upsertExam = useUpsertExam();
   const { toast } = useToast();
