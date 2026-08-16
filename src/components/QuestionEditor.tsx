@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Question, Exam } from "@/lib/types";
 import { useUpsertExam } from "@/hooks/useSupabaseData";
 import { compressImage } from "@/lib/imageUtils";
-import { X, ImagePlus, Save, ChevronDown, ChevronUp, Plus, Trash2 } from "lucide-react";
+import { X, ImagePlus, Save, ChevronDown, ChevronUp, Plus, Trash2, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Props {
