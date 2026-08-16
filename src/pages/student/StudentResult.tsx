@@ -134,14 +134,14 @@ const StudentResult = () => {
             examKind="practice"
             questionNumber={(questions?.findIndex((item) => item.id === q.id) ?? -1) + 1 || null}
             totalQuestions={questions?.length ?? null}
-            questionText={q.question}
-            section={q.section}
+            questionText={sourceQuestion.question}
+            section={sourceQuestion.section || q.section}
             className="flex-shrink-0"
           />
         </div>
-        {q.questionImage && <img src={q.questionImage} alt="" className="max-w-full max-h-48 rounded-lg border border-border mb-3 object-contain" />}
+        {sourceQuestion.questionImage && <img src={sourceQuestion.questionImage} alt="" className="max-w-full max-h-48 rounded-lg border border-border mb-3 object-contain" />}
         <div className="space-y-2 mb-3">
-          {q.options.map((opt, oi) => {
+          {sourceQuestion.options.map((opt, oi) => {
             const isAnswer = isAnswerMatch(opt, correctAnswer);
             const isUser = Boolean(userAns) && isAnswerMatch(opt, userAns);
             let cls = "border-border";
