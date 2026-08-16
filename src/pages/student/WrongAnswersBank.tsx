@@ -4,6 +4,7 @@ import { fetchWrongAnswers, deleteWrongAnswersByExam, WrongAnswerEntry } from "@
 import { CheckCircle2, XCircle, Trash2, ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
 import { isAnswerMatch } from "@/lib/answerUtils";
 import MathText from "@/components/MathText";
+import QuestionReportButton from "@/components/QuestionReportButton";
 
 const WrongAnswersBank = () => {
   const [entries, setEntries] = useState<WrongAnswerEntry[]>([]);
