@@ -52,17 +52,19 @@ const Index = () => {
             </p>
           )}
 
-          <div className="relative max-w-md mx-auto mb-8 animate-fade-in z-30" style={{ animationDelay: "0.2s"}}>
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={18} />
-            <input type="text" placeholder={getLabel("searchPlaceholder")} value={search} onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-2xl border border-border/60 bg-background/90 backdrop-blur-md pl-11 pr-10 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 shadow-sm" />
-            {search && search.length > 0 && (
-              <button onClick={() => setSearch("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors z-10">
-                <XIcon size={16} />
-              </button>
-            )}
+          <div className="max-w-md mx-auto mb-8 animate-fade-in" style={{ animationDelay: "0.2s"}}>
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10" size={18} />
+              <input type="text" placeholder={getLabel("searchPlaceholder")} value={search} onChange={(e) => setSearch(e.target.value)}
+                className="w-full rounded-2xl border border-border/60 bg-background/90 backdrop-blur-md pl-11 pr-10 py-3.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 shadow-sm" />
+              {search && search.length > 0 && (
+                <button onClick={() => setSearch("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors z-10">
+                  <XIcon size={16} />
+                </button>
+              )}
+            </div>
             {search && (
-              <div className="absolute top-full mt-2 left-0 right-0 rounded-2xl border border-border/60 bg-background shadow-2xl max-h-72 overflow-y-auto z-[100]" style={{ backdropFilter: 'blur(20px)' }}>
+              <div className="mt-3 rounded-2xl border border-border/60 bg-background/95 shadow-lg max-h-80 overflow-y-auto text-left">
                 {filtered.length > 0 ? (
                   <div className="p-2 space-y-0.5">
                     {filtered.map((e) => (
@@ -84,6 +86,7 @@ const Index = () => {
               </div>
             )}
           </div>
+
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center animate-fade-in" style={{ animationDelay: "0.3s"}}>
             <Link to="/exams" className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-[0.98]">
