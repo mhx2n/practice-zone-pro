@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Flag, Trash2, Check, Eye, RotateCcw, Search, Loader2 } from "lucide-react";
+import { Flag, Trash2, Check, Eye, RotateCcw, Search, Loader2, Copy } from "lucide-react";
 import {
   QuestionReport,
   ReportStatus,
@@ -62,6 +62,11 @@ const ReportCard = ({ report }: { report: QuestionReport }) => {
     }
   };
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast({ title: "কপি হয়েছে", description: `"${text}" ক্লিপবোর্ডে কপি করা হয়েছে` });
+  };
+
   return (
     <div className="glass-card-static p-4 space-y-3">
       <div className="flex flex-wrap items-center gap-2">
@@ -77,8 +82,11 @@ const ReportCard = ({ report }: { report: QuestionReport }) => {
         <span className="ml-auto text-[11px] text-muted-foreground">{formatDate(report.created_at)}</span>
       </div>
 
-      <div>
-        <p className="text-sm font-semibold">{report.exam_title || "শিরোনামহীন পরীক্ষা"}</p>
+      <div className="group cursor-pointer" onClick={() => copyToClipboard(report.exam_title || "")}>
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-bold group-hover:text-primary transition-colors">{report.exam_title || "শিরোনামহীন পরীক্ষা"}</p>
+          <Copy size={12} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+        </div>
         <p className="text-xs text-muted-foreground">
           {report.question_number
             ? `প্রশ্ন সিরিয়াল ${report.question_number}${report.total_questions ? ` / ${report.total_questions}` : ""}`

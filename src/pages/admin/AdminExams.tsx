@@ -208,7 +208,7 @@ const AdminExams = () => {
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-sm truncate">{e.title}</h3>
                     <p className="text-xs text-muted-foreground">
-                      {e.subject} • {e.questionCount} প্রশ্ন • {e.createdAt}
+                      {e.subject} • {(e.questions || []).length} প্রশ্ন • {e.createdAt}
                       {section && <span className="text-primary"> •  {section.name}</span>}
                     </p>
                     {hasMultipleSubjects && (

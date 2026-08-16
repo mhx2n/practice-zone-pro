@@ -200,10 +200,12 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
 
                     <div className="space-y-4">
                       <label className="text-sm font-semibold text-foreground block"> অপশনসমূহ (সঠিক উত্তর সিলেক্ট করুন)</label>
-                      {q.options.map((opt, oi) => (
-                        <div key={oi} className={`p-4 rounded-xl border-2 transition-all ${opt === q.answer && opt !== ""? "border-success/60 bg-success/5 ring-1 ring-success/20": "border-border"}`}>
+                      {q.options.map((opt, oi) => {
+                        const isCorrect = opt === q.answer && opt !== "";
+                        return (
+                          <div key={oi} className={`p-4 rounded-xl border-2 transition-all ${isCorrect ? "border-success bg-success/5 ring-2 ring-success/20": "border-border"}`}>
                           <div className="flex items-center gap-3 mb-3">
-                            <span className={`w-9 h-9 rounded-full text-sm flex items-center justify-center font-bold flex-shrink-0 ${opt === q.answer && opt !== ""? "bg-success/20 text-success": "bg-muted"}`}>
+                            <span className={`w-9 h-9 rounded-full text-sm flex items-center justify-center font-bold flex-shrink-0 ${isCorrect ? "bg-success text-success-foreground": "bg-muted text-muted-foreground"}`}>
                               {String.fromCharCode(65 + oi)}
                             </span>
                             <input
@@ -221,11 +223,11 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                           <div className="flex items-center gap-3 ml-12">
                             <button
                               onClick={() => updateQ(q.id, { answer: opt })}
-                              className={`text-xs px-4 py-2 rounded-lg font-semibold transition-all ${
-                                opt === q.answer && opt !== ""? "bg-success/20 text-success ring-1 ring-success/30": "bg-muted text-muted-foreground hover:bg-success/10 hover:text-success"
+                              className={`text-xs px-4 py-2 rounded-lg font-bold transition-all flex items-center gap-2 ${
+                                isCorrect ? "bg-success text-success-foreground shadow-md": "bg-muted text-muted-foreground hover:bg-success/10 hover:text-success"
                               }`}
                             >
-                              {opt === q.answer && opt !== ""? " সঠিক উত্তর": "সঠিক করুন"}
+                              {isCorrect ? <><Check size={14} /> সঠিক উত্তর</> : "সঠিক করুন"}
                             </button>
                             {q.optionImages?.[oi] ? (
                               <div className="relative inline-block">
@@ -250,8 +252,10 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                               </label>
                             )}
                           </div>
+                          </div>
                         </div>
-                      ))}
+                      );
+                    })}
                     </div>
 
                     <div>
