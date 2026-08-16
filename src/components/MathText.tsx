@@ -22,11 +22,43 @@ const escapeHtml = (value: string) =>
     .replace(/>/g, "&gt;")
     .replace(/\n/g, "<br />");
 
+/**
+ * Unicode combining marks that authors often paste directly (e.g. "A⃗", "â").
+ * Browsers rarely have a Bengali/Latin font that can compose them, so they show
+ * up as tofu boxes. We convert them into proper LaTeX accents instead.
+ */
+const COMBINING_ACCENTS: Record<string, string> = {
+  "\u20d7": "vec",
+  "\u20d6": "overleftarrow",
+  "\u0302": "hat",
+  "\u0303": "tilde",
+  "\u0304": "bar",
+  "\u0305": "bar",
+  "\u0306": "breve",
+  "\u0307": "dot",
+  "\u0308": "ddot",
+  "\u030a": "mathring",
+  "\u030c": "check",
+  "\u0301": "acute",
+  "\u0300": "grave",
+};
+
+const COMBINING_CHARS = Object.keys(COMBINING_ACCENTS).join("");
+const COMBINING_RE = new RegExp(`([A-Za-z0-9])([${COMBINING_CHARS}]+)`, "g");
+
+const combiningToLatex = (base: string, marks: string) =>
+  marks.split("").reduce((acc, mark) => `\\${COMBINING_ACCENTS[mark]}{${acc}}`, base);
+
+const expandCombiningInMath = (value: string) =>
+  value.replace(COMBINING_RE, (_m, base: string, marks: string) => combiningToLatex(base, marks));
+
 const normalizeMath = (value: string) =>
-  value
-    .replace(/\\text\s*\{/g, "\\text{")
-    .replace(/\u00a0/g, " ")
-    .trim();
+  expandCombiningInMath(
+    value
+      .replace(/\\text\s*\{/g, "\\text{")
+      .replace(/\u00a0/g, " ")
+  ).trim();
+
 
 const renderMath = (math: string, displayMode = false) => {
   try {
