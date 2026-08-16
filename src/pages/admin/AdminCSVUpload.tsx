@@ -218,7 +218,7 @@ const AdminCSVUpload = () => {
     chapter: chapterMeta?.chapter.name || "",
     chapterId: targetChapterId || undefined,
     difficulty: newExamDifficulty,
-    questionCount: questions.length,
+    questionCount: (questions || []).length,
     duration: newExamDuration,
     negativeMarking: newExamNegativeMarking,
     questions,

@@ -15,7 +15,7 @@ interface Props {
 const generateId = () => crypto.randomUUID?.() || Math.random().toString(36).slice(2);
 
 const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
-  const [questions, setQuestions] = useState<Question[]>(JSON.parse(JSON.stringify(exam.questions)));
+  const [questions, setQuestions] = useState<Question[]>(Array.isArray(exam.questions) ? JSON.parse(JSON.stringify(exam.questions)) : []);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const upsertExam = useUpsertExam();
   const { toast } = useToast();
