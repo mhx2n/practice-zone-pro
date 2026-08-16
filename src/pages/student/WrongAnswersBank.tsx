@@ -60,7 +60,7 @@ const WrongAnswersBank = () => {
   });
 
   return (
-    <div className="pt-24 pb-8 container max-w-3xl mx-auto animate-fade-in px-3 sm:px-4">
+    <div className="pt-24 pb-8 container max-w-5xl mx-auto animate-fade-in px-3 sm:px-4">
       <div className="flex items-center gap-3 mb-5">
         <Link to="/" className="text-muted-foreground hover:text-foreground"><ArrowLeft size={20} /></Link>
         <h1 className="text-xl font-bold"> ভুল উত্তর ব্যাংক</h1>
