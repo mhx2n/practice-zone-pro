@@ -7,6 +7,7 @@ import { ArrowLeft, CheckCircle2, XCircle, MinusCircle, Trophy } from "lucide-re
 import MathText from "@/components/MathText";
 import { resolveCorrectOptionText, isAnswerMatch } from "@/lib/answerUtils";
 import { computeLiveStatus } from "@/lib/liveExamStatus";
+import QuestionReportButton from "@/components/QuestionReportButton";
 
 interface LiveExam {
   id: string; title: string; exam_id: string;
@@ -150,9 +151,21 @@ const LiveExamReview = () => {
             <div key={q.id} className="glass-card-static p-4 space-y-3">
               <div className="flex items-center justify-between gap-2">
                 <p className="text-xs text-muted-foreground">প্রশ্ন {idx + 1} / {total}</p>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1 border ${stateMeta.cls}`}>
-                  {stateMeta.icon} {stateMeta.label}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1 border ${stateMeta.cls}`}>
+                    {stateMeta.icon} {stateMeta.label}
+                  </span>
+                  <QuestionReportButton
+                    questionId={q.id}
+                    examId={exam.exam_id}
+                    examTitle={exam.title}
+                    examKind="live"
+                    questionNumber={idx + 1}
+                    totalQuestions={total}
+                    questionText={q.question}
+                    section={q.section}
+                  />
+                </div>
               </div>
               <div className="text-sm font-semibold leading-relaxed"><MathText text={q.question} /></div>
               <div className="space-y-1.5">

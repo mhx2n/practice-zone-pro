@@ -738,8 +738,36 @@ export async function fetchWrongAnswers(): Promise<WrongAnswerEntry[]> {
         createdAt: r.created_at,
       }));
 
-      store.setWrongAnswers(mapped);
-      return mapped;
+      // Keep saved wrong answers in sync with the latest edited question content.
+      const questionIds = Array.from(new Set(mapped.map((m) => m.questionId).filter(Boolean)));
+      let synced = mapped;
+      if (questionIds.length) {
+        const { data: liveQs } = await supabase
+          .from("questions")
+          .select("id,question,question_image,options,option_images,answer,explanation,section")
+          .in("id", questionIds);
+        if (liveQs?.length) {
+          const byId = new Map(liveQs.map((q: any) => [q.id, q]));
+          synced = mapped.map((entry) => {
+            const q: any = byId.get(entry.questionId);
+            if (!q) return entry;
+            const options = Array.isArray(q.options) ? q.options : entry.options;
+            return {
+              ...entry,
+              questionText: q.question ?? entry.questionText,
+              questionImage: q.question_image || undefined,
+              options,
+              optionImages: Array.isArray(q.option_images) ? q.option_images : undefined,
+              correctAnswer: q.answer ?? entry.correctAnswer,
+              explanation: q.explanation ?? entry.explanation,
+              section: q.section || entry.section || "",
+            };
+          });
+        }
+      }
+
+      store.setWrongAnswers(synced);
+      return synced;
     },
     () => store.getWrongAnswers<WrongAnswerEntry>(),
   );

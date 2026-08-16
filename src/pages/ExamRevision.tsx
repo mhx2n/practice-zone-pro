@@ -5,6 +5,7 @@ import { ArrowLeft, BookOpen, CheckCircle2, Lock } from "lucide-react";
 import { useMemo } from "react";
 import MathText from "@/components/MathText";
 import { isAnswerMatch, resolveCorrectOptionText } from "@/lib/answerUtils";
+import QuestionReportButton from "@/components/QuestionReportButton";
 
 const ExamRevision = () => {
   const { id } = useParams();
@@ -89,10 +90,23 @@ const ExamRevision = () => {
                 const correct = resolveCorrectOptionText(q);
                 return (
                   <div key={q.id} className="glass-card-static p-4">
-                    <p className="text-base font-semibold mb-2">
-                      <span className="text-muted-foreground mr-2">{i + 1}.</span>
-                      <MathText text={q.question} />
-                    </p>
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <p className="text-base font-semibold flex-1">
+                        <span className="text-muted-foreground mr-2">{i + 1}.</span>
+                        <MathText text={q.question} />
+                      </p>
+                      <QuestionReportButton
+                        questionId={q.id}
+                        examId={exam.id}
+                        examTitle={exam.title}
+                        examKind="practice"
+                        questionNumber={i + 1}
+                        totalQuestions={g.questions.length}
+                        questionText={q.question}
+                        section={q.section}
+                        className="flex-shrink-0"
+                      />
+                    </div>
                     {q.questionImage && <img src={q.questionImage} alt="" className="max-w-full max-h-48 rounded-lg border border-border mb-3 object-contain" />}
                     <div className="space-y-2 mb-3">
                       {q.options.map((opt, oi) => {

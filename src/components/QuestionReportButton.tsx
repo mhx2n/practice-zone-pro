@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Flag, Loader2, ShieldCheck } from "lucide-react";
+import { Flag, Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -155,9 +155,6 @@ const QuestionReportButton = ({
                 placeholder="কী ভুল আছে, বা কীভাবে ঠিক করলে ভালো হয় লিখুন।"
                 className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
-              <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
-                <ShieldCheck size={12} /> রিপোর্টটি শুধু পরিচালনা দলের কাছে যাবে।
-              </p>
             </div>
           </div>
 

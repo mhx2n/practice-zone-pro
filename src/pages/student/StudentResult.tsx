@@ -122,10 +122,10 @@ const StudentResult = () => {
       <div key={q.id} className="glass-card-static p-4">
         <div className="flex items-center gap-2 mb-2">
           <p className="text-base font-semibold flex-1">
-            <span className="text-muted-foreground mr-2">{i + 1}.</span><MathText text={q.question} />
+            <span className="text-muted-foreground mr-2">{i + 1}.</span><MathText text={sourceQuestion.question} />
           </p>
-          {q.section && hasSubjectBreakdown && (
-            <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full flex-shrink-0">{q.section}</span>
+          {(sourceQuestion.section || q.section) && hasSubjectBreakdown && (
+            <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full flex-shrink-0">{sourceQuestion.section || q.section}</span>
           )}
           <QuestionReportButton
             questionId={q.id}
@@ -134,14 +134,14 @@ const StudentResult = () => {
             examKind="practice"
             questionNumber={(questions?.findIndex((item) => item.id === q.id) ?? -1) + 1 || null}
             totalQuestions={questions?.length ?? null}
-            questionText={q.question}
-            section={q.section}
+            questionText={sourceQuestion.question}
+            section={sourceQuestion.section || q.section}
             className="flex-shrink-0"
           />
         </div>
-        {q.questionImage && <img src={q.questionImage} alt="" className="max-w-full max-h-48 rounded-lg border border-border mb-3 object-contain" />}
+        {sourceQuestion.questionImage && <img src={sourceQuestion.questionImage} alt="" className="max-w-full max-h-48 rounded-lg border border-border mb-3 object-contain" />}
         <div className="space-y-2 mb-3">
-          {q.options.map((opt, oi) => {
+          {sourceQuestion.options.map((opt, oi) => {
             const isAnswer = isAnswerMatch(opt, correctAnswer);
             const isUser = Boolean(userAns) && isAnswerMatch(opt, userAns);
             let cls = "border-border";
@@ -154,12 +154,12 @@ const StudentResult = () => {
                   {isUser && !isCorrect && <XCircle size={16} className="text-destructive flex-shrink-0" />}
                   <MathText text={opt} className="text-sm" />
                 </div>
-                {q.optionImages?.[oi] && <img src={q.optionImages[oi]!} alt="" className="mt-2 max-h-24 rounded border border-border object-contain" />}
+                {sourceQuestion.optionImages?.[oi] && <img src={sourceQuestion.optionImages[oi]!} alt="" className="mt-2 max-h-24 rounded border border-border object-contain" />}
               </div>
             );
           })}
         </div>
-        {q.explanation && <div className="text-sm text-muted-foreground bg-muted/50 rounded-lg p-3 mt-2"> <strong>ব্যাখ্যা:</strong> <MathText text={q.explanation} /></div>}
+        {sourceQuestion.explanation && <div className="text-sm text-muted-foreground bg-muted/50 rounded-lg p-3 mt-2"> <strong>ব্যাখ্যা:</strong> <MathText text={sourceQuestion.explanation} /></div>}
       </div>
     );
   };

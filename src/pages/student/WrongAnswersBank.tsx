@@ -4,6 +4,7 @@ import { fetchWrongAnswers, deleteWrongAnswersByExam, WrongAnswerEntry } from "@
 import { CheckCircle2, XCircle, Trash2, ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
 import { isAnswerMatch } from "@/lib/answerUtils";
 import MathText from "@/components/MathText";
+import QuestionReportButton from "@/components/QuestionReportButton";
 
 const WrongAnswersBank = () => {
   const [entries, setEntries] = useState<WrongAnswerEntry[]>([]);
@@ -59,7 +60,7 @@ const WrongAnswersBank = () => {
   });
 
   return (
-    <div className="pt-24 pb-8 container max-w-3xl mx-auto animate-fade-in px-3 sm:px-4">
+    <div className="pt-24 pb-8 container max-w-5xl mx-auto animate-fade-in px-3 sm:px-4">
       <div className="flex items-center gap-3 mb-5">
         <Link to="/" className="text-muted-foreground hover:text-foreground"><ArrowLeft size={20} /></Link>
         <h1 className="text-xl font-bold"> ভুল উত্তর ব্যাংক</h1>
@@ -90,24 +91,25 @@ const WrongAnswersBank = () => {
           </div>
 
           {/* Exam groups */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 items-start">
           {Object.values(grouped).map((group) => {
             const isExamOpen = expandedExam === group.examId;
             const subjectCount = Object.keys(group.subjects).length;
 
             return (
-              <div key={group.examId} className="glass-card-static overflow-hidden">
+              <div key={group.examId} className={`glass-card-static overflow-hidden ${isExamOpen ? "col-span-2 md:col-span-3" : ""}`}>
                 {/* Exam header */}
                 <button
                   onClick={() => toggleExam(group.examId)}
-                  className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/50 transition-colors"
+                  className="w-full flex items-center justify-between gap-2 p-3 sm:p-4 text-left hover:bg-muted/50 transition-colors"
                 >
-                  <div className="flex-1">
-                    <h2 className="text-base font-bold text-foreground">{group.title}</h2>
-                    <p className="text-xs text-muted-foreground mt-1">
+                  <div className="flex-1 min-w-0">
+                    <h2 className="text-sm sm:text-base font-bold text-foreground line-clamp-2">{group.title}</h2>
+                    <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
                       {group.total}টি ভুল • {subjectCount}টি বিষয়
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 ml-3">
+                  <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                     <button
                       onClick={(e) => { e.stopPropagation(); handleDeleteExam(group.examId); }}
                       className="text-xs text-destructive hover:underline flex items-center gap-1 p-1"
@@ -144,13 +146,24 @@ const WrongAnswersBank = () => {
                             <div className="px-3 pb-3 space-y-3 animate-fade-in">
                               {items.map((entry, i) => (
                                 <div key={entry.id || i} className="p-4 sm:p-5 border border-border/30 rounded-xl hover:border-primary/30 transition-colors bg-card">
-                                  <div className="flex items-start justify-between mb-3">
+                                   <div className="flex items-start justify-between gap-2 mb-3">
                                     <div className="flex-1 pr-2">
                                       <p className="text-[15px] sm:text-base font-semibold leading-[1.7]">
                                         <span className="text-muted-foreground mr-2 font-mono">{i + 1}.</span>
                                         <MathText text={entry.questionText} />
                                       </p>
                                     </div>
+                                    <QuestionReportButton
+                                      questionId={entry.questionId}
+                                      examId={entry.examId}
+                                      examTitle={entry.examTitle}
+                                      examKind="practice"
+                                      questionNumber={i + 1}
+                                      totalQuestions={items.length}
+                                      questionText={entry.questionText}
+                                      section={entry.section}
+                                      className="flex-shrink-0"
+                                    />
                                   </div>
                                   {entry.questionImage && <img src={entry.questionImage} alt="প্রশ্নের ছবি" className="max-w-full max-h-48 rounded-xl border border-border/30 mb-3 object-contain shadow-sm" />}
                                   <div className="space-y-2 mb-3">
@@ -197,8 +210,10 @@ const WrongAnswersBank = () => {
               </div>
             );
           })}
+          </div>
         </div>
       )}
+
 
     </div>
   );
