@@ -122,10 +122,10 @@ const StudentResult = () => {
       <div key={q.id} className="glass-card-static p-4">
         <div className="flex items-center gap-2 mb-2">
           <p className="text-base font-semibold flex-1">
-            <span className="text-muted-foreground mr-2">{i + 1}.</span><MathText text={q.question} />
+            <span className="text-muted-foreground mr-2">{i + 1}.</span><MathText text={sourceQuestion.question} />
           </p>
-          {q.section && hasSubjectBreakdown && (
-            <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full flex-shrink-0">{q.section}</span>
+          {(sourceQuestion.section || q.section) && hasSubjectBreakdown && (
+            <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full flex-shrink-0">{sourceQuestion.section || q.section}</span>
           )}
           <QuestionReportButton
             questionId={q.id}
