@@ -204,58 +204,57 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                         const isCorrect = opt === q.answer && opt !== "";
                         return (
                           <div key={oi} className={`p-4 rounded-xl border-2 transition-all ${isCorrect ? "border-success bg-success/5 ring-2 ring-success/20": "border-border"}`}>
-                          <div className="flex items-center gap-3 mb-3">
-                            <span className={`w-9 h-9 rounded-full text-sm flex items-center justify-center font-bold flex-shrink-0 ${isCorrect ? "bg-success text-success-foreground": "bg-muted text-muted-foreground"}`}>
-                              {String.fromCharCode(65 + oi)}
-                            </span>
-                            <input
-                              value={opt}
-                              onChange={(e) => {
-                                const newOpts = [...q.options];
-                                const wasAnswer = q.answer === opt;
-                                newOpts[oi] = e.target.value;
-                                updateQ(q.id, { options: newOpts, ...(wasAnswer ? { answer: e.target.value } : {}) });
-                              }}
-                              placeholder={`অপশন ${String.fromCharCode(65 + oi)} লিখুন...`}
-                              className="flex-1 bg-transparent text-base font-medium focus:outline-none border-b border-transparent focus:border-primary/30 pb-1"
-                            />
+                            <div className="flex items-center gap-3 mb-3">
+                              <span className={`w-9 h-9 rounded-full text-sm flex items-center justify-center font-bold flex-shrink-0 ${isCorrect ? "bg-success text-success-foreground": "bg-muted text-muted-foreground"}`}>
+                                {String.fromCharCode(65 + oi)}
+                              </span>
+                              <input
+                                value={opt}
+                                onChange={(e) => {
+                                  const newOpts = [...q.options];
+                                  const wasAnswer = q.answer === opt;
+                                  newOpts[oi] = e.target.value;
+                                  updateQ(q.id, { options: newOpts, ...(wasAnswer ? { answer: e.target.value } : {}) });
+                                }}
+                                placeholder={`অপশন ${String.fromCharCode(65 + oi)} লিখুন...`}
+                                className="flex-1 bg-transparent text-base font-medium focus:outline-none border-b border-transparent focus:border-primary/30 pb-1"
+                              />
+                            </div>
+                            <div className="flex items-center gap-3 ml-12">
+                              <button
+                                onClick={() => updateQ(q.id, { answer: opt })}
+                                className={`text-xs px-4 py-2 rounded-lg font-bold transition-all flex items-center gap-2 ${
+                                  isCorrect ? "bg-success text-success-foreground shadow-md": "bg-muted text-muted-foreground hover:bg-success/10 hover:text-success"
+                                }`}
+                              >
+                                {isCorrect ? <><Check size={14} /> সঠিক উত্তর</> : "সঠিক করুন"}
+                              </button>
+                              {q.optionImages?.[oi] ? (
+                                <div className="relative inline-block">
+                                  <img src={q.optionImages[oi]!} alt="" className="max-h-32 rounded-lg border border-border" />
+                                  <button
+                                    onClick={() => removeOptionImage(q.id, oi)}
+                                    className="absolute top-1 right-1 p-1.5 rounded-full bg-destructive text-destructive-foreground shadow-lg"
+                                  >
+                                    <X size={12} />
+                                  </button>
+                                </div>
+                              ) : (
+                                <label className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-dashed border-border text-xs text-muted-foreground cursor-pointer hover:border-primary/50 hover:text-primary transition-all">
+                                  <ImagePlus size={16} />
+                                  <span>ছবি যোগ</span>
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={(e) => e.target.files?.[0] && handleOptionImage(q.id, oi, e.target.files[0])}
+                                  />
+                                </label>
+                              )}
+                            </div>
                           </div>
-                          <div className="flex items-center gap-3 ml-12">
-                            <button
-                              onClick={() => updateQ(q.id, { answer: opt })}
-                              className={`text-xs px-4 py-2 rounded-lg font-bold transition-all flex items-center gap-2 ${
-                                isCorrect ? "bg-success text-success-foreground shadow-md": "bg-muted text-muted-foreground hover:bg-success/10 hover:text-success"
-                              }`}
-                            >
-                              {isCorrect ? <><Check size={14} /> সঠিক উত্তর</> : "সঠিক করুন"}
-                            </button>
-                            {q.optionImages?.[oi] ? (
-                              <div className="relative inline-block">
-                                <img src={q.optionImages[oi]!} alt="" className="max-h-32 rounded-lg border border-border" />
-                                <button
-                                  onClick={() => removeOptionImage(q.id, oi)}
-                                  className="absolute top-1 right-1 p-1.5 rounded-full bg-destructive text-destructive-foreground shadow-lg"
-                                >
-                                  <X size={12} />
-                                </button>
-                              </div>
-                            ) : (
-                              <label className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-dashed border-border text-xs text-muted-foreground cursor-pointer hover:border-primary/50 hover:text-primary transition-all">
-                                <ImagePlus size={16} />
-                                <span>ছবি যোগ</span>
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  className="hidden"
-                                  onChange={(e) => e.target.files?.[0] && handleOptionImage(q.id, oi, e.target.files[0])}
-                                />
-                              </label>
-                            )}
-                          </div>
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
                     </div>
 
                     <div>
