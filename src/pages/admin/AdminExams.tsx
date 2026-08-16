@@ -7,6 +7,7 @@ import QuestionEditor from "@/components/QuestionEditor";
 const ExamPdfExporter = lazy(() => import("@/components/ExamPdfExporter"));
 import { FileDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { fetchExamById } from "@/lib/api";
 
 const AdminExams = () => {
   const { data: exams = [], isLoading } = useExams();
@@ -24,6 +25,7 @@ const AdminExams = () => {
   const [premiumBatches, setPremiumBatches] = useState<{ id: string; name: string }[]>([]);
   const [examPremiumMap, setExamPremiumMap] = useState<Record<string, string[]>>({});
   const [searchQuery, setSearchQuery] = useState("");
+  const [loadingEditId, setLoadingEditId] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -57,6 +59,23 @@ const AdminExams = () => {
   );
 
   const sorted = [...filteredExams].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  const openQuestionEditor = async (exam: Exam) => {
+    setLoadingEditId(exam.id);
+    try {
+      const completeExam = await fetchExamById(exam.id);
+      if (!completeExam) throw new Error("পরীক্ষাটি পাওয়া যায়নি");
+      setEditingExam(completeExam);
+    } catch (error) {
+      toast({
+        title: "প্রশ্ন লোড করা যায়নি",
+        description: error instanceof Error ? error.message : "আবার চেষ্টা করুন",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingEditId(null);
+    }
+  };
 
   const togglePublish = (examId: string, current: boolean) => {
     updateFieldMut.mutate({ id: examId, field: "published", value: !current }, {
@@ -208,7 +227,7 @@ const AdminExams = () => {
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-sm truncate">{e.title}</h3>
                     <p className="text-xs text-muted-foreground">
-                      {e.subject} • {(e.questions && Array.isArray(e.questions)) ? e.questions.length : (e.questionCount || 0)} প্রশ্ন • {e.createdAt}
+                      {e.subject} • {e.questionCount || e.questions.length} প্রশ্ন • {e.createdAt}
                       {section && <span className="text-primary"> •  {section.name}</span>}
                     </p>
                     {hasMultipleSubjects && (
@@ -239,8 +258,8 @@ const AdminExams = () => {
                       <Lock size={16} className={isEditingMandatory ? "text-primary": "text-muted-foreground"} />
                     </button>
                   )}
-                  <button onClick={() => setEditingExam(e)} className="p-2 rounded-lg hover:bg-primary/10 transition-colors" title="প্রশ্ন সম্পাদনা">
-                    <Pencil size={16} className="text-primary" />
+                  <button onClick={() => openQuestionEditor(e)} disabled={loadingEditId === e.id} className="p-2 rounded-lg hover:bg-primary/10 transition-colors disabled:opacity-50" title="প্রশ্ন সম্পাদনা">
+                    <Pencil size={16} className={loadingEditId === e.id ? "text-muted-foreground animate-pulse" : "text-primary"} />
                   </button>
                   <button onClick={() => setPdfExam(e)} className="p-2 rounded-lg hover:bg-primary/10 transition-colors" title="PDF এক্সপোর্ট">
                     <FileDown size={16} className="text-primary" />
