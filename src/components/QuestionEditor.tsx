@@ -212,11 +212,20 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                     <div className="space-y-4">
                       <label className="text-sm font-semibold text-foreground block"> অপশনসমূহ (সঠিক উত্তর সিলেক্ট করুন)</label>
                       {q.options.map((opt, oi) => {
-                        const isCorrect = opt === q.answer && opt !== "";
+                        const isCorrect = q.answer === opt && opt !== "";
                         return (
-                          <div key={oi} className={`p-4 rounded-xl border-2 transition-all ${isCorrect ? "border-success bg-success/5 ring-2 ring-success/20": "border-border"}`}>
+                          <div 
+                            key={oi} 
+                            className={`p-4 rounded-xl border-2 transition-all duration-300 ${
+                              isCorrect 
+                                ? "border-success bg-success/10 ring-2 ring-success/20 scale-[1.01] shadow-sm" 
+                                : "border-border hover:border-border/80"
+                            }`}
+                          >
                             <div className="flex items-center gap-3 mb-3">
-                              <span className={`w-9 h-9 rounded-full text-sm flex items-center justify-center font-bold flex-shrink-0 ${isCorrect ? "bg-success text-success-foreground": "bg-muted text-muted-foreground"}`}>
+                              <span className={`w-9 h-9 rounded-full text-sm flex items-center justify-center font-bold flex-shrink-0 transition-colors ${
+                                isCorrect ? "bg-success text-success-foreground": "bg-muted text-muted-foreground"
+                              }`}>
                                 {String.fromCharCode(65 + oi)}
                               </span>
                               <input
@@ -228,17 +237,24 @@ const QuestionEditor = ({ exam, onClose, onSaved }: Props) => {
                                   updateQ(q.id, { options: newOpts, ...(wasAnswer ? { answer: e.target.value } : {}) });
                                 }}
                                 placeholder={`অপশন ${String.fromCharCode(65 + oi)} লিখুন...`}
-                                className="flex-1 bg-transparent text-base font-medium focus:outline-none border-b border-transparent focus:border-primary/30 pb-1"
+                                className="flex-1 bg-transparent text-base font-semibold focus:outline-none border-b border-transparent focus:border-primary/30 pb-1"
                               />
+                              {isCorrect && (
+                                <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-success text-success-foreground text-[10px] font-bold uppercase tracking-wider animate-in fade-in zoom-in duration-300">
+                                  <Check size={12} strokeWidth={3} /> সঠিক উত্তর
+                                </span>
+                              )}
                             </div>
                             <div className="flex items-center gap-3 ml-12">
                               <button
                                 onClick={() => updateQ(q.id, { answer: opt })}
                                 className={`text-xs px-4 py-2 rounded-lg font-bold transition-all flex items-center gap-2 ${
-                                  isCorrect ? "bg-success text-success-foreground shadow-md": "bg-muted text-muted-foreground hover:bg-success/10 hover:text-success"
+                                  isCorrect 
+                                    ? "bg-success text-success-foreground shadow-md ring-2 ring-success/20"
+                                    : "bg-muted text-muted-foreground hover:bg-success/10 hover:text-success"
                                 }`}
                               >
-                                {isCorrect ? <><Check size={14} /> সঠিক উত্তর</> : "সঠিক করুন"}
+                                {isCorrect ? <Check size={14} strokeWidth={3} /> : "সঠিক উত্তর হিসেবে সেট করুন"}
                               </button>
                               {q.optionImages?.[oi] ? (
                                 <div className="relative inline-block">
