@@ -275,10 +275,11 @@ const AdminCSVUpload = () => {
     const targetExam = existingExams.find((e) => e.id === targetExamId);
     if (!targetExam) return;
 
+    const newQuestions = [...(targetExam.questions || []), ...csvQuestions];
     const updatedExam: Exam = {
       ...targetExam,
-      questions: [...targetExam.questions, ...csvQuestions],
-      questionCount: (targetExam.questions || []).length + (csvQuestions || []).length,
+      questions: newQuestions,
+      questionCount: newQuestions.length,
     };
 
     upsertExam.mutate(updatedExam, {
