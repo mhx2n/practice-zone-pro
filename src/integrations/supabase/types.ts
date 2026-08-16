@@ -649,6 +649,69 @@ export type Database = {
           },
         ]
       }
+      question_reports: {
+        Row: {
+          admin_note: string | null
+          created_at: string
+          exam_id: string | null
+          exam_kind: string
+          exam_title: string
+          id: string
+          message: string
+          question_id: string
+          question_number: number | null
+          question_text: string
+          reason: string
+          section: string | null
+          status: string
+          total_questions: number | null
+          updated_at: string
+          user_email: string | null
+          user_id: string | null
+          user_name: string | null
+        }
+        Insert: {
+          admin_note?: string | null
+          created_at?: string
+          exam_id?: string | null
+          exam_kind?: string
+          exam_title?: string
+          id?: string
+          message?: string
+          question_id: string
+          question_number?: number | null
+          question_text?: string
+          reason?: string
+          section?: string | null
+          status?: string
+          total_questions?: number | null
+          updated_at?: string
+          user_email?: string | null
+          user_id?: string | null
+          user_name?: string | null
+        }
+        Update: {
+          admin_note?: string | null
+          created_at?: string
+          exam_id?: string | null
+          exam_kind?: string
+          exam_title?: string
+          id?: string
+          message?: string
+          question_id?: string
+          question_number?: number | null
+          question_text?: string
+          reason?: string
+          section?: string | null
+          status?: string
+          total_questions?: number | null
+          updated_at?: string
+          user_email?: string | null
+          user_id?: string | null
+          user_name?: string | null
+        }
+        Relationships: []
+      }
       questions: {
         Row: {
           answer: string
