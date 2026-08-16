@@ -37,6 +37,7 @@ const AdminLiveExams = () => {
   const [premiumBatches, setPremiumBatches] = useState<{ id: string; name: string }[]>([]);
   const [batchLinks, setBatchLinks] = useState<{ id: string; live_exam_id: string; premium_batch_id: string }[]>([]);
   const [accessFor, setAccessFor] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [form, setForm] = useState({
     title: "", description: "", exam_id: "", start_time: "", end_time: "",
@@ -66,6 +67,11 @@ const AdminLiveExams = () => {
     }
     setLoading(false);
   };
+
+  const filteredLiveExams = liveExams.filter((e) =>
+    e.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    e.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => { load(); }, []);
 
