@@ -1,78 +1,47 @@
-## লক্ষ্য
+# Plan - Admin Panel Fixes and Question Report Enhancements
 
-লাইভ এক্সাম রিপোর্ট ও লিডারবোর্ডকে প্রফেশনাল ও কনফিগারেবল করা — চারটি উন্নয়ন একসাথে।
+The user is experiencing several issues in the Admin Panel:
+1. **Search Discrepancy:** Searching for an exam shows a question count (e.g., 33) but the editor only shows a few questions (e.g., 4). This suggests a mismatch between the `questionCount` field and the actual `questions` array in the JSONB field.
+2. **Correct Answer Visibility:** In the question editor, it's difficult to see which option is currently selected as the correct answer when editing.
+3. **Report System Enhancement:** In the question report section, the exam name should be easily copyable with a single click to facilitate quick searching.
 
----
+## Proposed Changes
 
-### 1. PDF রিপোর্টে কাস্টমাইজেবল থিম + ফুটার
+### 1. Fix Question Count Mismatch
+- I will investigate `src/pages/admin/AdminExams.tsx` and `src/components/QuestionEditor.tsx`.
+- The `questionCount` field in the database might not be staying in sync with the actual length of the `questions` JSONB array. 
+- I will ensure that when an exam is upserted, the `questionCount` is derived from `questions.length`.
+- I will also add a safeguard in the admin list to display the actual length of the questions array if it differs from the cached `questionCount`.
 
-`SiteSettings`-এ নতুন ফিল্ড যোগ:
+### 2. Improve Correct Answer UI in Editor
+- In `src/components/QuestionEditor.tsx`, I will enhance the visual indicator for the correct answer.
+- I'll add a checkmark icon or a more distinct background/border to the selected option.
+- I'll ensure that the "Correct" button is clearly highlighted.
 
-```ts
-reportSettings?: {
-  themeId: string;             // "blue" | "green" | "maroon" | "black-gold" | "purple" | "custom"
-  customHeader?: string;       // hex (যখন themeId === "custom")
-  customAccent?: string;       // hex
-  footerText: string;          // "Target — Smart Exam Platform"
-  footerLinks: { label: string; url: string }[]; // Website / Facebook / Telegram
-}
-```
+### 3. One-Click Copy for Exam Names in Reports
+- In `src/pages/admin/AdminQuestionReports.tsx`, I will wrap the exam title in a component that allows one-click copying to the clipboard.
+- I'll add a visual feedback (like a tooltip or temporary icon change) when the text is copied.
 
-- `src/lib/types.ts` + `src/lib/api.ts` (default + DB column `report_settings jsonb`) আপডেট।
-- নতুন migration: `site_settings.report_settings jsonb`।
-- নতুন এডমিন পেজ সেকশন `AdminThemeSettings`-এর ভেতরে "PDF রিপোর্ট থিম" — প্রিসেট সিলেক্টর + কালার পিকার (যখন custom) + footer text + লিংক ম্যানেজমেন্ট (Website/Facebook/Telegram, Add/Remove)।
+### 4. Fix "Search" Positioning (Addressing previous user request context)
+- Ensure search results in the admin panel flow correctly as per the user's previous preference (inline below search box, not overlay).
 
----
+## Technical Details
 
-### 2. PDF রিপোর্টের নতুন প্রফেশনাল লেআউট
+### Database Sync
+- Verify `useUpsertExam` hook and ensure it sends the correct `questionCount`.
 
-`AdminLiveExams.tsx` → `exportLeaderboardPDF` রি-রাইট:
+### UI Components
+- Add `Copy` icon from `lucide-react` to the report titles.
+- Use `navigator.clipboard.writeText` for the copy functionality.
 
-- হেডার ব্যান্ড — থিম কালার থেকে।
-- **পডিয়াম ব্লক** (টপ ৩): 1st center (largest gold tile), 2nd left silver, 3rd right bronze। প্রতিটি tile-এ — avatar (rounded image, fall back to initials), নাম, batch, score, percent।
-- নিচে full leaderboard টেবিল — প্রতিটি row-এ avatar (small thumbnail) যোগ। autoTable-এর `didDrawCell` hook দিয়ে cell-এ image draw করব।
-- avatar URL fetch: `profiles.avatar_url`; PDF embed করার জন্য আগে fetch → base64 convert → `doc.addImage` (jsPDF)।
-- ফুটার: কনফিগারেবল text + clickable links (`doc.textWithLink`)।
-- থিম কালার dynamic (RGB tuple)।
+### Question Editor
+- Update the styles in the `options.map` loop to make the `answer === opt` state much more prominent.
+- The user mentioned "ekhane shothik answer konta select kora ta dekha jayna" (here it can't be seen which correct answer is selected). I will add a prominent badge or color change.
 
----
+## Verification Plan
 
-### 3. Student `/live-exams` portal-এ সরাসরি লিডারবোর্ড
-
-`StudentLiveExams.tsx`-এ নতুন সেকশন: **"সম্পন্ন পরীক্ষা ও ফলাফল"**।
-
-- ফেচ: `live_exams` যেগুলো `status === "ended"`, অথবা `status === "live"` কিন্তু ইউজার ইতোমধ্যে submit করেছে।
-- প্রতিটি কার্ডে — title, date, "র‍্যাঙ্কিং দেখুন" বাটন → modal/expand করে full leaderboard (top-3 podium + list) দেখাবে; ইউজারের রো highlighted।
-- পরীক্ষার শুরুর বাটনে ক্লিক করতে হবে না।
-- Live ranking দেখানোর শর্ত (চলমান exam-এ): `show_leaderboard` সত্য হলেই, কেবল submit করার পর।
-
----
-
-### 4. `LiveExamAttempt` — চলমান অবস্থায় leaderboard লুকানো
-
-- চলমান অবস্থায় "লাইভ র‍্যাঙ্কিং" panel সরিয়ে দেওয়া (cheating prevention)।
-- শুধু submit-এর পর full ranking দেখাবে — যেটা ইতোমধ্যে আছে।
-
----
-
-### টেকনিক্যাল ডিটেইল
-
-- jsPDF avatar embed: `fetch(url).then(blob → FileReader → dataURL)` → `doc.addImage(dataUrl, 'JPEG', x, y, w, h)`। CORS-friendly URL দরকার (Supabase storage সাধারণত OK)।
-- Avatar না থাকলে initial-circle fallback canvas-এ draw করব (`doc.circle` + `doc.text`)।
-- `themePresets.ts`-এর pattern ফলো করে `reportThemePresets.ts` বানাব।
-- Migration: শুধু `ALTER TABLE site_settings ADD COLUMN report_settings jsonb`।
-
----
-
-### ফাইল পরিবর্তন
-
-| ফাইল | কাজ |
-|---|---|
-| `supabase/migrations/<new>.sql` | `report_settings` column |
-| `src/lib/types.ts` | `SiteSettings.reportSettings` |
-| `src/lib/api.ts` | default + read/write |
-| `src/lib/reportThemePresets.ts` (new) | ৫টি প্রিসেট |
-| `src/pages/admin/AdminThemeSettings.tsx` | নতুন UI সেকশন |
-| `src/pages/admin/AdminLiveExams.tsx` | নতুন PDF লেআউট (podium + avatars + theme + footer) |
-| `src/pages/student/StudentLiveExams.tsx` | "সম্পন্ন পরীক্ষা" সেকশন + leaderboard modal |
-| `src/pages/student/LiveExamAttempt.tsx` | চলমান অবস্থায় ranking hide |
+### Manual Verification
+- Go to Admin > Exams, search for an exam, and check if the question count in the list matches the number of questions in the editor.
+- Open the question editor, change the correct answer, and verify it's visually distinct.
+- Go to Admin > Question Reports, click on an exam name, and verify it copies to the clipboard.
+- Paste the copied name into the exam search to verify it works as intended.
