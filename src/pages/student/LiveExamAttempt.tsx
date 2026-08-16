@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { CheckCircle2, Send, Trophy, Home } from "lucide-react";
 import ExamTimerBar from "@/components/ExamTimerBar";
 import MathText from "@/components/MathText";
+import QuestionReportButton from "@/components/QuestionReportButton";
 import { resolveCorrectOptionText } from "@/lib/answerUtils";
 import { usePremiumAccess } from "@/hooks/usePremiumAccess";
 import { computeLiveStatus } from "@/lib/liveExamStatus";
@@ -321,7 +322,19 @@ const LiveExamAttempt = () => {
           const locked = !!answers[q.id];
           return (
             <div key={q.id} className="glass-card-static p-5">
-              <p className="text-xs text-muted-foreground mb-2">প্রশ্ন {qi + 1} / {total}</p>
+              <div className="flex items-start justify-between gap-2 mb-2">
+                <p className="text-xs text-muted-foreground">প্রশ্ন {qi + 1} / {total}</p>
+                <QuestionReportButton
+                  questionId={q.id}
+                  examId={liveExam.exam_id ?? liveExam.id}
+                  examTitle={liveExam.title}
+                  examKind="live"
+                  questionNumber={qi + 1}
+                  totalQuestions={total}
+                  questionText={q.question}
+                  section={q.section}
+                />
+              </div>
               <div className="text-base font-semibold mb-4 leading-relaxed"><MathText text={q.question} /></div>
               <div className="space-y-2">
                 {q.options.map((opt, idx) => {
