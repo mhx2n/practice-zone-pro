@@ -154,12 +154,12 @@ const StudentResult = () => {
                   {isUser && !isCorrect && <XCircle size={16} className="text-destructive flex-shrink-0" />}
                   <MathText text={opt} className="text-sm" />
                 </div>
-                {q.optionImages?.[oi] && <img src={q.optionImages[oi]!} alt="" className="mt-2 max-h-24 rounded border border-border object-contain" />}
+                {sourceQuestion.optionImages?.[oi] && <img src={sourceQuestion.optionImages[oi]!} alt="" className="mt-2 max-h-24 rounded border border-border object-contain" />}
               </div>
             );
           })}
         </div>
-        {q.explanation && <div className="text-sm text-muted-foreground bg-muted/50 rounded-lg p-3 mt-2"> <strong>ব্যাখ্যা:</strong> <MathText text={q.explanation} /></div>}
+        {sourceQuestion.explanation && <div className="text-sm text-muted-foreground bg-muted/50 rounded-lg p-3 mt-2"> <strong>ব্যাখ্যা:</strong> <MathText text={sourceQuestion.explanation} /></div>}
       </div>
     );
   };
