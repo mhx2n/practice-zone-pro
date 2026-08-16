@@ -91,12 +91,13 @@ const WrongAnswersBank = () => {
           </div>
 
           {/* Exam groups */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 items-start">
           {Object.values(grouped).map((group) => {
             const isExamOpen = expandedExam === group.examId;
             const subjectCount = Object.keys(group.subjects).length;
 
             return (
-              <div key={group.examId} className="glass-card-static overflow-hidden">
+              <div key={group.examId} className={`glass-card-static overflow-hidden ${isExamOpen ? "col-span-2 md:col-span-3" : ""}`}>
                 {/* Exam header */}
                 <button
                   onClick={() => toggleExam(group.examId)}
