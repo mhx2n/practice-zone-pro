@@ -5,6 +5,7 @@ import { ArrowLeft, BookOpen, CheckCircle2, Lock } from "lucide-react";
 import { useMemo } from "react";
 import MathText from "@/components/MathText";
 import { isAnswerMatch, resolveCorrectOptionText } from "@/lib/answerUtils";
+import QuestionReportButton from "@/components/QuestionReportButton";
 
 const ExamRevision = () => {
   const { id } = useParams();
