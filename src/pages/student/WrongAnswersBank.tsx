@@ -199,8 +199,10 @@ const WrongAnswersBank = () => {
               </div>
             );
           })}
+          </div>
         </div>
       )}
+
 
     </div>
   );
