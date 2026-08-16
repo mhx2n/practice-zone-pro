@@ -101,15 +101,15 @@ const WrongAnswersBank = () => {
                 {/* Exam header */}
                 <button
                   onClick={() => toggleExam(group.examId)}
-                  className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/50 transition-colors"
+                  className="w-full flex items-center justify-between gap-2 p-3 sm:p-4 text-left hover:bg-muted/50 transition-colors"
                 >
-                  <div className="flex-1">
-                    <h2 className="text-base font-bold text-foreground">{group.title}</h2>
-                    <p className="text-xs text-muted-foreground mt-1">
+                  <div className="flex-1 min-w-0">
+                    <h2 className="text-sm sm:text-base font-bold text-foreground line-clamp-2">{group.title}</h2>
+                    <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">
                       {group.total}টি ভুল • {subjectCount}টি বিষয়
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 ml-3">
+                  <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                     <button
                       onClick={(e) => { e.stopPropagation(); handleDeleteExam(group.examId); }}
                       className="text-xs text-destructive hover:underline flex items-center gap-1 p-1"
