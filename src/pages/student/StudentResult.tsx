@@ -5,6 +5,7 @@ import { useMemo, useEffect, useState } from "react";
 import { useResults } from "@/hooks/useSupabaseData";
 import { isAnswerMatch, resolveCorrectOptionText } from "@/lib/answerUtils";
 import MathText from "@/components/MathText";
+import QuestionReportButton from "@/components/QuestionReportButton";
 import { saveWrongAnswers, WrongAnswerEntry } from "@/lib/api";
 
 const StudentResult = () => {
@@ -126,6 +127,17 @@ const StudentResult = () => {
           {q.section && hasSubjectBreakdown && (
             <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full flex-shrink-0">{q.section}</span>
           )}
+          <QuestionReportButton
+            questionId={q.id}
+            examId={result.examId}
+            examTitle={result.examTitle}
+            examKind="practice"
+            questionNumber={(questions?.findIndex((item) => item.id === q.id) ?? -1) + 1 || null}
+            totalQuestions={questions?.length ?? null}
+            questionText={q.question}
+            section={q.section}
+            className="flex-shrink-0"
+          />
         </div>
         {q.questionImage && <img src={q.questionImage} alt="" className="max-w-full max-h-48 rounded-lg border border-border mb-3 object-contain" />}
         <div className="space-y-2 mb-3">
