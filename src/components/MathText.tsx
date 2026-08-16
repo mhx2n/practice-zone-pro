@@ -130,8 +130,9 @@ const consumeBracketExpression = (source: string, start: number) => {
       }
       continue;
     }
-    break;
+    if (source[i] !== "{" && source[i] !== "[") break;
   }
+
   if (!consumedGroup) return null;
   return { value: source.slice(start, i), end: i, display: false };
 };
