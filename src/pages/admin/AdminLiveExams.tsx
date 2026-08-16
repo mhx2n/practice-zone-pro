@@ -409,11 +409,39 @@ const AdminLiveExams = () => {
             value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
           <textarea className="w-full glass-strong rounded-lg px-3 py-2 text-sm" placeholder="বিবরণ" rows={2}
             value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
-          <select className="w-full glass-strong rounded-lg px-3 py-2 text-sm"
-            value={form.exam_id} onChange={(e) => setForm({ ...form, exam_id: e.target.value })}>
-            <option value="">পরীক্ষা সিলেক্ট করুন</option>
-            {exams.map((x) => <option key={x.id} value={x.id}>{x.title} ({x.question_count}টি) {x.published ? "": "• অপ্রকাশিত"}</option>)}
-          </select>
+          <div className="space-y-2">
+            <label className="text-xs font-semibold">পরীক্ষা নির্বাচন করুন:</label>
+            <input
+              type="text"
+              placeholder="পরীক্ষার নাম দিয়ে খুঁজুন..."
+              className="w-full glass-strong rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/30"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 max-h-48 overflow-y-auto p-2 glass-strong rounded-lg">
+              {filteredExams.map((x) => {
+                const isSelected = form.exam_id === x.id;
+                return (
+                  <button
+                    key={x.id}
+                    type="button"
+                    onClick={() => setForm({ ...form, exam_id: x.id })}
+                    className={`text-left p-2 rounded-lg text-xs transition-colors border ${
+                      isSelected 
+                        ? "bg-primary/10 border-primary text-primary font-semibold" 
+                        : "border-transparent hover:bg-muted text-muted-foreground"
+                    }`}
+                  >
+                    <p className="truncate">{x.title}</p>
+                    <p className="text-[10px] opacity-70">{x.question_count}টি প্রশ্ন {!x.published && "• অপ্রকাশিত"}</p>
+                  </button>
+                );
+              })}
+              {filteredExams.length === 0 && (
+                <p className="text-[10px] text-muted-foreground text-center py-2 col-span-full">কোনো পরীক্ষা পাওয়া যায়নি</p>
+              )}
+            </div>
+          </div>
           <div className="rounded-xl border border-border p-3 space-y-2">
             <p className="text-xs font-semibold flex items-center gap-1.5"><Crown size={13} className="text-warning" /> প্রিমিয়াম ব্যাচ অ্যাক্সেস (ঐচ্ছিক)</p>
             <p className="text-[11px] text-muted-foreground">কোনো ব্যাচ সিলেক্ট না করলে সবাই দেখতে পাবে। সিলেক্ট করলে শুধু ঐ ব্যাচের সদস্যরাই পরীক্ষাটি দেখতে ও দিতে পারবে — বাকিদের আইডিতে এটি একেবারেই দেখাবে না।</p>
