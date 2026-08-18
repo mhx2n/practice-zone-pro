@@ -66,15 +66,19 @@ const LiveExamAttempt = () => {
       }
       setLiveExam(le as LiveExam);
 
-      // Negative marking: prefer the live exam override; fall back to the source exam's value.
+      // Negative marking + mandatory subjects come from the source exam.
+      const { data: examRow } = await supabase.from("exams")
+        .select("negative_marking,mandatory_subjects").eq("id", le.exam_id).maybeSingle();
       const liveNeg = (le as any).negative_marking;
-      if (liveNeg !== null && liveNeg !== undefined) {
-        setNegativeMarking(Number(liveNeg));
-      } else {
-        const { data: examRow } = await supabase.from("exams")
-          .select("negative_marking").eq("id", le.exam_id).maybeSingle();
-        setNegativeMarking(Number(examRow?.negative_marking || 0));
-      }
+      setNegativeMarking(
+        liveNeg !== null && liveNeg !== undefined
+          ? Number(liveNeg)
+          : Number(examRow?.negative_marking || 0)
+      );
+      const mand: string[] = Array.isArray(examRow?.mandatory_subjects)
+        ? (examRow!.mandatory_subjects as any[]).map(String)
+        : [];
+      setMandatorySubjects(mand);
 
       const { data: q } = await supabase.from("questions").select("id,question,options,answer,section")
         .eq("exam_id", le.exam_id).order("sort_order");
@@ -95,37 +99,68 @@ const LiveExamAttempt = () => {
       });
       setQuestions(parsed);
 
-      let { data: p } = await supabase.from("live_exam_participants").select("*")
+      const allSections = Array.from(new Set(parsed.map((x) => x.section).filter(Boolean)));
+      const multi = allSections.length > 1;
+
+      const { data: p } = await supabase.from("live_exam_participants").select("*")
         .eq("live_exam_id", id).eq("user_id", user.id).maybeSingle();
 
-      if (!p) {
-        const { data: ins } = await supabase.from("live_exam_participants").insert({
-          live_exam_id: id, user_id: user.id, status: "in_progress",
-          started_at: new Date().toISOString(), max_score: parsed.length,
-        }).select().single();
-        p = ins;
-      } else if (!p.started_at) {
-        const { data: upd } = await supabase.from("live_exam_participants").update({
-          started_at: new Date().toISOString(), status: "in_progress", max_score: parsed.length,
-        }).eq("id", p.id).select().single();
-        p = upd;
-      }
-      setParticipant(p as Participant);
-      startedAtRef.current = p?.started_at ? new Date(p.started_at) : new Date();
-      if (p?.status === "submitted") {
-        setSubmitted(true);
-        await loadRankings(id);
-      }
+      // Restore a previously made subject selection (survives refresh)
+      let saved: string[] | null = null;
+      try {
+        const raw = localStorage.getItem(`live-subjects-${id}-${user.id}`);
+        if (raw) { const arr = JSON.parse(raw); if (Array.isArray(arr) && arr.length) saved = arr.map(String); }
+      } catch { /* ignore */ }
 
-      const { data: ans } = await supabase.from("live_exam_answers").select("question_id,selected_answer")
-        .eq("participant_id", p!.id);
-      const map: Record<string, string> = {};
-      (ans || []).forEach((a: any) => { map[a.question_id] = a.selected_answer; });
-      setAnswers(map);
+      if (p && p.started_at) {
+        setParticipant(p as Participant);
+        startedAtRef.current = new Date(p.started_at);
+        setSelectedSubjects(saved && multi ? saved.filter((s) => allSections.includes(s)) : allSections);
+        if (p.status === "submitted") { setSubmitted(true); await loadRankings(id); }
+        const { data: ans } = await supabase.from("live_exam_answers").select("question_id,selected_answer")
+          .eq("participant_id", p.id);
+        const map: Record<string, string> = {};
+        (ans || []).forEach((a: any) => { map[a.question_id] = a.selected_answer; });
+        setAnswers(map);
+      } else if (multi) {
+        // Ask which subjects the student will attempt before the timer starts
+        setSelectedSubjects(saved ? saved.filter((s) => allSections.includes(s)) : allSections);
+        setNeedsSelection(true);
+      } else {
+        await beginAttempt(allSections, parsed, p as Participant | null);
+      }
 
       setLoading(false);
     })();
   }, [id, user, accessLoading]);
+
+  const beginAttempt = async (subjects: string[], qs: Question[], existing: Participant | null) => {
+    if (!id || !user) return;
+    const count = qs.filter((q) => !q.section || subjects.includes(q.section)).length;
+    let p = existing;
+    if (!p) {
+      const { data: ins } = await supabase.from("live_exam_participants").insert({
+        live_exam_id: id, user_id: user.id, status: "in_progress",
+        started_at: new Date().toISOString(), max_score: count,
+      }).select().single();
+      p = ins as Participant;
+    } else {
+      const { data: upd } = await supabase.from("live_exam_participants").update({
+        started_at: new Date().toISOString(), status: "in_progress", max_score: count,
+      }).eq("id", p.id).select().single();
+      p = upd as Participant;
+    }
+    try { localStorage.setItem(`live-subjects-${id}-${user.id}`, JSON.stringify(subjects)); } catch { /* ignore */ }
+    setSelectedSubjects(subjects);
+    setParticipant(p);
+    startedAtRef.current = p?.started_at ? new Date(p.started_at) : new Date();
+    setNeedsSelection(false);
+  };
+
+  const activeQuestions = useMemo(
+    () => questions.filter((q) => !q.section || selectedSubjects.length === 0 || selectedSubjects.includes(q.section)),
+    [questions, selectedSubjects]
+  );
 
   // Timer tick — uses RAF-equivalent setInterval but recomputes from real time
   useEffect(() => {
