@@ -158,13 +158,23 @@ const LiveExamReview = () => {
         ))}
       </div>
 
+      {untakenQs.length > 0 && (
+        <div className="flex items-center gap-2 px-1">
+          <span className="h-4 w-1 rounded-full bg-primary" />
+          <h2 className="text-sm font-bold">আপনি যে বিষয়গুলোতে পরীক্ষা দিয়েছেন</h2>
+          <span className="text-[10px] text-muted-foreground">
+            {Array.from(attemptedSections).join(", ")}
+          </span>
+        </div>
+      )}
+
       <div className="space-y-3">
         {filtered.length === 0 && (
           <div className="glass-card-static p-8 text-center text-sm text-muted-foreground">এই ক্যাটাগরিতে কোনো প্রশ্ন নেই</div>
         )}
         {filtered.map((q) => {
-          const idx = questions.findIndex((x) => x.id === q.id);
-          const state = counted[idx];
+          const idx = attemptedQs.findIndex((x) => x.id === q.id);
+          const state = stateOf(q);
           const correctText = resolveCorrectOptionText(q as any);
           const selected = answers[q.id] || "";
 
