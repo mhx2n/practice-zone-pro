@@ -231,13 +231,13 @@ const LiveExamAttempt = () => {
     if (!auto && !confirm("পরীক্ষা জমা দিতে চান?")) return;
 
     let correct = 0, wrong = 0, skipped = 0;
-    questions.forEach((q) => {
+    activeQuestions.forEach((q) => {
       const a = answers[q.id];
       if (!a) skipped++;
       else if (a === q.answer) correct++;
       else wrong++;
     });
-    const max = questions.length;
+    const max = activeQuestions.length;
     const negMarks = +(wrong * negativeMarking).toFixed(2);
     const score = +Math.max(0, correct - negMarks).toFixed(2);
     const pct = max ? (score / max) * 100 : 0;
