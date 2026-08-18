@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle2, Send, Trophy, Home } from "lucide-react";
+import { CheckCircle2, Send, Trophy, Home, CheckSquare, Square, Lock, ListChecks } from "lucide-react";
 import ExamTimerBar from "@/components/ExamTimerBar";
 import MathText from "@/components/MathText";
 import QuestionReportButton from "@/components/QuestionReportButton";
