@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle2, Send, Trophy, Home } from "lucide-react";
+import { CheckCircle2, Send, Trophy, Home, CheckSquare, Square, Lock, ListChecks } from "lucide-react";
 import ExamTimerBar from "@/components/ExamTimerBar";
 import MathText from "@/components/MathText";
 import QuestionReportButton from "@/components/QuestionReportButton";
@@ -33,6 +33,13 @@ const LiveExamAttempt = () => {
   const [loading, setLoading] = useState(true);
   const startedAtRef = useRef<Date | null>(null);
 
+  // Subject (section) selection — same behaviour as practice exams
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [mandatorySubjects, setMandatorySubjects] = useState<string[]>([]);
+  const [needsSelection, setNeedsSelection] = useState(false);
+  const [starting, setStarting] = useState(false);
+  const selKey = `live-subjects-${id}-${user?.id ?? ""}`;
+
   // Post-submit ranking state
   const [allParts, setAllParts] = useState<Participant[]>([]);
   const [profiles, setProfiles] = useState<Record<string, Profile>>({});
@@ -59,15 +66,19 @@ const LiveExamAttempt = () => {
       }
       setLiveExam(le as LiveExam);
 
-      // Negative marking: prefer the live exam override; fall back to the source exam's value.
+      // Negative marking + mandatory subjects come from the source exam.
+      const { data: examRow } = await supabase.from("exams")
+        .select("negative_marking,mandatory_subjects").eq("id", le.exam_id).maybeSingle();
       const liveNeg = (le as any).negative_marking;
-      if (liveNeg !== null && liveNeg !== undefined) {
-        setNegativeMarking(Number(liveNeg));
-      } else {
-        const { data: examRow } = await supabase.from("exams")
-          .select("negative_marking").eq("id", le.exam_id).maybeSingle();
-        setNegativeMarking(Number(examRow?.negative_marking || 0));
-      }
+      setNegativeMarking(
+        liveNeg !== null && liveNeg !== undefined
+          ? Number(liveNeg)
+          : Number(examRow?.negative_marking || 0)
+      );
+      const mand: string[] = Array.isArray(examRow?.mandatory_subjects)
+        ? (examRow!.mandatory_subjects as any[]).map(String)
+        : [];
+      setMandatorySubjects(mand);
 
       const { data: q } = await supabase.from("questions").select("id,question,options,answer,section")
         .eq("exam_id", le.exam_id).order("sort_order");
@@ -88,37 +99,68 @@ const LiveExamAttempt = () => {
       });
       setQuestions(parsed);
 
-      let { data: p } = await supabase.from("live_exam_participants").select("*")
+      const allSections = Array.from(new Set(parsed.map((x) => x.section).filter(Boolean)));
+      const multi = allSections.length > 1;
+
+      const { data: p } = await supabase.from("live_exam_participants").select("*")
         .eq("live_exam_id", id).eq("user_id", user.id).maybeSingle();
 
-      if (!p) {
-        const { data: ins } = await supabase.from("live_exam_participants").insert({
-          live_exam_id: id, user_id: user.id, status: "in_progress",
-          started_at: new Date().toISOString(), max_score: parsed.length,
-        }).select().single();
-        p = ins;
-      } else if (!p.started_at) {
-        const { data: upd } = await supabase.from("live_exam_participants").update({
-          started_at: new Date().toISOString(), status: "in_progress", max_score: parsed.length,
-        }).eq("id", p.id).select().single();
-        p = upd;
-      }
-      setParticipant(p as Participant);
-      startedAtRef.current = p?.started_at ? new Date(p.started_at) : new Date();
-      if (p?.status === "submitted") {
-        setSubmitted(true);
-        await loadRankings(id);
-      }
+      // Restore a previously made subject selection (survives refresh)
+      let saved: string[] | null = null;
+      try {
+        const raw = localStorage.getItem(`live-subjects-${id}-${user.id}`);
+        if (raw) { const arr = JSON.parse(raw); if (Array.isArray(arr) && arr.length) saved = arr.map(String); }
+      } catch { /* ignore */ }
 
-      const { data: ans } = await supabase.from("live_exam_answers").select("question_id,selected_answer")
-        .eq("participant_id", p!.id);
-      const map: Record<string, string> = {};
-      (ans || []).forEach((a: any) => { map[a.question_id] = a.selected_answer; });
-      setAnswers(map);
+      if (p && p.started_at) {
+        setParticipant(p as Participant);
+        startedAtRef.current = new Date(p.started_at);
+        setSelectedSubjects(saved && multi ? saved.filter((s) => allSections.includes(s)) : allSections);
+        if (p.status === "submitted") { setSubmitted(true); await loadRankings(id); }
+        const { data: ans } = await supabase.from("live_exam_answers").select("question_id,selected_answer")
+          .eq("participant_id", p.id);
+        const map: Record<string, string> = {};
+        (ans || []).forEach((a: any) => { map[a.question_id] = a.selected_answer; });
+        setAnswers(map);
+      } else if (multi) {
+        // Ask which subjects the student will attempt before the timer starts
+        setSelectedSubjects(saved ? saved.filter((s) => allSections.includes(s)) : allSections);
+        setNeedsSelection(true);
+      } else {
+        await beginAttempt(allSections, parsed, p as Participant | null);
+      }
 
       setLoading(false);
     })();
   }, [id, user, accessLoading]);
+
+  const beginAttempt = async (subjects: string[], qs: Question[], existing: Participant | null) => {
+    if (!id || !user) return;
+    const count = qs.filter((q) => !q.section || subjects.includes(q.section)).length;
+    let p = existing;
+    if (!p) {
+      const { data: ins } = await supabase.from("live_exam_participants").insert({
+        live_exam_id: id, user_id: user.id, status: "in_progress",
+        started_at: new Date().toISOString(), max_score: count,
+      }).select().single();
+      p = ins as Participant;
+    } else {
+      const { data: upd } = await supabase.from("live_exam_participants").update({
+        started_at: new Date().toISOString(), status: "in_progress", max_score: count,
+      }).eq("id", p.id).select().single();
+      p = upd as Participant;
+    }
+    try { localStorage.setItem(`live-subjects-${id}-${user.id}`, JSON.stringify(subjects)); } catch { /* ignore */ }
+    setSelectedSubjects(subjects);
+    setParticipant(p);
+    startedAtRef.current = p?.started_at ? new Date(p.started_at) : new Date();
+    setNeedsSelection(false);
+  };
+
+  const activeQuestions = useMemo(
+    () => questions.filter((q) => !q.section || selectedSubjects.length === 0 || selectedSubjects.includes(q.section)),
+    [questions, selectedSubjects]
+  );
 
   // Timer tick — uses RAF-equivalent setInterval but recomputes from real time
   useEffect(() => {
@@ -189,13 +231,13 @@ const LiveExamAttempt = () => {
     if (!auto && !confirm("পরীক্ষা জমা দিতে চান?")) return;
 
     let correct = 0, wrong = 0, skipped = 0;
-    questions.forEach((q) => {
+    activeQuestions.forEach((q) => {
       const a = answers[q.id];
       if (!a) skipped++;
       else if (a === q.answer) correct++;
       else wrong++;
     });
-    const max = questions.length;
+    const max = activeQuestions.length;
     const negMarks = +(wrong * negativeMarking).toFixed(2);
     const score = +Math.max(0, correct - negMarks).toFixed(2);
     const pct = max ? (score / max) * 100 : 0;
@@ -217,6 +259,74 @@ const LiveExamAttempt = () => {
   if (loading) return <div className="p-6 text-center text-sm text-muted-foreground pt-32">লোড হচ্ছে...</div>;
   if (!liveExam) return null;
 
+  // ============ SUBJECT SELECTION GATE (multi-subject live exams) ============
+  if (needsSelection) {
+    const allSections = Array.from(new Set(questions.map((q) => q.section).filter(Boolean)));
+    const counts: Record<string, number> = {};
+    questions.forEach((q) => { if (q.section) counts[q.section] = (counts[q.section] || 0) + 1; });
+    const chosen = Array.from(new Set([...selectedSubjects, ...mandatorySubjects.filter((m) => allSections.includes(m))]));
+    const chosenCount = questions.filter((q) => !q.section || chosen.includes(q.section)).length;
+    const toggle = (s: string) => {
+      if (mandatorySubjects.includes(s)) return;
+      setSelectedSubjects((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
+    };
+    return (
+      <div className="min-h-screen pt-24 pb-10 px-4 max-w-2xl mx-auto">
+        <div className="glass-card-static p-6 space-y-5">
+          <div>
+            <p className="text-[11px] font-semibold text-primary uppercase tracking-wide">লাইভ পরীক্ষা</p>
+            <h1 className="text-xl font-bold mt-1">{liveExam.title}</h1>
+            <p className="text-xs text-muted-foreground mt-1">{liveExam.duration} মিনিট • মোট {questions.length} প্রশ্ন</p>
+          </div>
+
+          <div className="glass-card-static p-4 bg-accent/5 border-accent/20">
+            <h2 className="font-semibold text-sm mb-1 flex items-center gap-2"><ListChecks size={15} className="text-primary" /> বিষয় নির্বাচন করুন</h2>
+            <p className="text-[11px] text-muted-foreground mb-3">
+              {mandatorySubjects.length > 0
+                ? `${mandatorySubjects.join(", ")} বাধ্যতামূলক।`
+                : "আপনি যে বিষয়গুলোতে পরীক্ষা দিতে চান সেগুলো নির্বাচন করুন।"}
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {allSections.map((s) => {
+                const isMandatory = mandatorySubjects.includes(s);
+                const isSelected = chosen.includes(s);
+                return (
+                  <button key={s} onClick={() => toggle(s)} disabled={isMandatory}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-all border ${
+                      isSelected ? "bg-primary/10 border-primary/30 text-primary"
+                        : "border-border hover:border-primary/20 hover:bg-primary/5 text-muted-foreground"
+                    } ${isMandatory ? "opacity-90 cursor-not-allowed": ""}`}>
+                    {isMandatory ? <Lock size={13} className="shrink-0" />
+                      : isSelected ? <CheckSquare size={13} className="shrink-0" />
+                      : <Square size={13} className="shrink-0" />}
+                    <span className="flex-1 text-left truncate">{s}</span>
+                    <span className="text-[10px] bg-muted px-1.5 py-0.5 rounded-full">{counts[s] || 0}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="mt-3 pt-3 border-t border-border flex items-center justify-between text-xs">
+              <span className="text-muted-foreground">নির্বাচিত প্রশ্ন:</span>
+              <span className="font-bold text-primary">{chosenCount}টি</span>
+            </div>
+          </div>
+
+          <p className="text-[11px] text-muted-foreground">
+            নির্বাচিত বিষয়ের প্রশ্ন অনুযায়ীই ফলাফল ও র‍্যাঙ্কিং নির্ধারিত হবে। পরীক্ষা শেষে সব বিষয়ের উত্তর পর্যালোচনায় দেখা যাবে।
+          </p>
+
+          <button
+            disabled={chosen.length === 0 || starting}
+            onClick={async () => { setStarting(true); await beginAttempt(chosen, questions, participant); setStarting(false); }}
+            className="w-full px-4 py-3 rounded-xl bg-primary text-primary-foreground text-sm font-bold disabled:opacity-50">
+            {starting ? "শুরু হচ্ছে...": `পরীক্ষা শুরু করুন (${chosenCount} প্রশ্ন)`}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+
   // ============ POST-SUBMIT RESULT + RANKING ============
   if (submitted) {
     const sorted = [...allParts].sort((a, b) => b.score - a.score || a.time_taken_seconds - b.time_taken_seconds);
@@ -234,7 +344,7 @@ const LiveExamAttempt = () => {
             <p className="mt-1 text-3xl sm:text-4xl font-extrabold text-success tabular-nums whitespace-nowrap">
               {Number(participant?.score ?? 0).toFixed(2)}
               <span className="text-muted-foreground font-bold mx-1">/</span>
-              {questions.length}
+              {participant?.max_score ?? activeQuestions.length}
             </p>
             {negativeMarking > 0 && (Number(participant?.wrong) || 0) > 0 && (
               <p className="text-[11px] text-destructive mt-1 font-semibold">
@@ -303,8 +413,8 @@ const LiveExamAttempt = () => {
 
   // ============ EXAM IN PROGRESS — simple portal style ============
   const mins = Math.floor(timeLeft / 60), secs = timeLeft % 60;
-  const total = questions.length;
-  const answered = Object.keys(answers).length;
+  const total = activeQuestions.length;
+  const answered = activeQuestions.filter((q) => answers[q.id]).length;
   // (Live rankings intentionally omitted during the attempt.)
 
   return (
@@ -315,10 +425,10 @@ const LiveExamAttempt = () => {
 
       {/* All questions in scroll view */}
       <div className="mt-4 space-y-4">
-        {questions.length === 0 && (
+        {activeQuestions.length === 0 && (
           <div className="text-center text-muted-foreground py-10">এই পরীক্ষায় কোনো প্রশ্ন নেই।</div>
         )}
-        {questions.map((q, qi) => {
+        {activeQuestions.map((q, qi) => {
           const locked = !!answers[q.id];
           return (
             <div key={q.id} className="glass-card-static p-5">

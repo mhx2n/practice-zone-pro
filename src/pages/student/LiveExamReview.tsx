@@ -93,20 +93,47 @@ const LiveExamReview = () => {
   if (loading) return <div className="pt-32 text-center text-sm text-muted-foreground">লোড হচ্ছে...</div>;
   if (!exam || !participant) return null;
 
-  const total = questions.length;
-  const counted = questions.map((q) => {
+  // Which subjects (sections) the student actually attempted
+  const allSections = Array.from(new Set(questions.map((q) => q.section || "").filter(Boolean)));
+  let savedSubjects: string[] = [];
+  try {
+    const raw = localStorage.getItem(`live-subjects-${id}-${user?.id ?? ""}`);
+    if (raw) { const arr = JSON.parse(raw); if (Array.isArray(arr)) savedSubjects = arr.map(String); }
+  } catch { /* ignore */ }
+  const answeredSections = new Set(
+    questions.filter((q) => answers[q.id]).map((q) => q.section || "")
+  );
+  const attemptedSections = new Set<string>(
+    savedSubjects.length ? savedSubjects.filter((s) => allSections.includes(s)) : allSections
+  );
+  answeredSections.forEach((s) => { if (s) attemptedSections.add(s); });
+  const isAttempted = (q: QRow) => !q.section || attemptedSections.has(q.section);
+
+  const attemptedQs = questions.filter(isAttempted);
+  const untakenQs = questions.filter((q) => !isAttempted(q));
+
+  const total = attemptedQs.length;
+  const stateOf = (q: QRow) => {
     const sel = answers[q.id];
     if (!sel) return "skipped"as const;
-    return isAnswerMatch(sel, resolveCorrectOptionText(q as any)) ? "correct": "wrong";
-  });
-  const filtered = questions.filter((_, i) => filter === "all"|| counted[i] === filter);
+    return isAnswerMatch(sel, resolveCorrectOptionText(q as any)) ? ("correct"as const) : ("wrong"as const);
+  };
+  const counted = questions.map(stateOf);
+  const filtered = attemptedQs.filter((q) => filter === "all"|| stateOf(q) === filter);
 
+  const attemptedStates = attemptedQs.map(stateOf);
   const tabs: Array<{ key: typeof filter; label: string; count: number; cls: string }> = [
     { key: "all", label: "সব", count: total, cls: "bg-primary/15 text-primary"},
-    { key: "correct", label: "সঠিক", count: counted.filter((x) => x === "correct").length, cls: "bg-success/15 text-success"},
-    { key: "wrong", label: "ভুল", count: counted.filter((x) => x === "wrong").length, cls: "bg-destructive/15 text-destructive"},
-    { key: "skipped", label: "স্কিপ", count: counted.filter((x) => x === "skipped").length, cls: "bg-muted text-muted-foreground"},
+    { key: "correct", label: "সঠিক", count: attemptedStates.filter((x) => x === "correct").length, cls: "bg-success/15 text-success"},
+    { key: "wrong", label: "ভুল", count: attemptedStates.filter((x) => x === "wrong").length, cls: "bg-destructive/15 text-destructive"},
+    { key: "skipped", label: "স্কিপ", count: attemptedStates.filter((x) => x === "skipped").length, cls: "bg-muted text-muted-foreground"},
   ];
+
+  const untakenBySection: Record<string, QRow[]> = {};
+  untakenQs.forEach((q) => {
+    const k = q.section || "অন্যান্য";
+    (untakenBySection[k] ||= []).push(q);
+  });
 
   return (
     <div className="min-h-screen pt-24 pb-10 px-4 max-w-3xl mx-auto space-y-4">
@@ -131,13 +158,23 @@ const LiveExamReview = () => {
         ))}
       </div>
 
+      {untakenQs.length > 0 && (
+        <div className="flex items-center gap-2 px-1">
+          <span className="h-4 w-1 rounded-full bg-primary" />
+          <h2 className="text-sm font-bold">আপনি যে বিষয়গুলোতে পরীক্ষা দিয়েছেন</h2>
+          <span className="text-[10px] text-muted-foreground">
+            {Array.from(attemptedSections).join(", ")}
+          </span>
+        </div>
+      )}
+
       <div className="space-y-3">
         {filtered.length === 0 && (
           <div className="glass-card-static p-8 text-center text-sm text-muted-foreground">এই ক্যাটাগরিতে কোনো প্রশ্ন নেই</div>
         )}
         {filtered.map((q) => {
-          const idx = questions.findIndex((x) => x.id === q.id);
-          const state = counted[idx];
+          const idx = attemptedQs.findIndex((x) => x.id === q.id);
+          const state = stateOf(q);
           const correctText = resolveCorrectOptionText(q as any);
           const selected = answers[q.id] || "";
 
@@ -195,6 +232,70 @@ const LiveExamReview = () => {
           );
         })}
       </div>
+
+      {untakenQs.length > 0 && (
+        <div className="space-y-3 pt-4">
+          <div className="flex items-center gap-2 px-1">
+            <span className="h-4 w-1 rounded-full bg-muted-foreground/50" />
+            <h2 className="text-sm font-bold text-muted-foreground">যে বিষয়গুলোতে আপনি পরীক্ষা দেননি</h2>
+          </div>
+          <p className="text-[11px] text-muted-foreground px-1">
+            এই প্রশ্নগুলো আপনার ফলাফলে গণনা করা হয়নি — শুধু শেখার জন্য দেখানো হচ্ছে।
+          </p>
+          {Object.entries(untakenBySection).map(([sec, list]) => (
+            <div key={sec} className="space-y-3">
+              <div className="flex items-center justify-between px-1">
+                <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-muted text-muted-foreground">{sec}</span>
+                <span className="text-[10px] text-muted-foreground">{list.length}টি প্রশ্ন</span>
+              </div>
+              {list.map((q, i) => {
+                const correctText = resolveCorrectOptionText(q as any);
+                return (
+                  <div key={q.id} className="glass-card-static p-4 space-y-3 opacity-95">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-xs text-muted-foreground">প্রশ্ন {i + 1} / {list.length}</p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1 border bg-muted text-muted-foreground border-border">
+                          <MinusCircle size={14} /> অংশগ্রহণ করেননি
+                        </span>
+                        <QuestionReportButton
+                          questionId={q.id}
+                          examId={exam.exam_id}
+                          examTitle={exam.title}
+                          examKind="live"
+                          questionNumber={i + 1}
+                          totalQuestions={list.length}
+                          questionText={q.question}
+                          section={q.section}
+                        />
+                      </div>
+                    </div>
+                    <div className="text-sm font-semibold leading-relaxed"><MathText text={q.question} /></div>
+                    <div className="space-y-1.5">
+                      {q.options.map((opt, oi) => {
+                        const isCorrect = isAnswerMatch(opt, correctText);
+                        return (
+                          <div key={oi} className={`p-2.5 rounded-lg border-2 text-sm flex items-start gap-2 ${isCorrect ? "border-success/50 bg-success/10": "border-border bg-card"}`}>
+                            <span className="font-bold shrink-0">{String.fromCharCode(65 + oi)}.</span>
+                            <span className="flex-1 min-w-0"><MathText text={opt} /></span>
+                            {isCorrect && <CheckCircle2 size={14} className="text-success shrink-0 mt-0.5" />}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    {q.explanation && (
+                      <div className="text-xs bg-primary/5 border border-primary/15 rounded-lg p-3">
+                        <p className="font-bold text-primary mb-1">ব্যাখ্যা</p>
+                        <div className="leading-relaxed text-foreground/85"><MathText text={q.explanation} /></div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
