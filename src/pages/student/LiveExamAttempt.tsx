@@ -276,7 +276,7 @@ const LiveExamAttempt = () => {
             <p className="mt-1 text-3xl sm:text-4xl font-extrabold text-success tabular-nums whitespace-nowrap">
               {Number(participant?.score ?? 0).toFixed(2)}
               <span className="text-muted-foreground font-bold mx-1">/</span>
-              {questions.length}
+              {participant?.max_score ?? activeQuestions.length}
             </p>
             {negativeMarking > 0 && (Number(participant?.wrong) || 0) > 0 && (
               <p className="text-[11px] text-destructive mt-1 font-semibold">
