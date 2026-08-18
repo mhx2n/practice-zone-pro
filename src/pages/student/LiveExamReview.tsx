@@ -93,20 +93,47 @@ const LiveExamReview = () => {
   if (loading) return <div className="pt-32 text-center text-sm text-muted-foreground">লোড হচ্ছে...</div>;
   if (!exam || !participant) return null;
 
-  const total = questions.length;
-  const counted = questions.map((q) => {
+  // Which subjects (sections) the student actually attempted
+  const allSections = Array.from(new Set(questions.map((q) => q.section || "").filter(Boolean)));
+  let savedSubjects: string[] = [];
+  try {
+    const raw = localStorage.getItem(`live-subjects-${id}-${user?.id ?? ""}`);
+    if (raw) { const arr = JSON.parse(raw); if (Array.isArray(arr)) savedSubjects = arr.map(String); }
+  } catch { /* ignore */ }
+  const answeredSections = new Set(
+    questions.filter((q) => answers[q.id]).map((q) => q.section || "")
+  );
+  const attemptedSections = new Set<string>(
+    savedSubjects.length ? savedSubjects.filter((s) => allSections.includes(s)) : allSections
+  );
+  answeredSections.forEach((s) => { if (s) attemptedSections.add(s); });
+  const isAttempted = (q: QRow) => !q.section || attemptedSections.has(q.section);
+
+  const attemptedQs = questions.filter(isAttempted);
+  const untakenQs = questions.filter((q) => !isAttempted(q));
+
+  const total = attemptedQs.length;
+  const stateOf = (q: QRow) => {
     const sel = answers[q.id];
     if (!sel) return "skipped"as const;
-    return isAnswerMatch(sel, resolveCorrectOptionText(q as any)) ? "correct": "wrong";
-  });
-  const filtered = questions.filter((_, i) => filter === "all"|| counted[i] === filter);
+    return isAnswerMatch(sel, resolveCorrectOptionText(q as any)) ? ("correct"as const) : ("wrong"as const);
+  };
+  const counted = questions.map(stateOf);
+  const filtered = attemptedQs.filter((q) => filter === "all"|| stateOf(q) === filter);
 
+  const attemptedStates = attemptedQs.map(stateOf);
   const tabs: Array<{ key: typeof filter; label: string; count: number; cls: string }> = [
     { key: "all", label: "সব", count: total, cls: "bg-primary/15 text-primary"},
-    { key: "correct", label: "সঠিক", count: counted.filter((x) => x === "correct").length, cls: "bg-success/15 text-success"},
-    { key: "wrong", label: "ভুল", count: counted.filter((x) => x === "wrong").length, cls: "bg-destructive/15 text-destructive"},
-    { key: "skipped", label: "স্কিপ", count: counted.filter((x) => x === "skipped").length, cls: "bg-muted text-muted-foreground"},
+    { key: "correct", label: "সঠিক", count: attemptedStates.filter((x) => x === "correct").length, cls: "bg-success/15 text-success"},
+    { key: "wrong", label: "ভুল", count: attemptedStates.filter((x) => x === "wrong").length, cls: "bg-destructive/15 text-destructive"},
+    { key: "skipped", label: "স্কিপ", count: attemptedStates.filter((x) => x === "skipped").length, cls: "bg-muted text-muted-foreground"},
   ];
+
+  const untakenBySection: Record<string, QRow[]> = {};
+  untakenQs.forEach((q) => {
+    const k = q.section || "অন্যান্য";
+    (untakenBySection[k] ||= []).push(q);
+  });
 
   return (
     <div className="min-h-screen pt-24 pb-10 px-4 max-w-3xl mx-auto space-y-4">
