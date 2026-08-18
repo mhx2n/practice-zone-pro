@@ -33,6 +33,13 @@ const LiveExamAttempt = () => {
   const [loading, setLoading] = useState(true);
   const startedAtRef = useRef<Date | null>(null);
 
+  // Subject (section) selection — same behaviour as practice exams
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [mandatorySubjects, setMandatorySubjects] = useState<string[]>([]);
+  const [needsSelection, setNeedsSelection] = useState(false);
+  const [starting, setStarting] = useState(false);
+  const selKey = `live-subjects-${id}-${user?.id ?? ""}`;
+
   // Post-submit ranking state
   const [allParts, setAllParts] = useState<Participant[]>([]);
   const [profiles, setProfiles] = useState<Record<string, Profile>>({});
