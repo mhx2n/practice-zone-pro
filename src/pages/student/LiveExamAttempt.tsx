@@ -413,8 +413,8 @@ const LiveExamAttempt = () => {
 
   // ============ EXAM IN PROGRESS — simple portal style ============
   const mins = Math.floor(timeLeft / 60), secs = timeLeft % 60;
-  const total = questions.length;
-  const answered = Object.keys(answers).length;
+  const total = activeQuestions.length;
+  const answered = activeQuestions.filter((q) => answers[q.id]).length;
   // (Live rankings intentionally omitted during the attempt.)
 
   return (
