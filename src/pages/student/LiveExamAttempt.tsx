@@ -259,6 +259,74 @@ const LiveExamAttempt = () => {
   if (loading) return <div className="p-6 text-center text-sm text-muted-foreground pt-32">লোড হচ্ছে...</div>;
   if (!liveExam) return null;
 
+  // ============ SUBJECT SELECTION GATE (multi-subject live exams) ============
+  if (needsSelection) {
+    const allSections = Array.from(new Set(questions.map((q) => q.section).filter(Boolean)));
+    const counts: Record<string, number> = {};
+    questions.forEach((q) => { if (q.section) counts[q.section] = (counts[q.section] || 0) + 1; });
+    const chosen = Array.from(new Set([...selectedSubjects, ...mandatorySubjects.filter((m) => allSections.includes(m))]));
+    const chosenCount = questions.filter((q) => !q.section || chosen.includes(q.section)).length;
+    const toggle = (s: string) => {
+      if (mandatorySubjects.includes(s)) return;
+      setSelectedSubjects((prev) => prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]);
+    };
+    return (
+      <div className="min-h-screen pt-24 pb-10 px-4 max-w-2xl mx-auto">
+        <div className="glass-card-static p-6 space-y-5">
+          <div>
+            <p className="text-[11px] font-semibold text-primary uppercase tracking-wide">লাইভ পরীক্ষা</p>
+            <h1 className="text-xl font-bold mt-1">{liveExam.title}</h1>
+            <p className="text-xs text-muted-foreground mt-1">{liveExam.duration} মিনিট • মোট {questions.length} প্রশ্ন</p>
+          </div>
+
+          <div className="glass-card-static p-4 bg-accent/5 border-accent/20">
+            <h2 className="font-semibold text-sm mb-1 flex items-center gap-2"><ListChecks size={15} className="text-primary" /> বিষয় নির্বাচন করুন</h2>
+            <p className="text-[11px] text-muted-foreground mb-3">
+              {mandatorySubjects.length > 0
+                ? `${mandatorySubjects.join(", ")} বাধ্যতামূলক।`
+                : "আপনি যে বিষয়গুলোতে পরীক্ষা দিতে চান সেগুলো নির্বাচন করুন।"}
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {allSections.map((s) => {
+                const isMandatory = mandatorySubjects.includes(s);
+                const isSelected = chosen.includes(s);
+                return (
+                  <button key={s} onClick={() => toggle(s)} disabled={isMandatory}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-all border ${
+                      isSelected ? "bg-primary/10 border-primary/30 text-primary"
+                        : "border-border hover:border-primary/20 hover:bg-primary/5 text-muted-foreground"
+                    } ${isMandatory ? "opacity-90 cursor-not-allowed": ""}`}>
+                    {isMandatory ? <Lock size={13} className="shrink-0" />
+                      : isSelected ? <CheckSquare size={13} className="shrink-0" />
+                      : <Square size={13} className="shrink-0" />}
+                    <span className="flex-1 text-left truncate">{s}</span>
+                    <span className="text-[10px] bg-muted px-1.5 py-0.5 rounded-full">{counts[s] || 0}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="mt-3 pt-3 border-t border-border flex items-center justify-between text-xs">
+              <span className="text-muted-foreground">নির্বাচিত প্রশ্ন:</span>
+              <span className="font-bold text-primary">{chosenCount}টি</span>
+            </div>
+          </div>
+
+          <p className="text-[11px] text-muted-foreground">
+            নির্বাচিত বিষয়ের প্রশ্ন অনুযায়ীই ফলাফল ও র‍্যাঙ্কিং নির্ধারিত হবে। পরীক্ষা শেষে সব বিষয়ের উত্তর পর্যালোচনায় দেখা যাবে।
+          </p>
+
+          <button
+            disabled={chosen.length === 0 || starting}
+            onClick={async () => { setStarting(true); await beginAttempt(chosen, questions, participant); setStarting(false); }}
+            className="w-full px-4 py-3 rounded-xl bg-primary text-primary-foreground text-sm font-bold disabled:opacity-50">
+            {starting ? "শুরু হচ্ছে...": `পরীক্ষা শুরু করুন (${chosenCount} প্রশ্ন)`}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+
   // ============ POST-SUBMIT RESULT + RANKING ============
   if (submitted) {
     const sorted = [...allParts].sort((a, b) => b.score - a.score || a.time_taken_seconds - b.time_taken_seconds);
