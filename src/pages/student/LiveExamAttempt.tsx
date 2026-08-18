@@ -425,10 +425,10 @@ const LiveExamAttempt = () => {
 
       {/* All questions in scroll view */}
       <div className="mt-4 space-y-4">
-        {questions.length === 0 && (
+        {activeQuestions.length === 0 && (
           <div className="text-center text-muted-foreground py-10">এই পরীক্ষায় কোনো প্রশ্ন নেই।</div>
         )}
-        {questions.map((q, qi) => {
+        {activeQuestions.map((q, qi) => {
           const locked = !!answers[q.id];
           return (
             <div key={q.id} className="glass-card-static p-5">
